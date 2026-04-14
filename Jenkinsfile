@@ -19,7 +19,7 @@ pipeline {
     parameters {
         choice(
             name: 'TEST_SUITE',
-            choices: ['demo', 'attenuator', 'all'],
+            choices: ['demo', 'vna', 'all'],
             description: 'Chọn test suite cần chạy'
         )
         string(
@@ -32,6 +32,7 @@ pipeline {
             defaultValue: false,
             description: 'Skip các test cần hardware (dùng khi chạy dry-run)'
         )
+
     }
 
     // ── Environment variables ───────────────────────────────────────────────

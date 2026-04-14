@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import time
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, Iterator, List
 
 import pytest
 
@@ -34,14 +34,39 @@ for d in ("reports/html", "reports/excel", "reports/logs", "reports/screenshots"
 # ════════════════════════════════════════════════════════════════════════════
 
 @pytest.fixture(scope="session")
-def app_ctrl() -> AppController:
+def s2vna_ctrl() -> Iterator[AppController]:
     """
-    Connects to the target Windows application.
-    The app must already be running before the test session starts.
-    To auto-launch, change .connect() → .launch() below.
+    Launch S2VNA simulator first (must start before PC17).
+    Nếu S2VNA đã mở sẵn thì connect vào; nếu chưa thì tự launch.
+    """
+    cfg = get_settings().s2vna
+    ctrl = AppController(app_name=cfg.name, backend=cfg.backend)
+    ctrl.exe_path    = cfg.exe_path
+    ctrl.timeout     = cfg.connect_timeout
+    try:
+        ctrl.connect()
+        logger.info("S2VNA already running — connected")
+    except Exception:
+        logger.info("S2VNA not running — launching...")
+        ctrl.launch()
+    time.sleep(cfg.startup_wait)
+    yield ctrl
+    # Không tắt S2VNA sau session (để tránh mất trạng thái)
+    ctrl.disconnect()
+
+
+@pytest.fixture(scope="session")
+def app_ctrl(s2vna_ctrl: AppController) -> Iterator[AppController]:
+    """
+    Launch / connect to PC17 (after S2VNA is ready).
     """
     ctrl = AppController()
-    ctrl.connect()          # change to ctrl.launch() if needed
+    try:
+        ctrl.connect()
+        logger.info("PC17 already running — connected")
+    except Exception:
+        logger.info("PC17 not running — launching...")
+        ctrl.launch()
     yield ctrl
     ctrl.disconnect()
 
@@ -53,7 +78,7 @@ def main_page(app_ctrl: AppController) -> MainPage:
 
 
 @pytest.fixture(scope="session")
-def device() -> SerialDevice:
+def device() -> Iterator[SerialDevice]:
     """Opens the serial connection to the DUT (USB COM port)."""
     dev = SerialDevice()
     dev.open()
@@ -62,7 +87,7 @@ def device() -> SerialDevice:
 
 
 @pytest.fixture(scope="session")
-def relay() -> RelayController:
+def relay() -> Iterator[RelayController]:
     """Relay board controller (disabled by default until hardware present)."""
     ctrl = RelayController()
     ctrl.connect()

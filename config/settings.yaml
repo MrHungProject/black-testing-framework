@@ -6,10 +6,17 @@
 
 app:
   name: "PC17"
-  exe_path: "C:/Apps/PC17/PC17.exe"
-  backend: "uia"                      # uia | win32
-  connect_timeout: 10
+  exe_path: "C:\PC17\PC17.exe"   # <<< cập nhật đường dẫn thật
+  backend: "uia"                       # uia | win32
+  connect_timeout: 15
   action_delay: 0.3
+
+s2vna:
+  name: "S2VNA"
+  exe_path: "C:\VNA\S2VNA\S2VNA.exe" # <<< cập nhật đường dẫn thật
+  backend: "uia"
+  connect_timeout: 15
+  startup_wait: 3                      # giây chờ sau khi launch
 
 serial:
   default_port: "COM3"                # override bằng env: SERIAL_PORT=COMx
