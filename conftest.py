@@ -34,31 +34,10 @@ for d in ("reports/html", "reports/excel", "reports/logs", "reports/screenshots"
 # ════════════════════════════════════════════════════════════════════════════
 
 @pytest.fixture(scope="session")
-def s2vna_ctrl() -> Iterator[AppController]:
+def app_ctrl() -> Iterator[AppController]:
     """
-    Launch S2VNA simulator first (must start before PC17).
-    Nếu S2VNA đã mở sẵn thì connect vào; nếu chưa thì tự launch.
-    """
-    cfg = get_settings().s2vna
-    ctrl = AppController(app_name=cfg.name, backend=cfg.backend)
-    ctrl.exe_path    = cfg.exe_path
-    ctrl.timeout     = cfg.connect_timeout
-    try:
-        ctrl.connect()
-        logger.info("S2VNA already running — connected")
-    except Exception:
-        logger.info("S2VNA not running — launching...")
-        ctrl.launch()
-    time.sleep(cfg.startup_wait)
-    yield ctrl
-    # Không tắt S2VNA sau session (để tránh mất trạng thái)
-    ctrl.disconnect()
-
-
-@pytest.fixture(scope="session")
-def app_ctrl(s2vna_ctrl: AppController) -> Iterator[AppController]:
-    """
-    Launch / connect to PC17 (after S2VNA is ready).
+    Launch / connect to PC17.
+    Dùng cho hầu hết mọi test case — session-scoped, luôn sẵn sàng.
     """
     ctrl = AppController()
     try:
@@ -73,8 +52,13 @@ def app_ctrl(s2vna_ctrl: AppController) -> Iterator[AppController]:
 
 @pytest.fixture(scope="session")
 def main_page(app_ctrl: AppController) -> MainPage:
-    """Page Object for the main window — shared across the session."""
-    return MainPage(app_ctrl)
+    """
+    Page Object cho FormMainEliteRF — dùng chung toàn session.
+    Tự động thực hiện luồng: RF Test Set → System → Connect → Connection.
+    """
+    page = MainPage(app_ctrl)
+    page.setup_connection()
+    return page
 
 
 @pytest.fixture(scope="session")

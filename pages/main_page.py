@@ -1,85 +1,69 @@
 """
-MainPage — Page Object for the PC17 main window.
+MainPage — Page Object cho cửa sổ FormMainEliteRF của PC17.
 
-HOW TO FIND ELEMENT IDENTIFIERS
---------------------------------
-Run this in a Python shell while your app is open:
+Luồng setup (gọi một lần qua setup_connection()):
+    1. PC17.exe đã được start → top_window là cửa sổ khởi động ban đầu
+    2. Tools → RF Test Set  (keyboard nav: DOWN×3 + ENTER)
+    3. Đợi cửa sổ FormMainEliteRF xuất hiện
+    4. Click System → Connect → Connection
+    5. Đợi trạng thái "Connected"
 
-    from pywinauto import Application
-    app = Application(backend="uia").connect(title_re=".*PC17.*")
-    app.top_window().print_control_identifiers(depth=5)
-
-This will print all element auto_id, class_name, title values.
-Replace the placeholder locators below with the real ones.
+Tìm element bằng scan descendants() theo window_text() vì app dùng WinForms
+và auto_id không ổn định.
 """
 from __future__ import annotations
+
+import time
 
 from pages.base_page import BasePage
 
 
 class MainPage(BasePage):
-    """Page Object for the main PC17 application window."""
+    """Page Object cho FormMainEliteRF — cửa sổ chính của PC17."""
 
-    # ── Element locators ──────────────────────────────────────────────────────
-    # Replace with real auto_id / title / class_name from your app
+    MAIN_WINDOW_TITLE_RE = ".*FormMainEliteRF.*"
+    NAV_WAIT        = 3   # giây chờ sau khi mở RF Test Set
+    CONNECT_TIMEOUT = 15  # giây chờ trạng thái Connected
 
-    # Attenuator section
-    BTN_ATTENUATOR_ON   = {"auto_id": "btnAttenuatorOn",   "control_type": "Button"}
-    BTN_ATTENUATOR_OFF  = {"auto_id": "btnAttenuatorOff",  "control_type": "Button"}
-    LBL_ATTENUATOR_STATUS = {"auto_id": "lblAttenuatorStatus"}
+    # ── Setup flow (gọi 1 lần trong fixture) ─────────────────────────────────
 
-    # Connection section
-    CMB_PORT            = {"auto_id": "cmbPort"}
-    BTN_CONNECT         = {"auto_id": "btnConnect"}
-    BTN_DISCONNECT      = {"auto_id": "btnDisconnect"}
-    LBL_CONN_STATUS     = {"auto_id": "lblConnectionStatus"}
+    def setup_connection(self) -> None:
+        self._open_rf_test_set()
+        if not self._ctrl.click_by_text("System"):
+            try:
+                self._ctrl._main_window.child_window(
+                    auto_id="CardSystem", control_type="Pane"
+                ).click_input()
+            except Exception:
+                raise RuntimeError("PC17: Không click được 'System'")
+        time.sleep(1)
+        self._ctrl.click_by_text("Connect")
+        time.sleep(2)
+        ok = self._ctrl.click_by_text("Connection", retries=5)
+        if not ok:
+            raise RuntimeError("PC17: Không click được 'Connection'")
+        if not self._ctrl.wait_for_text("Connected", timeout=self.CONNECT_TIMEOUT):
+            raise RuntimeError("PC17: Device did not reach 'Connected' state")
 
-    # General
-    LBL_APP_STATUS      = {"auto_id": "lblAppStatus"}
-    BTN_APPLY           = {"auto_id": "btnApply"}
-    BTN_RESET           = {"auto_id": "btnReset"}
+    def _open_rf_test_set(self) -> None:
+        """Tools → RF Test Set → switch sang cửa sổ FormMainEliteRF."""
+        try:
+            self._ctrl._main_window.child_window(
+                title="Tools", control_type="MenuItem"
+            ).click_input()
+        except Exception:
+            self._ctrl.click_by_text("Tools")
+        time.sleep(1)
+        # WinForms menu không expose submenu qua UIA → keyboard fallback
+        self._ctrl.type_keys_on_window("{DOWN}{DOWN}{DOWN}{ENTER}")
+        time.sleep(self.NAV_WAIT)
+        self._ctrl.switch_window(self.MAIN_WINDOW_TITLE_RE, timeout=20)
+        time.sleep(2)  # đợi FormMainEliteRF ổn định trước khi click System
 
-    # ── Attenuator actions ────────────────────────────────────────────────────
-
-    def turn_on_attenuator(self) -> None:
-        """Click the Attenuator ON button in the UI."""
-        self.click(self.BTN_ATTENUATOR_ON)
-
-    def turn_off_attenuator(self) -> None:
-        self.click(self.BTN_ATTENUATOR_OFF)
-
-    def get_attenuator_status(self) -> str:
-        return self.get_text(self.LBL_ATTENUATOR_STATUS)
-
-    def is_attenuator_on(self) -> bool:
-        status = self.get_attenuator_status().lower()
-        return "on" in status or "ready" in status or "active" in status
-
-    # ── Connection actions ────────────────────────────────────────────────────
-
-    def select_port(self, port: str) -> None:
-        self.select(self.CMB_PORT, port)
-
-    def click_connect(self) -> None:
-        self.click(self.BTN_CONNECT)
-
-    def click_disconnect(self) -> None:
-        self.click(self.BTN_DISCONNECT)
-
-    def get_connection_status(self) -> str:
-        return self.get_text(self.LBL_CONN_STATUS)
+    # ── Trạng thái kết nối ────────────────────────────────────────────────────
 
     def is_connected(self) -> bool:
-        status = self.get_connection_status().lower()
-        return "connected" in status
+        return self._ctrl.has_element_with_text("Connected")
 
-    # ── General actions ───────────────────────────────────────────────────────
-
-    def get_app_status(self) -> str:
-        return self.get_text(self.LBL_APP_STATUS)
-
-    def click_apply(self) -> None:
-        self.click(self.BTN_APPLY)
-
-    def click_reset(self) -> None:
-        self.click(self.BTN_RESET)
+    def click_disconnect(self) -> None:
+        self._ctrl.click_by_text("Disconnect")

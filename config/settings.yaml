@@ -5,8 +5,8 @@
 # ══════════════════════════════════════════════════════════
 
 app:
-  name: "PC17"
-  exe_path: "C:\PC17\PC17.exe"   # <<< cập nhật đường dẫn thật
+  name: "FormMainEliteRF"
+  exe_path: "C:\PC17\PC17.exe"   # <<< cập nhật đường dẫn thật nếu khác
   backend: "uia"                       # uia | win32
   connect_timeout: 15
   action_delay: 0.3

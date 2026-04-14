@@ -60,3 +60,12 @@ class BasePage:
 
     def screenshot(self, name: str) -> None:
         self._ctrl.take_screenshot(name)
+
+    def click_by_text(self, text: str, retries: int = 5) -> bool:
+        return self._ctrl.click_by_text(text, retries=retries)
+
+    def wait_for_text(self, text: str, timeout: int = 10) -> bool:
+        return self._ctrl.wait_for_text(text, timeout=timeout)
+
+    def has_text(self, text: str) -> bool:
+        return self._ctrl.has_element_with_text(text)

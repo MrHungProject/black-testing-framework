@@ -79,7 +79,7 @@ class AppController:
             raise ValueError("exe_path is not configured in settings.yaml")
         logger.info(f"Launching: {self.exe_path}")
         self._app = Application(backend=self.backend).start(self.exe_path)
-        time.sleep(2)
+        time.sleep(5)
         self._main_window = self._app.top_window()
         self._main_window.wait("ready", timeout=self.timeout)
         logger.info("App launched and ready")
@@ -198,6 +198,87 @@ class AppController:
         except Exception as e:
             logger.warning(f"Screenshot failed: {e}")
             return None
+
+    # ── Utility ───────────────────────────────────────────────────────────────
+
+    # ── Text-based element helpers (dùng khi auto_id không hoạt động) ─────────
+
+    def click_by_text(self, text: str, retries: int = 5) -> bool:
+        """
+        Tìm và click control theo window_text() — scan toàn bộ descendants.
+        Retry tối đa `retries` lần, mỗi lần cách nhau 1 giây.
+        """
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return False
+        for _ in range(retries):
+            for ctrl in self._main_window.descendants():
+                try:
+                    if ctrl.window_text().strip().lower() == text.lower() and ctrl.is_enabled():
+                        ctrl.click_input()
+                        time.sleep(self.action_delay)
+                        logger.info(f"click_by_text({text!r}) OK")
+                        return True
+                except Exception:
+                    pass
+            time.sleep(1)
+        logger.warning(f"click_by_text({text!r}) — not found after {retries} retries")
+        return False
+
+    def wait_for_text(self, text: str, timeout: int = 15) -> bool:
+        """Đợi cho đến khi xuất hiện control có window_text() == text."""
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return False
+        for _ in range(timeout):
+            for ctrl in self._main_window.descendants():
+                try:
+                    if ctrl.window_text().strip() == text:
+                        return True
+                except Exception:
+                    pass
+            time.sleep(1)
+        logger.warning(f"wait_for_text({text!r}) — timeout after {timeout}s")
+        return False
+
+    def has_element_with_text(self, text: str) -> bool:
+        """Kiểm tra có control nào có window_text() == text và enabled không."""
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return False
+        for ctrl in self._main_window.descendants():
+            try:
+                if ctrl.window_text().strip() == text and ctrl.is_enabled():
+                    return True
+            except Exception:
+                pass
+        return False
+
+    def type_keys_on_window(self, keys: str) -> None:
+        """Gửi phím tắt trực tiếp vào main window (dùng cho menu keyboard nav)."""
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return
+        self._main_window.type_keys(keys)
+        time.sleep(self.action_delay)
+
+    def is_running(self) -> bool:
+        """Kiểm tra app có đang chạy và cửa sổ còn hiển thị không."""
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return False
+        try:
+            return self._main_window.exists() and self._main_window.is_visible()
+        except Exception:
+            return False
+
+    def switch_window(self, title_re: str, timeout: int = 20) -> None:
+        """
+        Chuyển _main_window sang cửa sổ khác sau khi navigation.
+        Ví dụ: sau khi mở RF Test Set từ menu Tools.
+        """
+        if not PYWINAUTO_AVAILABLE or self._app is None:
+            return
+        logger.info(f"Switching to window: {title_re!r}")
+        win = self._app.window(title_re=title_re)
+        win.wait("visible", timeout=timeout)
+        self._main_window = win
+        logger.info(f"Switched to: {win.window_text()!r}")
 
     # ── Utility ───────────────────────────────────────────────────────────────
 

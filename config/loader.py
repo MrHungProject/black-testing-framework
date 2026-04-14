@@ -15,8 +15,8 @@ from pydantic import BaseModel, Field
 
 
 class AppConfig(BaseModel):
-    name: str = "PC17"
-    exe_path: str = ""
+    name: str = "FormMainEliteRF"   # tiêu đề cửa sổ chính sau khi mở RF Test Set
+    exe_path: str = r"C:\PC17\PC17.exe"
     backend: str = "uia"
     connect_timeout: int = 15
     action_delay: float = 0.3
