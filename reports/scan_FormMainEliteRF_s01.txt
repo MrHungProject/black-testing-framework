@@ -1,0 +1,469 @@
+Control Identifiers:
+
+Dialog - 'FormMainEliteRF'    (L0, T0, R1920, B1040)
+['Dialog', 'FormMainEliteRF', 'FormMainEliteRFDialog', 'Dialog0', 'Dialog1']
+child_window(title="FormMainEliteRF", auto_id="FormMainEliteRF", control_type="Window")
+   | 
+   | Pane - ''    (L0, T32, R1770, B1018)
+   | ['Pane', 'VNAPane', 'Pane0', 'Pane1', 'VNAPane0', 'VNAPane1']
+   | child_window(auto_id="panelMain", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L0, T32, R1518, B1018)
+   |    | ['Pane2', 'VNAPane2']
+   |    | child_window(auto_id="panelContent", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L8, T40, R503, B521)
+   |    |    | ['Pane3', 'VNAPane3']
+   |    |    | child_window(auto_id="PanelChannel1", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Dialog - 'FormChannel'    (L8, T40, R503, B521)
+   |    |    |    | ['Dialog2', 'FormChannel', 'FormChannelDialog', 'FormChannel0', 'FormChannel1', 'FormChannelDialog0', 'FormChannelDialog1']
+   |    |    |    | child_window(title="FormChannel", auto_id="Channel1", control_type="Window")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - 'VNA'    (L9, T65, R502, B518)
+   |    |    |    |    | ['Pane4', 'VNA', 'VNAPane4', 'VNA0', 'VNA1']
+   |    |    |    |    | child_window(title="VNA", auto_id="panelContent", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Dialog - 'FormDisplayGraphicVNA'    (L9, T65, R502, B518)
+   |    |    |    |    |    | ['Dialog3', 'FormDisplayGraphicVNA', 'FormDisplayGraphicVNADialog']
+   |    |    |    |    |    | child_window(title="FormDisplayGraphicVNA", auto_id="FormDisplayGraphicVNA", control_type="Window")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Pane - ''    (L9, T65, R502, B518)
+   |    |    |    |    |    |    | ['Pane5', 'VNAPane5']
+   |    |    |    |    |    |    | child_window(auto_id="panelAll", control_type="Pane")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - ''    (L9, T44, R502, B64)
+   |    |    |    |    | ['Pane8', 'VNAPane8']
+   |    |    |    |    | child_window(auto_id="panel1", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch1'    (L471, T45, R503, B65)
+   |    |    |    |    |    | ['Static', 'Ch1', 'Ch1Static', 'Static0', 'Static1', 'Ch10', 'Ch11', 'Ch1Static0', 'Ch1Static1']
+   |    |    |    |    |    | child_window(title="Ch1", auto_id="lblChannelName", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch1'    (L449, T44, R469, B64)
+   |    |    |    |    |    | ['Static2', 'Ch12', 'Ch1Static2']
+   |    |    |    |    |    | child_window(title="Ch1", auto_id="btnCloseChannel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - ''    (L427, T44, R447, B64)
+   |    |    |    |    |    | ['Static3', 'RF Test SetStatic', 'RF Test SetStatic0', 'RF Test SetStatic1']
+   |    |    |    |    |    | child_window(auto_id="label1", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'VNA'    (L12, T44, R50, B63)
+   |    |    |    |    |    | ['Static4', 'VNA2', 'VNAStatic', 'VNAStatic0', 'VNAStatic1']
+   |    |    |    |    |    | child_window(title="VNA", auto_id="lblChannel", control_type="Text")
+   |    |    |    | 
+   |    |    |    | Dialog - 'FormChannel'    (L8, T40, R503, B521)
+   |    |    |    | ['Dialog4', 'FormChannel2', 'FormChannelDialog2']
+   |    |    |    | child_window(title="FormChannel", auto_id="Channel2", control_type="Window")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - 'Channel 2'    (L9, T65, R502, B518)
+   |    |    |    |    | ['Channel 2', 'Pane9', 'Channel 2Pane', 'Channel 20', 'Channel 21', 'Channel 2Pane0', 'Channel 2Pane1']
+   |    |    |    |    | child_window(title="Channel 2", auto_id="panelContent", control_type="Pane")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - ''    (L9, T44, R502, B64)
+   |    |    |    |    | ['Pane10', 'VNAPane9']
+   |    |    |    |    | child_window(auto_id="panel1", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch2'    (L471, T45, R503, B65)
+   |    |    |    |    |    | ['Static5', 'Ch2', 'Ch2Static', 'Ch20', 'Ch21', 'Ch2Static0', 'Ch2Static1']
+   |    |    |    |    |    | child_window(title="Ch2", auto_id="lblChannelName", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch2'    (L449, T44, R469, B64)
+   |    |    |    |    |    | ['Static6', 'Ch22', 'Ch2Static2']
+   |    |    |    |    |    | child_window(title="Ch2", auto_id="btnCloseChannel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - ''    (L427, T44, R447, B64)
+   |    |    |    |    |    | ['Static7', 'RF Test SetStatic2']
+   |    |    |    |    |    | child_window(auto_id="label1", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Channel 2'    (L12, T44, R84, B63)
+   |    |    |    |    |    | ['Static8', 'Channel 2Static', 'Channel 22']
+   |    |    |    |    |    | child_window(title="Channel 2", auto_id="lblChannel", control_type="Text")
+   |    |    | 
+   |    |    | Pane - ''    (L511, T40, R1006, B521)
+   |    |    | ['Pane11', 'Channel 2Pane2', 'Ch1Pane', 'Ch1Pane0', 'Ch1Pane1']
+   |    |    | child_window(auto_id="PanelChannel3", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Dialog - 'FormChannel'    (L511, T40, R1006, B521)
+   |    |    |    | ['Dialog5', 'FormChannel3', 'FormChannelDialog3']
+   |    |    |    | child_window(title="FormChannel", auto_id="Channel3", control_type="Window")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - 'Channel 3'    (L512, T65, R1005, B518)
+   |    |    |    |    | ['Channel 3Pane', 'Pane12', 'Channel 3', 'Channel 30', 'Channel 31', 'Channel 3Pane0', 'Channel 3Pane1']
+   |    |    |    |    | child_window(title="Channel 3", auto_id="panelContent", control_type="Pane")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - ''    (L512, T44, R1005, B64)
+   |    |    |    |    | ['Pane13', 'Ch1Pane2']
+   |    |    |    |    | child_window(auto_id="panel1", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch3'    (L974, T45, R1006, B65)
+   |    |    |    |    |    | ['Ch3', 'Static9', 'Ch3Static', 'Ch30', 'Ch31', 'Ch3Static0', 'Ch3Static1']
+   |    |    |    |    |    | child_window(title="Ch3", auto_id="lblChannelName", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch3'    (L952, T44, R972, B64)
+   |    |    |    |    |    | ['Ch32', 'Static10', 'Ch3Static2']
+   |    |    |    |    |    | child_window(title="Ch3", auto_id="btnCloseChannel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - ''    (L930, T44, R950, B64)
+   |    |    |    |    |    | ['Static11', 'Channel 3Static', 'Channel 3Static0', 'Channel 3Static1']
+   |    |    |    |    |    | child_window(auto_id="label1", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Channel 3'    (L515, T44, R587, B63)
+   |    |    |    |    |    | ['Static12', 'Channel 3Static2', 'Channel 32']
+   |    |    |    |    |    | child_window(title="Channel 3", auto_id="lblChannel", control_type="Text")
+   |    |    | 
+   |    |    | Pane - ''    (L1014, T40, R1509, B521)
+   |    |    | ['Channel 3Pane2', 'Ch3Pane', 'Pane14', 'Ch3Pane0', 'Ch3Pane1']
+   |    |    | child_window(auto_id="PanelChannel4", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Dialog - 'FormChannel'    (L1014, T40, R1509, B521)
+   |    |    |    | ['Dialog6', 'FormChannel4', 'FormChannelDialog4']
+   |    |    |    | child_window(title="FormChannel", auto_id="Channel4", control_type="Window")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - 'ATT'    (L1015, T65, R1508, B518)
+   |    |    |    |    | ['ATTPane', 'ATT', 'Pane15', 'ATT0', 'ATT1', 'ATTPane0', 'ATTPane1']
+   |    |    |    |    | child_window(title="ATT", auto_id="panelContent", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Dialog - 'FormDetailDefault'    (L1015, T65, R1508, B518)
+   |    |    |    |    |    | ['Dialog7', 'FormDetailDefault', 'FormDetailDefaultDialog']
+   |    |    |    |    |    | child_window(title="FormDetailDefault", auto_id="FormDetailAttInfo", control_type="Window")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Pane - ''    (L1170, T74, R1372, B114)
+   |    |    |    |    |    |    | ['Attenuation (0-30dB)Pane', 'Pane16']
+   |    |    |    |    |    |    | child_window(auto_id="txtAttValue", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Static - 'Attenuation (0-30dB)'    (L1027, T84, R1167, B103)
+   |    |    |    |    |    |    | ['Static13', 'Attenuation (0-30dB)', 'Attenuation (0-30dB)Static']
+   |    |    |    |    |    |    | child_window(title="Attenuation (0-30dB)", auto_id="label1", control_type="Text")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - ''    (L1015, T44, R1508, B64)
+   |    |    |    |    | ['Ch3Pane2', 'Pane17']
+   |    |    |    |    | child_window(auto_id="panel1", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch4'    (L1477, T45, R1509, B65)
+   |    |    |    |    |    | ['Static14', 'Ch4', 'Ch4Static', 'Ch40', 'Ch41', 'Ch4Static0', 'Ch4Static1']
+   |    |    |    |    |    | child_window(title="Ch4", auto_id="lblChannelName", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch4'    (L1455, T44, R1475, B64)
+   |    |    |    |    |    | ['Static15', 'Ch42', 'Ch4Static2']
+   |    |    |    |    |    | child_window(title="Ch4", auto_id="btnCloseChannel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - ''    (L1433, T44, R1453, B64)
+   |    |    |    |    |    | ['Static16', 'ATTStatic', 'ATTStatic0', 'ATTStatic1']
+   |    |    |    |    |    | child_window(auto_id="label1", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'ATT'    (L1018, T44, R1051, B63)
+   |    |    |    |    |    | ['Static17', 'ATT2', 'ATTStatic2']
+   |    |    |    |    |    | child_window(title="ATT", auto_id="lblChannel", control_type="Text")
+   |    |    | 
+   |    |    | Pane - ''    (L8, T529, R503, B1010)
+   |    |    | ['Channel 5Pane', 'Pane18', 'Channel 5Pane0', 'Channel 5Pane1']
+   |    |    | child_window(auto_id="PanelChannel5", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Dialog - 'FormChannel'    (L8, T529, R503, B1010)
+   |    |    |    | ['Dialog8', 'FormChannel5', 'FormChannelDialog5']
+   |    |    |    | child_window(title="FormChannel", auto_id="Channel5", control_type="Window")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - 'Channel 5'    (L9, T554, R502, B1007)
+   |    |    |    |    | ['Channel 5Pane2', 'Pane19', 'Channel 5', 'Channel 50', 'Channel 51']
+   |    |    |    |    | child_window(title="Channel 5", auto_id="panelContent", control_type="Pane")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - ''    (L9, T533, R502, B553)
+   |    |    |    |    | ['Channel 5Pane3', 'Pane20']
+   |    |    |    |    | child_window(auto_id="panel1", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch5'    (L471, T534, R503, B554)
+   |    |    |    |    |    | ['Ch5Static', 'Static18', 'Ch5', 'Ch5Static0', 'Ch5Static1', 'Ch50', 'Ch51']
+   |    |    |    |    |    | child_window(title="Ch5", auto_id="lblChannelName", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch5'    (L449, T533, R469, B553)
+   |    |    |    |    |    | ['Ch5Static2', 'Static19', 'Ch52']
+   |    |    |    |    |    | child_window(title="Ch5", auto_id="btnCloseChannel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - ''    (L427, T533, R447, B553)
+   |    |    |    |    |    | ['Static20', 'Channel 5Static', 'Channel 5Static0', 'Channel 5Static1']
+   |    |    |    |    |    | child_window(auto_id="label1", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Channel 5'    (L12, T533, R84, B552)
+   |    |    |    |    |    | ['Static21', 'Channel 52', 'Channel 5Static2']
+   |    |    |    |    |    | child_window(title="Channel 5", auto_id="lblChannel", control_type="Text")
+   |    |    | 
+   |    |    | Pane - ''    (L511, T529, R1006, B1010)
+   |    |    | ['Channel 5Pane4', 'Ch5Pane', 'Pane21', 'Ch5Pane0', 'Ch5Pane1']
+   |    |    | child_window(auto_id="PanelChannel6", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Dialog - 'FormChannel'    (L511, T529, R1006, B1010)
+   |    |    |    | ['Dialog9', 'FormChannel6', 'FormChannelDialog6']
+   |    |    |    | child_window(title="FormChannel", auto_id="Channel6", control_type="Window")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - 'Channel 6'    (L512, T554, R1005, B1007)
+   |    |    |    |    | ['Channel 6Pane', 'Pane22', 'Channel 6', 'Channel 60', 'Channel 61', 'Channel 6Pane0', 'Channel 6Pane1']
+   |    |    |    |    | child_window(title="Channel 6", auto_id="panelContent", control_type="Pane")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - ''    (L512, T533, R1005, B553)
+   |    |    |    |    | ['Ch5Pane2', 'Pane23']
+   |    |    |    |    | child_window(auto_id="panel1", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch6'    (L974, T534, R1006, B554)
+   |    |    |    |    |    | ['Ch6Static', 'Static22', 'Ch6', 'Ch6Static0', 'Ch6Static1', 'Ch60', 'Ch61']
+   |    |    |    |    |    | child_window(title="Ch6", auto_id="lblChannelName", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch6'    (L952, T533, R972, B553)
+   |    |    |    |    |    | ['Ch6Static2', 'Static23', 'Ch62']
+   |    |    |    |    |    | child_window(title="Ch6", auto_id="btnCloseChannel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - ''    (L930, T533, R950, B553)
+   |    |    |    |    |    | ['Static24', 'Channel 6Static', 'Channel 6Static0', 'Channel 6Static1']
+   |    |    |    |    |    | child_window(auto_id="label1", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Channel 6'    (L515, T533, R587, B552)
+   |    |    |    |    |    | ['Static25', 'Channel 62', 'Channel 6Static2']
+   |    |    |    |    |    | child_window(title="Channel 6", auto_id="lblChannel", control_type="Text")
+   |    |    | 
+   |    |    | Pane - ''    (L1014, T529, R1509, B1010)
+   |    |    | ['Channel 6Pane2', 'Pane24', 'Ch6Pane', 'Ch6Pane0', 'Ch6Pane1']
+   |    |    | child_window(auto_id="PanelChannel7", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Dialog - 'FormChannel'    (L1014, T529, R1509, B1010)
+   |    |    |    | ['Dialog10', 'FormChannel7', 'FormChannelDialog7']
+   |    |    |    | child_window(title="FormChannel", auto_id="Channel7", control_type="Window")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - 'Channel 7'    (L1015, T554, R1508, B1007)
+   |    |    |    |    | ['Channel 7Pane', 'Channel 7', 'Pane25', 'Channel 70', 'Channel 71', 'Channel 7Pane0', 'Channel 7Pane1']
+   |    |    |    |    | child_window(title="Channel 7", auto_id="panelContent", control_type="Pane")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - ''    (L1015, T533, R1508, B553)
+   |    |    |    |    | ['Pane26', 'Ch6Pane2']
+   |    |    |    |    | child_window(auto_id="panel1", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch7'    (L1477, T534, R1509, B554)
+   |    |    |    |    |    | ['Static26', 'Ch7Static', 'Ch7', 'Ch7Static0', 'Ch7Static1', 'Ch70', 'Ch71']
+   |    |    |    |    |    | child_window(title="Ch7", auto_id="lblChannelName", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Ch7'    (L1455, T533, R1475, B553)
+   |    |    |    |    |    | ['Static27', 'Ch7Static2', 'Ch72']
+   |    |    |    |    |    | child_window(title="Ch7", auto_id="btnCloseChannel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - ''    (L1433, T533, R1453, B553)
+   |    |    |    |    |    | ['Static28', 'Channel 7Static', 'Channel 7Static0', 'Channel 7Static1']
+   |    |    |    |    |    | child_window(auto_id="label1", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Channel 7'    (L1018, T533, R1090, B552)
+   |    |    |    |    |    | ['Static29', 'Channel 72', 'Channel 7Static2']
+   |    |    |    |    |    | child_window(title="Channel 7", auto_id="lblChannel", control_type="Text")
+   |    | 
+   |    | Pane - ''    (L1518, T32, R1770, B1033)
+   |    | ['Channel 7Pane2', 'Ch4Pane', 'Pane27', 'Ch4Pane0', 'Ch4Pane1']
+   |    | child_window(auto_id="panelDetail", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1518, T76, R1770, B1019)
+   |    |    | ['Pane28', 'System - ConnectPane', 'System - ConnectPane0', 'System - ConnectPane1']
+   |    |    | child_window(auto_id="panelDetailContent", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Dialog - 'FormDetailSystemConnect'    (L1518, T76, R1770, B1019)
+   |    |    |    | ['Dialog11', 'FormDetailSystemConnectDialog', 'FormDetailSystemConnect']
+   |    |    |    | child_window(title="FormDetailSystemConnect", auto_id="FormDetailSystemConnect", control_type="Window")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.'    (L1518, T156, R1768, B840)
+   |    |    |    |    | ['Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.', 'Pane29', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.Pane', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.0', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.1', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.Pane0', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.Pane1']
+   |    |    |    |    | child_window(title="Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.", auto_id="flowLayoutPanel1", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.'    (L1530, T156, R1748, B367)
+   |    |    |    |    |    | ['Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.2', 'Pane30', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.Pane2']
+   |    |    |    |    |    | child_window(title="Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.", auto_id="flowPanelConnectVNA", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Pane - ''    (L1530, T156, R1748, B191)
+   |    |    |    |    |    |    | ['Pane31', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.Pane3']
+   |    |    |    |    |    |    | child_window(auto_id="panelCustomRadius3", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Pane - 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.'    (L1539, T195, R1741, B223)
+   |    |    |    |    |    |    | ['Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.3', 'Pane32', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.Pane4']
+   |    |    |    |    |    |    | child_window(title="Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.", auto_id="btnConnectionVNA", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - 'Connection failed. Please check IP and port to connect VNA.'    (L1530, T379, R1748, B590)
+   |    |    |    |    |    | ['Pane33', 'Connection failed. Please check IP and port to connect VNA.', 'Connection failed. Please check IP and port to connect VNA.Pane', 'Connection failed. Please check IP and port to connect VNA.0', 'Connection failed. Please check IP and port to connect VNA.1', 'Connection failed. Please check IP and port to connect VNA.Pane0', 'Connection failed. Please check IP and port to connect VNA.Pane1']
+   |    |    |    |    |    | child_window(title="Connection failed. Please check IP and port to connect VNA.", auto_id="flowPanelConnectATT", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Pane - ''    (L1530, T379, R1748, B414)
+   |    |    |    |    |    |    | ['Attenuator DevicePane', 'Pane34']
+   |    |    |    |    |    |    | child_window(auto_id="panelCustomRadius2", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Pane - 'Connection failed. Please check IP and port to connect VNA.'    (L1539, T418, R1741, B446)
+   |    |    |    |    |    |    | ['Pane35', 'Connection failed. Please check IP and port to connect VNA.2', 'Connection failed. Please check IP and port to connect VNA.Pane2']
+   |    |    |    |    |    |    | child_window(title="Connection failed. Please check IP and port to connect VNA.", auto_id="btnConnectionATT", control_type="Pane")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - ''    (L1530, T88, R1748, B150)
+   |    |    |    |    | ['Pane36', 'System - ConnectPane2']
+   |    |    |    |    | child_window(auto_id="panelCustomRadius1", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.'    (L1539, T97, R1731, B141)
+   |    |    |    |    |    | ['Static36', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.4', 'Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.Static']
+   |    |    |    |    |    | child_window(title="Configure and test connections to measurement devices. Ensure all devices are powered on and network settings are correct.", auto_id="label1", control_type="Text")
+   |    |    | 
+   |    |    | Pane - ''    (L1518, T32, R1770, B76)
+   |    |    | ['Ch4Pane2', 'Pane37']
+   |    |    | child_window(auto_id="panelCustomBorder3", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Static - 'System - Connect'    (L1734, T41, R1758, B65)
+   |    |    |    | ['System - Connect', 'Static37', 'System - ConnectStatic', 'System - Connect0', 'System - Connect1', 'System - ConnectStatic0', 'System - ConnectStatic1']
+   |    |    |    | child_window(title="System - Connect", auto_id="btnClosePanelDetail", control_type="Text")
+   |    |    |    | 
+   |    |    |    | Static - 'System - Connect'    (L1527, T42, R1647, B61)
+   |    |    |    | ['System - Connect2', 'Static38', 'System - ConnectStatic2']
+   |    |    |    | child_window(title="System - Connect", auto_id="lblTitlePanelDetail", control_type="Text")
+   | 
+   | Pane - 'ATT'    (L1770, T32, R1920, B1018)
+   | ['ATTPane2', 'ATT3', 'Pane38']
+   | child_window(title="ATT", auto_id="panelRight", control_type="Pane")
+   |    | 
+   |    | Pane - 'ATT'    (L1771, T32, R1903, B64)
+   |    | ['ATTPane3', 'ATT4', 'Pane39']
+   |    | child_window(title="ATT", auto_id="CardDetail", control_type="Pane")
+   |    |    | 
+   |    |    | Static - 'Detail'    (L1780, T37, R1900, B56)
+   |    |    | ['Static39', 'Detail', 'DetailStatic']
+   |    |    | child_window(title="Detail", auto_id="label1", control_type="Text")
+   |    | 
+   |    | Pane - ''    (L1771, T64, R1903, B96)
+   |    | ['Pane40', 'DetailPane']
+   |    | child_window(auto_id="CardSystem", control_type="Pane")
+   |    |    | 
+   |    |    | Static - 'System'    (L1883, T74, R1895, B86)
+   |    |    | ['Static40', 'SystemStatic', 'System', 'SystemStatic0', 'SystemStatic1', 'System0', 'System1']
+   |    |    | child_window(title="System", auto_id="label2", control_type="Text")
+   |    |    | 
+   |    |    | Static - 'System'    (L1777, T71, R1875, B90)
+   |    |    | ['Static41', 'SystemStatic2', 'System2']
+   |    |    | child_window(title="System", auto_id="label1", control_type="Text")
+   |    | 
+   |    | Pane - ''    (L1771, T96, R1903, B128)
+   |    | ['Pane41', 'SystemPane']
+   |    | child_window(auto_id="cnbSystemAbout", control_type="Pane")
+   |    |    | 
+   |    |    | Static - 'About'    (L1784, T101, R1892, B120)
+   |    |    | ['Static42', 'AboutStatic', 'About']
+   |    |    | child_window(title="About", auto_id="label1", control_type="Text")
+   |    | 
+   |    | Pane - ''    (L1771, T128, R1903, B160)
+   |    | ['AboutPane', 'Pane42']
+   |    | child_window(auto_id="cnbSystemConnect", control_type="Pane")
+   |    |    | 
+   |    |    | Static - 'Connect'    (L1784, T133, R1892, B152)
+   |    |    | ['Connect', 'Static43', 'ConnectStatic']
+   |    |    | child_window(title="Connect", auto_id="label1", control_type="Text")
+   |    | 
+   |    | Pane - ''    (L1771, T160, R1903, B192)
+   |    | ['ConnectPane', 'Pane43']
+   |    | child_window(auto_id="cnbSystemHelp", control_type="Pane")
+   |    |    | 
+   |    |    | Static - 'Help'    (L1784, T165, R1892, B184)
+   |    |    | ['Static44', 'Help', 'HelpStatic']
+   |    |    | child_window(title="Help", auto_id="label1", control_type="Text")
+   |    | 
+   |    | Pane - ''    (L1771, T192, R1903, B224)
+   |    | ['HelpPane', 'Pane44']
+   |    | child_window(auto_id="CardCollapeVNA", control_type="Pane")
+   |    |    | 
+   |    |    | Static - 'VNA'    (L1883, T202, R1895, B214)
+   |    |    | ['Static45', 'VNA3', 'VNAStatic2']
+   |    |    | child_window(title="VNA", auto_id="label2", control_type="Text")
+   |    |    | 
+   |    |    | Static - 'VNA'    (L1777, T199, R1875, B218)
+   |    |    | ['Static46', 'VNA4', 'VNAStatic3']
+   |    |    | child_window(title="VNA", auto_id="label1", control_type="Text")
+   |    | 
+   |    | Pane - ''    (L1771, T224, R1903, B256)
+   |    | ['Pane45', 'VNAPane10']
+   |    | child_window(auto_id="CardCollapeSpectrum", control_type="Pane")
+   |    |    | 
+   |    |    | Static - 'SPECTRUM'    (L1883, T234, R1895, B246)
+   |    |    | ['Static47', 'SPECTRUM', 'SPECTRUMStatic', 'SPECTRUM0', 'SPECTRUM1', 'SPECTRUMStatic0', 'SPECTRUMStatic1']
+   |    |    | child_window(title="SPECTRUM", auto_id="label2", control_type="Text")
+   |    |    | 
+   |    |    | Static - 'SPECTRUM'    (L1777, T231, R1875, B250)
+   |    |    | ['Static48', 'SPECTRUM2', 'SPECTRUMStatic2']
+   |    |    | child_window(title="SPECTRUM", auto_id="label1", control_type="Text")
+   |    | 
+   |    | Pane - ''    (L1771, T256, R1903, B288)
+   |    | ['Pane46', 'SPECTRUMPane']
+   |    | child_window(auto_id="CardCollapePOWER", control_type="Pane")
+   |    |    | 
+   |    |    | Static - 'POWER'    (L1883, T266, R1895, B278)
+   |    |    | ['Static49', 'POWER', 'POWERStatic', 'POWER0', 'POWER1', 'POWERStatic0', 'POWERStatic1']
+   |    |    | child_window(title="POWER", auto_id="label2", control_type="Text")
+   |    |    | 
+   |    |    | Static - 'POWER'    (L1777, T263, R1875, B282)
+   |    |    | ['Static50', 'POWER2', 'POWERStatic2']
+   |    |    | child_window(title="POWER", auto_id="label1", control_type="Text")
+   |    | 
+   |    | Pane - ''    (L1771, T288, R1903, B320)
+   |    | ['Pane47', 'POWERPane']
+   |    | child_window(auto_id="CardCollapeATT", control_type="Pane")
+   |    |    | 
+   |    |    | Static - 'ATTENUATOR'    (L1883, T298, R1895, B310)
+   |    |    | ['Static51', 'ATTENUATOR', 'ATTENUATORStatic', 'ATTENUATOR0', 'ATTENUATOR1', 'ATTENUATORStatic0', 'ATTENUATORStatic1']
+   |    |    | child_window(title="ATTENUATOR", auto_id="label2", control_type="Text")
+   |    |    | 
+   |    |    | Static - 'ATTENUATOR'    (L1777, T295, R1875, B314)
+   |    |    | ['Static52', 'ATTENUATOR2', 'ATTENUATORStatic2']
+   |    |    | child_window(title="ATTENUATOR", auto_id="label1", control_type="Text")
+   |    | 
+   |    | ScrollBar - 'Vertical'    (L1903, T32, R1920, B1018)
+   |    | ['Vertical', 'VerticalScrollBar', 'ScrollBar']
+   |    | child_window(title="Vertical", auto_id="NonClientVerticalScrollBar", control_type="ScrollBar")
+   |    |    | 
+   |    |    | Button - 'Line up'    (L1903, T32, R1920, B49)
+   |    |    | ['Line up', 'Button', 'Line upButton', 'Button0', 'Button1']
+   |    |    | child_window(title="Line up", auto_id="UpButton", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Line down'    (L1903, T1001, R1920, B1018)
+   |    |    | ['Line down', 'Button2', 'Line downButton']
+   |    |    | child_window(title="Line down", auto_id="DownButton", control_type="Button")
+   | 
+   | Pane - ''    (L0, T1018, R1920, B1040)
+   | ['Pane48', 'VNAPane11']
+   | child_window(auto_id="panelCustomBorder2", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L0, T1019, R1920, B1040)
+   |    | ['Pane49', 'VNAPane12']
+   |    | child_window(auto_id="flowLayoutPanel1", control_type="Pane")
+   |    |    | 
+   |    |    | Static - ''    (L16, T1025, R24, B1033)
+   |    |    | ['Static53', 'Channel 5Static3']
+   |    |    | child_window(auto_id="lblIconStatusVNA", control_type="Text")
+   |    |    | 
+   |    |    | Static - 'VNA'    (L30, T1019, R68, B1038)
+   |    |    | ['Static54', 'VNA5', 'VNAStatic4']
+   |    |    | child_window(title="VNA", auto_id="lblStatusVNA", control_type="Text")
+   |    |    | 
+   |    |    | Static - 'VNA'    (L87, T1025, R95, B1033)
+   |    |    | ['Static55', 'VNA6', 'VNAStatic5']
+   |    |    | child_window(title="VNA", auto_id="lblIconStatusATT", control_type="Text")
+   |    |    | 
+   |    |    | Static - 'ATT'    (L101, T1019, R134, B1038)
+   |    |    | ['Static56', 'ATT5', 'ATTStatic3']
+   |    |    | child_window(title="ATT", auto_id="label5", control_type="Text")
+   | 
+   | Pane - ''    (L0, T0, R1920, B32)
+   | ['RF Test SetPane', 'Pane50']
+   | child_window(auto_id="panelCustomBorder1", control_type="Pane")
+   |    | 
+   |    | Static - 'RF Test Set'    (L1773, T0, R1821, B32)
+   |    | ['Static57', 'RF Test Set', 'RF Test SetStatic3', 'RF Test Set0', 'RF Test Set1']
+   |    | child_window(title="RF Test Set", auto_id="btnMinimum", control_type="Text")
+   |    | 
+   |    | Static - ''    (L1821, T0, R1869, B32)
+   |    | ['Static58', 'RF Test SetStatic4']
+   |    | child_window(auto_id="label4", control_type="Text")
+   |    | 
+   |    | Static - ''    (L1869, T0, R1917, B32)
+   |    | ['Static59', 'RF Test SetStatic5']
+   |    | child_window(auto_id="btnClose", control_type="Text")
+   |    | 
+   |    | Static - 'RF Test Set'    (L51, T6, R145, B23)
+   |    | ['Static60', 'RF Test Set2', 'RF Test SetStatic6']
+   |    | child_window(title="RF Test Set", auto_id="label2", control_type="Text")
+   |    | 
+   |    | Static - ''    (L11, T1, R39, B29)
+   |    | ['Static61']
+   |    | child_window(auto_id="label1", control_type="Text")

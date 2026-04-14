@@ -1,0 +1,73 @@
+Control Identifiers:
+
+Dialog - 'Run Flow'    (L0, T5, R1920, B1035)
+['Run FlowDialog', 'Dialog', 'Run Flow']
+child_window(title="Run Flow", auto_id="FormMain", control_type="Window")
+   | 
+   | Pane - ''    (L0, T53, R1920, B1026)
+   | ['Pane', 'RF Test SetPane', 'Pane0', 'Pane1', 'RF Test SetPane0', 'RF Test SetPane1']
+   | child_window(auto_id="panelMain", control_type="Pane")
+   | 
+   | Pane - ''    (L1, T7, R1917, B51)
+   | ['Pane2', 'RF Test SetPane2']
+   | child_window(auto_id="panelTitleForm", control_type="Pane")
+   |    | 
+   |    | Button - 'RF Test Set'    (L1867, T9, R1921, B53)
+   |    | ['RF Test Set', 'RF Test SetButton', 'Button', 'RF Test Set0', 'RF Test Set1', 'RF Test SetButton0', 'RF Test SetButton1', 'Button0', 'Button1']
+   |    | child_window(title="RF Test Set", auto_id="btnClose", control_type="Button")
+   |    | 
+   |    | Static - 'RF Test Set'    (L48, T21, R142, B38)
+   |    | ['RF Test Set2', 'Static', 'RF Test SetStatic', 'Static0', 'Static1']
+   |    | child_window(title="RF Test Set", auto_id="lblSwName", control_type="Text")
+   |    | 
+   |    | Button - ''    (L1809, T9, R1863, B53)
+   |    | ['RF Test SetButton2', 'Button2']
+   |    | child_window(auto_id="btnMaximun", control_type="Button")
+   |    | 
+   |    | Menu - 'menuStrip1'    (L132, T7, R1110, B51)
+   |    | ['Menu', 'menuStrip1', 'menuStrip1Menu']
+   |    | child_window(title="menuStrip1", auto_id="menuSw", control_type="MenuBar")
+   |    |    | 
+   |    |    | MenuItem - 'File'    (L132, T7, R166, B51)
+   |    |    | ['MenuItem', 'FileMenuItem', 'File', 'MenuItem0', 'MenuItem1']
+   |    |    | child_window(title="File", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'User Management'    (L166, T7, R302, B51)
+   |    |    | ['User Management', 'MenuItem2', 'User ManagementMenuItem']
+   |    |    | child_window(title="User Management", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Procedure Management'    (L302, T7, R474, B51)
+   |    |    | ['Procedure Management', 'MenuItem3', 'Procedure ManagementMenuItem']
+   |    |    | child_window(title="Procedure Management", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Devices Management'    (L474, T7, R622, B51)
+   |    |    | ['Devices Management', 'Devices ManagementMenuItem', 'MenuItem4']
+   |    |    | child_window(title="Devices Management", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Tools'    (L622, T7, R669, B51)
+   |    |    | ['Tools', 'ToolsMenuItem', 'MenuItem5']
+   |    |    | child_window(title="Tools", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Help'    (L669, T7, R710, B51)
+   |    |    | ['MenuItem6', 'Help', 'HelpMenuItem']
+   |    |    | child_window(title="Help", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Extensions'    (L710, T7, R798, B51)
+   |    |    | ['Extensions', 'MenuItem7', 'ExtensionsMenuItem']
+   |    |    | child_window(title="Extensions", control_type="MenuItem")
+   |    | 
+   |    | Button - ''    (L1755, T9, R1809, B53)
+   |    | ['Button3']
+   |    | child_window(auto_id="btnMinimun", control_type="Button")
+   |    | 
+   |    | Static - ''    (L8, T13, R41, B45)
+   |    | ['Static2']
+   |    | child_window(auto_id="lblSwIcon", control_type="Text")
+   | 
+   | Pane - ''    (L0, T5, R1920, B53)
+   | ['Pane3', 'RF Test SetPane3']
+   | child_window(auto_id="panelBorderTitleTop", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L2, T7, R1918, B51)
+   |    | ['Pane4', 'RF Test SetPane4']
+   |    | child_window(auto_id="panel1", control_type="Pane")

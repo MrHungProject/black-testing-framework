@@ -1,0 +1,2120 @@
+Control Identifiers:
+
+Dialog - 'CMT    S5180B*    Network Analyzer    100 kHz - 18 GHz     N00000001   (Simulation Mode)'    (L-8, T-8, R1928, B1048)
+['CMT    S5180B*    Network Analyzer    100 kHz - 18 GHz     N00000001   (Simulation Mode)', 'Dialog', 'CMT    S5180B*    Network Analyzer    100 kHz - 18 GHz     N00000001   (Simulation Mode)Dialog']
+child_window(title="CMT    S5180B*    Network Analyzer    100 kHz - 18 GHz     N00000001   (Simulation Mode)", control_type="Window")
+   | 
+   | Pane - ''    (L0, T23, R1804, B1040)
+   | ['Pane', 'Pane0', 'Pane1']
+   | child_window(auto_id="265152", control_type="Pane")
+   |    | 
+   |    | Toolbar - ''    (L0, T23, R1804, B42)
+   |    | ['Toolbar Display ', 'ToolbarSystem', 'Toolbar Analysis ', 'Toolbar', 'Toolbar Save/Recall ', 'Toolbar Response ', 'Toolbar Calibration ', 'Toolbar Stimulus ', 'Toolbar Markers ']
+   |    | child_window(auto_id="1903188", control_type="ToolBar")
+   |    |    | 
+   |    |    | MenuItem - ' Trace/Channel '    (L0, T23, R87, B42)
+   |    |    | ['MenuItem', ' Trace/Channel ', ' Trace/Channel MenuItem', 'MenuItem0', 'MenuItem1']
+   |    |    | child_window(title=" Trace/Channel ", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - ' Stimulus '    (L87, T23, R143, B42)
+   |    |    | [' Stimulus MenuItem', 'MenuItem2', ' Stimulus ']
+   |    |    | child_window(title=" Stimulus ", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - ' Response '    (L143, T23, R207, B42)
+   |    |    | [' Response MenuItem', ' Response ', 'MenuItem3']
+   |    |    | child_window(title=" Response ", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - ' Display '    (L207, T23, R258, B42)
+   |    |    | [' Display ', ' Display MenuItem', 'MenuItem4']
+   |    |    | child_window(title=" Display ", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - ' Calibration '    (L258, T23, R326, B42)
+   |    |    | [' Calibration MenuItem', ' Calibration ', 'MenuItem5']
+   |    |    | child_window(title=" Calibration ", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - ' Markers '    (L326, T23, R381, B42)
+   |    |    | ['MenuItem6', ' Markers MenuItem', ' Markers ']
+   |    |    | child_window(title=" Markers ", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - ' Analysis '    (L381, T23, R437, B42)
+   |    |    | [' Analysis MenuItem', ' Analysis ', 'MenuItem7']
+   |    |    | child_window(title=" Analysis ", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - ' Save/Recall '    (L437, T23, R510, B42)
+   |    |    | [' Save/Recall ', 'MenuItem8', ' Save/Recall MenuItem']
+   |    |    | child_window(title=" Save/Recall ", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'System'    (L510, T23, R556, B42)
+   |    |    | ['SystemMenuItem', 'System', 'MenuItem9']
+   |    |    | child_window(title="System", control_type="MenuItem")
+   |    | 
+   |    | Pane - ''    (L0, T1021, R1804, B1040)
+   |    | ['Pane2']
+   |    | child_window(auto_id="264956", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1692, T1023, R1730, B1038)
+   |    |    | ['Pane3']
+   |    |    | child_window(auto_id="330274", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1730, T1023, R1763, B1038)
+   |    |    | ['Pane4']
+   |    |    | child_window(auto_id="264786", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1763, T1023, R1802, B1038)
+   |    |    | ['Pane5']
+   |    |    | child_window(auto_id="264960", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L2, T1023, R91, B1038)
+   |    |    | ['Pane6']
+   |    |    | child_window(auto_id="264958", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L0, T42, R1804, B1021)
+   |    | ['Pane7']
+   |    | child_window(auto_id="265154", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L0, T42, R1804, B1021)
+   |    |    | ['Pane8']
+   |    |    | child_window(auto_id="265156", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Pane - ''    (L0, T42, R1804, B1021)
+   |    |    |    | ['Pane9']
+   |    |    |    | child_window(auto_id="265166", control_type="Pane")
+   |    |    |    |    | 
+   |    |    |    |    | Pane - ''    (L0, T42, R1804, B1021)
+   |    |    |    |    | ['Pane10']
+   |    |    |    |    | child_window(auto_id="265168", control_type="Pane")
+   | 
+   | Pane - ''    (L1804, T23, R1920, B1040)
+   | ['Pane15']
+   | child_window(auto_id="265160", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane16']
+   |    | child_window(auto_id="265088", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane17']
+   |    |    | child_window(auto_id="265070", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane18']
+   |    | child_window(auto_id="1180170", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane19']
+   |    |    | child_window(auto_id="264716", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane20']
+   |    | child_window(auto_id="264616", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane21']
+   |    |    | child_window(auto_id="264640", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane22']
+   |    | child_window(auto_id="265534", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane23']
+   |    |    | child_window(auto_id="265536", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane24']
+   |    | child_window(auto_id="265442", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane25']
+   |    |    | child_window(auto_id="265444", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane26']
+   |    | child_window(auto_id="264964", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane27']
+   |    |    | child_window(auto_id="264966", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane28']
+   |    | child_window(auto_id="264976", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane29']
+   |    |    | child_window(auto_id="264962", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane30']
+   |    | child_window(auto_id="264972", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane31']
+   |    |    | child_window(auto_id="264974", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane32']
+   |    | child_window(auto_id="264984", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane33']
+   |    |    | child_window(auto_id="264970", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane34']
+   |    | child_window(auto_id="264980", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane35']
+   |    |    | child_window(auto_id="264982", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane36']
+   |    | child_window(auto_id="264992", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane37']
+   |    |    | child_window(auto_id="264978", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane38']
+   |    | child_window(auto_id="264988", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane39']
+   |    |    | child_window(auto_id="264990", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane40']
+   |    | child_window(auto_id="265000", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane41']
+   |    |    | child_window(auto_id="264986", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane42']
+   |    | child_window(auto_id="264996", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane43']
+   |    |    | child_window(auto_id="264998", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane44']
+   |    | child_window(auto_id="265008", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane45']
+   |    |    | child_window(auto_id="264994", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane46']
+   |    | child_window(auto_id="265004", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane47']
+   |    |    | child_window(auto_id="265006", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane48']
+   |    | child_window(auto_id="265016", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane49']
+   |    |    | child_window(auto_id="265002", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane50']
+   |    | child_window(auto_id="265012", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane51']
+   |    |    | child_window(auto_id="265014", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane52']
+   |    | child_window(auto_id="265024", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane53']
+   |    |    | child_window(auto_id="265010", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane54']
+   |    | child_window(auto_id="265020", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane55']
+   |    |    | child_window(auto_id="265022", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane56']
+   |    | child_window(auto_id="265032", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane57']
+   |    |    | child_window(auto_id="265018", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane58']
+   |    | child_window(auto_id="265028", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane59']
+   |    |    | child_window(auto_id="265030", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane60']
+   |    | child_window(auto_id="265040", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane61']
+   |    |    | child_window(auto_id="265026", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane62']
+   |    | child_window(auto_id="265036", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane63']
+   |    |    | child_window(auto_id="265038", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane64']
+   |    | child_window(auto_id="265052", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane65']
+   |    |    | child_window(auto_id="265034", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane66']
+   |    | child_window(auto_id="265048", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane67']
+   |    |    | child_window(auto_id="265050", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane68']
+   |    | child_window(auto_id="265060", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane69']
+   |    |    | child_window(auto_id="265042", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane70']
+   |    | child_window(auto_id="265056", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane71']
+   |    |    | child_window(auto_id="265058", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane72']
+   |    | child_window(auto_id="265068", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane73']
+   |    |    | child_window(auto_id="265054", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane74']
+   |    | child_window(auto_id="265064", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane75']
+   |    |    | child_window(auto_id="265066", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane76']
+   |    | child_window(auto_id="265080", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane77']
+   |    |    | child_window(auto_id="265062", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane78']
+   |    | child_window(auto_id="265072", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane79']
+   |    |    | child_window(auto_id="265074", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane80']
+   |    | child_window(auto_id="265084", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane81']
+   |    |    | child_window(auto_id="265086", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane82']
+   |    | child_window(auto_id="264770", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane83']
+   |    |    | child_window(auto_id="265082", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane84']
+   |    | child_window(auto_id="264924", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane85']
+   |    |    | child_window(auto_id="264926", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane86']
+   |    | child_window(auto_id="264920", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane87']
+   |    |    | child_window(auto_id="264922", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane88']
+   |    | child_window(auto_id="264916", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane89']
+   |    |    | child_window(auto_id="264918", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane90']
+   |    | child_window(auto_id="264912", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane91']
+   |    |    | child_window(auto_id="264914", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane92']
+   |    | child_window(auto_id="264908", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane93']
+   |    |    | child_window(auto_id="264910", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane94']
+   |    | child_window(auto_id="264904", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane95']
+   |    |    | child_window(auto_id="264906", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane96']
+   |    | child_window(auto_id="264900", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane97']
+   |    |    | child_window(auto_id="264902", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane98']
+   |    | child_window(auto_id="264896", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane99']
+   |    |    | child_window(auto_id="264898", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane100']
+   |    | child_window(auto_id="264892", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane101']
+   |    |    | child_window(auto_id="264894", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane102']
+   |    | child_window(auto_id="264888", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane103']
+   |    |    | child_window(auto_id="264890", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane104']
+   |    | child_window(auto_id="264756", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane105']
+   |    |    | child_window(auto_id="264758", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane106']
+   |    | child_window(auto_id="2032986", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane107']
+   |    |    | child_window(auto_id="264754", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane108']
+   |    | child_window(auto_id="264576", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane109']
+   |    |    | child_window(auto_id="2099026", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane110']
+   |    | child_window(auto_id="1312988", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane111']
+   |    |    | child_window(auto_id="264580", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane112']
+   |    | child_window(auto_id="264782", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane113']
+   |    |    | child_window(auto_id="461064", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane114']
+   |    | child_window(auto_id="264780", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane115']
+   |    |    | child_window(auto_id="264774", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane116']
+   |    | child_window(auto_id="264776", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane117']
+   |    |    | child_window(auto_id="264778", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane118']
+   |    | child_window(auto_id="264944", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane119']
+   |    |    | child_window(auto_id="264790", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane120']
+   |    | child_window(auto_id="264940", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane121']
+   |    |    | child_window(auto_id="264942", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane122']
+   |    | child_window(auto_id="265326", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane123']
+   |    |    | child_window(auto_id="265328", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane124']
+   |    | child_window(auto_id="265250", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane125']
+   |    |    | child_window(auto_id="265252", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane126']
+   |    | child_window(auto_id="265774", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane127']
+   |    |    | child_window(auto_id="265776", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane128']
+   |    | child_window(auto_id="264622", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane129']
+   |    |    | child_window(auto_id="264624", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane130']
+   |    | child_window(auto_id="264798", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane131']
+   |    |    | child_window(auto_id="264784", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane132']
+   |    | child_window(auto_id="264794", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane133']
+   |    |    | child_window(auto_id="264796", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane134']
+   |    | child_window(auto_id="264806", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane135']
+   |    |    | child_window(auto_id="264792", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane136']
+   |    | child_window(auto_id="264802", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane137']
+   |    |    | child_window(auto_id="264804", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane138']
+   |    | child_window(auto_id="264814", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane139']
+   |    |    | child_window(auto_id="264800", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane140']
+   |    | child_window(auto_id="264810", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane141']
+   |    |    | child_window(auto_id="264812", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane142']
+   |    | child_window(auto_id="264822", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane143']
+   |    |    | child_window(auto_id="264808", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane144']
+   |    | child_window(auto_id="264818", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane145']
+   |    |    | child_window(auto_id="264820", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane146']
+   |    | child_window(auto_id="264830", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane147']
+   |    |    | child_window(auto_id="264816", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane148']
+   |    | child_window(auto_id="264826", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane149']
+   |    |    | child_window(auto_id="264828", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane150']
+   |    | child_window(auto_id="264838", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane151']
+   |    |    | child_window(auto_id="264824", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane152']
+   |    | child_window(auto_id="264834", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane153']
+   |    |    | child_window(auto_id="264836", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane154']
+   |    | child_window(auto_id="264846", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane155']
+   |    |    | child_window(auto_id="264832", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane156']
+   |    | child_window(auto_id="264842", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane157']
+   |    |    | child_window(auto_id="264844", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane158']
+   |    | child_window(auto_id="264854", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane159']
+   |    |    | child_window(auto_id="264840", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane160']
+   |    | child_window(auto_id="264850", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane161']
+   |    |    | child_window(auto_id="264852", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane162']
+   |    | child_window(auto_id="264862", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane163']
+   |    |    | child_window(auto_id="264848", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane164']
+   |    | child_window(auto_id="264858", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane165']
+   |    |    | child_window(auto_id="264860", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane166']
+   |    | child_window(auto_id="264870", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane167']
+   |    |    | child_window(auto_id="264856", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane168']
+   |    | child_window(auto_id="264866", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane169']
+   |    |    | child_window(auto_id="264868", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane170']
+   |    | child_window(auto_id="264878", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane171']
+   |    |    | child_window(auto_id="264864", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane172']
+   |    | child_window(auto_id="264874", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane173']
+   |    |    | child_window(auto_id="264876", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane174']
+   |    | child_window(auto_id="264886", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane175']
+   |    |    | child_window(auto_id="264872", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane176']
+   |    | child_window(auto_id="264882", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane177']
+   |    |    | child_window(auto_id="264884", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane178']
+   |    | child_window(auto_id="264644", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane179']
+   |    |    | child_window(auto_id="264880", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane180']
+   |    | child_window(auto_id="330056", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane181']
+   |    |    | child_window(auto_id="264614", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane182']
+   |    | child_window(auto_id="264626", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane183']
+   |    |    | child_window(auto_id="264628", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane184']
+   |    | child_window(auto_id="264636", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane185']
+   |    |    | child_window(auto_id="330072", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane186']
+   |    | child_window(auto_id="264632", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane187']
+   |    |    | child_window(auto_id="264634", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane188']
+   |    | child_window(auto_id="330068", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane189']
+   |    |    | child_window(auto_id="264630", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane190']
+   |    | child_window(auto_id="264734", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane191']
+   |    |    | child_window(auto_id="264736", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane192']
+   |    | child_window(auto_id="264730", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane193']
+   |    |    | child_window(auto_id="264732", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane194']
+   |    | child_window(auto_id="264726", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane195']
+   |    |    | child_window(auto_id="264728", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane196']
+   |    | child_window(auto_id="264722", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane197']
+   |    |    | child_window(auto_id="264724", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane198']
+   |    | child_window(auto_id="264718", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane199']
+   |    |    | child_window(auto_id="264720", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane200']
+   |    | child_window(auto_id="264712", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane201']
+   |    |    | child_window(auto_id="264714", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane202']
+   |    | child_window(auto_id="1181470", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane203']
+   |    |    | child_window(auto_id="592106", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane204']
+   |    | child_window(auto_id="330074", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane205']
+   |    |    | child_window(auto_id="1640018", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane206']
+   |    | child_window(auto_id="264566", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane207']
+   |    |    | child_window(auto_id="264562", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane208']
+   |    | child_window(auto_id="264570", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane209']
+   |    |    | child_window(auto_id="264568", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane210']
+   |    | child_window(auto_id="264564", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane211']
+   |    |    | child_window(auto_id="264572", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane212']
+   |    | child_window(auto_id="1967952", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane213']
+   |    |    | child_window(auto_id="2230026", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane214']
+   |    | child_window(auto_id="3213500", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane215']
+   |    |    | child_window(auto_id="5244546", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane216']
+   |    | child_window(auto_id="330066", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane217']
+   |    |    | child_window(auto_id="264638", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane218']
+   |    | child_window(auto_id="264650", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane219']
+   |    |    | child_window(auto_id="264652", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane220']
+   |    | child_window(auto_id="264748", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane221']
+   |    |    | child_window(auto_id="264750", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane222']
+   |    | child_window(auto_id="265114", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane223']
+   |    |    | child_window(auto_id="264746", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane224']
+   |    | child_window(auto_id="265046", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane225']
+   |    |    | child_window(auto_id="265112", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane226']
+   |    | child_window(auto_id="265562", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane227']
+   |    |    | child_window(auto_id="265044", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane228']
+   |    | child_window(auto_id="526606", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane229']
+   |    |    | child_window(auto_id="265560", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane230']
+   |    | child_window(auto_id="265150", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane231']
+   |    |    | child_window(auto_id="592094", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane232']
+   |    | child_window(auto_id="265078", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane233']
+   |    |    | child_window(auto_id="265148", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane234']
+   |    | child_window(auto_id="526576", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane235']
+   |    |    | child_window(auto_id="265076", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane236']
+   |    | child_window(auto_id="330064", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane237']
+   |    |    | child_window(auto_id="1247338", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane238']
+   |    | child_window(auto_id="264658", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane239']
+   |    |    | child_window(auto_id="264660", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane240']
+   |    | child_window(auto_id="264654", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane241']
+   |    |    | child_window(auto_id="264656", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane242']
+   |    | child_window(auto_id="264668", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane243']
+   |    |    | child_window(auto_id="330062", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane244']
+   |    | child_window(auto_id="264664", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane245']
+   |    |    | child_window(auto_id="264666", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane246']
+   |    | child_window(auto_id="330060", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane247']
+   |    |    | child_window(auto_id="264662", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane248']
+   |    | child_window(auto_id="264674", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane249']
+   |    |    | child_window(auto_id="264676", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane250']
+   |    | child_window(auto_id="264670", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane251']
+   |    |    | child_window(auto_id="264672", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane252']
+   |    | child_window(auto_id="264684", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane253']
+   |    |    | child_window(auto_id="330086", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane254']
+   |    | child_window(auto_id="264680", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane255']
+   |    |    | child_window(auto_id="264682", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane256']
+   |    | child_window(auto_id="330058", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane257']
+   |    |    | child_window(auto_id="264678", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane258']
+   |    | child_window(auto_id="264690", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane259']
+   |    |    | child_window(auto_id="264692", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane260']
+   |    | child_window(auto_id="264700", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane261']
+   |    |    | child_window(auto_id="264688", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane262']
+   |    | child_window(auto_id="264696", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane263']
+   |    |    | child_window(auto_id="264698", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane264']
+   |    | child_window(auto_id="330078", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane265']
+   |    |    | child_window(auto_id="264694", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane266']
+   |    | child_window(auto_id="264706", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane267']
+   |    |    | child_window(auto_id="264708", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane268']
+   |    | child_window(auto_id="264702", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane269']
+   |    |    | child_window(auto_id="264704", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane270']
+   |    | child_window(auto_id="592124", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane271']
+   |    |    | child_window(auto_id="330088", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane272']
+   |    | child_window(auto_id="526632", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane273']
+   |    |    | child_window(auto_id="395554", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane274']
+   |    | child_window(auto_id="657656", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane275']
+   |    |    | child_window(auto_id="526634", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane276']
+   |    | child_window(auto_id="395552", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane277']
+   |    |    | child_window(auto_id="592122", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane278']
+   |    | child_window(auto_id="461060", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane279']
+   |    |    | child_window(auto_id="854088", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane280']
+   |    | child_window(auto_id="526592", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane281']
+   |    |    | child_window(auto_id="657452", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane282']
+   |    | child_window(auto_id="395550", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane283']
+   |    |    | child_window(auto_id="461062", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane284']
+   |    | child_window(auto_id="985234", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane285']
+   |    |    | child_window(auto_id="461014", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane286']
+   |    | child_window(auto_id="592108", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane287']
+   |    |    | child_window(auto_id="1640556", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane288']
+   |    | child_window(auto_id="592144", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane289']
+   |    |    | child_window(auto_id="1967982", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane290']
+   |    | child_window(auto_id="2164752", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane291']
+   |    |    | child_window(auto_id="526610", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane292']
+   |    | child_window(auto_id="2099372", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane293']
+   |    |    | child_window(auto_id="2425252", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane294']
+   |    | child_window(auto_id="2033628", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane295']
+   |    |    | child_window(auto_id="3409196", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane296']
+   |    | child_window(auto_id="591918", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane297']
+   |    |    | child_window(auto_id="984220", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane298']
+   |    | child_window(auto_id="592148", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane299']
+   |    |    | child_window(auto_id="2360984", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane300']
+   |    | child_window(auto_id="788520", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane301']
+   |    |    | child_window(auto_id="2164990", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane302']
+   |    | child_window(auto_id="854234", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane303']
+   |    |    | child_window(auto_id="1509304", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane304']
+   |    | child_window(auto_id="1639462", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane305']
+   |    |    | child_window(auto_id="8979770", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane306']
+   |    | child_window(auto_id="788514", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane307']
+   |    |    | child_window(auto_id="1115164", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane308']
+   |    | child_window(auto_id="1705668", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane309']
+   |    |    | child_window(auto_id="2818474", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane310']
+   |    | child_window(auto_id="1902872", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane311']
+   |    |    | child_window(auto_id="1246070", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane312']
+   |    | child_window(auto_id="788568", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane313']
+   |    |    | child_window(auto_id="854000", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane314']
+   |    | child_window(auto_id="4589582", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane315']
+   |    |    | child_window(auto_id="2883644", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane316']
+   |    | child_window(auto_id="1114924", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane317']
+   |    |    | child_window(auto_id="723000", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane318']
+   |    | child_window(auto_id="265770", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane319']
+   |    |    | child_window(auto_id="265772", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane320']
+   |    | child_window(auto_id="330084", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane321']
+   |    |    | child_window(auto_id="265768", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane322']
+   |    | child_window(auto_id="330090", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane323']
+   |    |    | child_window(auto_id="330076", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane324']
+   |    | child_window(auto_id="264928", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane325']
+   |    |    | child_window(auto_id="264930", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane326']
+   |    | child_window(auto_id="265372", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane327']
+   |    |    | child_window(auto_id="265374", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane328']
+   |    | child_window(auto_id="265652", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane329']
+   |    |    | child_window(auto_id="265654", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane330']
+   |    | child_window(auto_id="265760", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane331']
+   |    |    | child_window(auto_id="265762", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane332']
+   |    | child_window(auto_id="265756", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane333']
+   |    |    | child_window(auto_id="265758", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane334']
+   |    | child_window(auto_id="265752", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane335']
+   |    |    | child_window(auto_id="265754", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane336']
+   |    | child_window(auto_id="265748", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane337']
+   |    |    | child_window(auto_id="265750", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane338']
+   |    | child_window(auto_id="265744", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane339']
+   |    |    | child_window(auto_id="265746", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane340']
+   |    | child_window(auto_id="265740", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane341']
+   |    |    | child_window(auto_id="265742", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane342']
+   |    | child_window(auto_id="265736", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane343']
+   |    |    | child_window(auto_id="265738", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane344']
+   |    | child_window(auto_id="265732", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane345']
+   |    |    | child_window(auto_id="265734", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane346']
+   |    | child_window(auto_id="265728", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane347']
+   |    |    | child_window(auto_id="265730", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane348']
+   |    | child_window(auto_id="265724", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane349']
+   |    |    | child_window(auto_id="265726", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane350']
+   |    | child_window(auto_id="265720", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane351']
+   |    |    | child_window(auto_id="265722", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane352']
+   |    | child_window(auto_id="265716", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane353']
+   |    |    | child_window(auto_id="265718", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane354']
+   |    | child_window(auto_id="265712", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane355']
+   |    |    | child_window(auto_id="265714", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane356']
+   |    | child_window(auto_id="265708", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane357']
+   |    |    | child_window(auto_id="265710", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane358']
+   |    | child_window(auto_id="265704", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane359']
+   |    |    | child_window(auto_id="265706", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane360']
+   |    | child_window(auto_id="265700", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane361']
+   |    |    | child_window(auto_id="265702", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane362']
+   |    | child_window(auto_id="265696", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane363']
+   |    |    | child_window(auto_id="265698", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane364']
+   |    | child_window(auto_id="265692", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane365']
+   |    |    | child_window(auto_id="265694", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane366']
+   |    | child_window(auto_id="265688", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane367']
+   |    |    | child_window(auto_id="265690", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane368']
+   |    | child_window(auto_id="265684", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane369']
+   |    |    | child_window(auto_id="265686", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane370']
+   |    | child_window(auto_id="265676", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane371']
+   |    |    | child_window(auto_id="265678", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane372']
+   |    | child_window(auto_id="265672", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane373']
+   |    |    | child_window(auto_id="265674", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane374']
+   |    | child_window(auto_id="265668", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane375']
+   |    |    | child_window(auto_id="265670", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane376']
+   |    | child_window(auto_id="265664", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane377']
+   |    |    | child_window(auto_id="265666", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane378']
+   |    | child_window(auto_id="265660", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane379']
+   |    |    | child_window(auto_id="265662", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane380']
+   |    | child_window(auto_id="265656", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane381']
+   |    |    | child_window(auto_id="265658", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane382']
+   |    | child_window(auto_id="265648", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane383']
+   |    |    | child_window(auto_id="265650", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane384']
+   |    | child_window(auto_id="265642", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane385']
+   |    |    | child_window(auto_id="265646", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane386']
+   |    | child_window(auto_id="265638", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane387']
+   |    |    | child_window(auto_id="265640", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane388']
+   |    | child_window(auto_id="265634", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane389']
+   |    |    | child_window(auto_id="265636", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane390']
+   |    | child_window(auto_id="265630", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane391']
+   |    |    | child_window(auto_id="265632", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane392']
+   |    | child_window(auto_id="265626", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane393']
+   |    |    | child_window(auto_id="265628", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane394']
+   |    | child_window(auto_id="265622", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane395']
+   |    |    | child_window(auto_id="265624", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane396']
+   |    | child_window(auto_id="265618", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane397']
+   |    |    | child_window(auto_id="265620", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane398']
+   |    | child_window(auto_id="265614", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane399']
+   |    |    | child_window(auto_id="265616", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane400']
+   |    | child_window(auto_id="265610", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane401']
+   |    |    | child_window(auto_id="265612", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane402']
+   |    | child_window(auto_id="265606", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane403']
+   |    |    | child_window(auto_id="265608", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane404']
+   |    | child_window(auto_id="265602", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane405']
+   |    |    | child_window(auto_id="265604", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane406']
+   |    | child_window(auto_id="265598", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane407']
+   |    |    | child_window(auto_id="265600", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane408']
+   |    | child_window(auto_id="265594", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane409']
+   |    |    | child_window(auto_id="265596", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane410']
+   |    | child_window(auto_id="265590", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane411']
+   |    |    | child_window(auto_id="265592", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane412']
+   |    | child_window(auto_id="265586", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane413']
+   |    |    | child_window(auto_id="265588", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane414']
+   |    | child_window(auto_id="265582", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane415']
+   |    |    | child_window(auto_id="265584", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane416']
+   |    | child_window(auto_id="265578", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane417']
+   |    |    | child_window(auto_id="265580", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane418']
+   |    | child_window(auto_id="265574", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane419']
+   |    |    | child_window(auto_id="265576", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane420']
+   |    | child_window(auto_id="265570", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane421']
+   |    |    | child_window(auto_id="265572", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane422']
+   |    | child_window(auto_id="265566", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane423']
+   |    |    | child_window(auto_id="265568", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane424']
+   |    | child_window(auto_id="265558", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane425']
+   |    |    | child_window(auto_id="265564", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane426']
+   |    | child_window(auto_id="265554", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane427']
+   |    |    | child_window(auto_id="265556", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane428']
+   |    | child_window(auto_id="265550", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane429']
+   |    |    | child_window(auto_id="265552", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane430']
+   |    | child_window(auto_id="265546", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane431']
+   |    |    | child_window(auto_id="265548", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane432']
+   |    | child_window(auto_id="265542", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane433']
+   |    |    | child_window(auto_id="265544", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane434']
+   |    | child_window(auto_id="265538", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane435']
+   |    |    | child_window(auto_id="265540", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane436']
+   |    | child_window(auto_id="265530", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane437']
+   |    |    | child_window(auto_id="265532", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane438']
+   |    | child_window(auto_id="265526", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane439']
+   |    |    | child_window(auto_id="265528", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane440']
+   |    | child_window(auto_id="265522", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane441']
+   |    |    | child_window(auto_id="265524", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane442']
+   |    | child_window(auto_id="265518", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane443']
+   |    |    | child_window(auto_id="265520", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane444']
+   |    | child_window(auto_id="265514", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane445']
+   |    |    | child_window(auto_id="265516", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane446']
+   |    | child_window(auto_id="265510", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane447']
+   |    |    | child_window(auto_id="265512", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane448']
+   |    | child_window(auto_id="265506", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane449']
+   |    |    | child_window(auto_id="265508", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane450']
+   |    | child_window(auto_id="265502", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane451']
+   |    |    | child_window(auto_id="265504", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane452']
+   |    | child_window(auto_id="265498", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane453']
+   |    |    | child_window(auto_id="265500", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane454']
+   |    | child_window(auto_id="265494", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane455']
+   |    |    | child_window(auto_id="265496", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane456']
+   |    | child_window(auto_id="265490", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane457']
+   |    |    | child_window(auto_id="265492", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane458']
+   |    | child_window(auto_id="265486", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane459']
+   |    |    | child_window(auto_id="265488", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane460']
+   |    | child_window(auto_id="265482", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane461']
+   |    |    | child_window(auto_id="265484", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane462']
+   |    | child_window(auto_id="265478", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane463']
+   |    |    | child_window(auto_id="265480", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane464']
+   |    | child_window(auto_id="265474", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane465']
+   |    |    | child_window(auto_id="265476", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane466']
+   |    | child_window(auto_id="265470", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane467']
+   |    |    | child_window(auto_id="265472", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane468']
+   |    | child_window(auto_id="265466", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane469']
+   |    |    | child_window(auto_id="265468", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane470']
+   |    | child_window(auto_id="265462", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane471']
+   |    |    | child_window(auto_id="265464", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane472']
+   |    | child_window(auto_id="265458", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane473']
+   |    |    | child_window(auto_id="265460", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane474']
+   |    | child_window(auto_id="265454", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane475']
+   |    |    | child_window(auto_id="265456", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane476']
+   |    | child_window(auto_id="265450", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane477']
+   |    |    | child_window(auto_id="265452", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane478']
+   |    | child_window(auto_id="265446", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane479']
+   |    |    | child_window(auto_id="265448", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane480']
+   |    | child_window(auto_id="265438", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane481']
+   |    |    | child_window(auto_id="265440", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane482']
+   |    | child_window(auto_id="265434", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane483']
+   |    |    | child_window(auto_id="265436", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane484']
+   |    | child_window(auto_id="265430", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane485']
+   |    |    | child_window(auto_id="265432", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane486']
+   |    | child_window(auto_id="265426", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane487']
+   |    |    | child_window(auto_id="265428", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane488']
+   |    | child_window(auto_id="265422", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane489']
+   |    |    | child_window(auto_id="265424", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane490']
+   |    | child_window(auto_id="265418", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane491']
+   |    |    | child_window(auto_id="265420", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane492']
+   |    | child_window(auto_id="265414", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane493']
+   |    |    | child_window(auto_id="265416", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane494']
+   |    | child_window(auto_id="265410", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane495']
+   |    |    | child_window(auto_id="265412", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane496']
+   |    | child_window(auto_id="265406", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane497']
+   |    |    | child_window(auto_id="265408", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane498']
+   |    | child_window(auto_id="265402", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L1805, T24, R1919, B74)
+   |    |    | ['Pane499']
+   |    |    | child_window(auto_id="265404", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane500']
+   |    | child_window(auto_id="265398", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane501']
+   |    | child_window(auto_id="265394", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane502']
+   |    | child_window(auto_id="265390", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane503']
+   |    | child_window(auto_id="265386", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane504']
+   |    | child_window(auto_id="265382", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane505']
+   |    | child_window(auto_id="265378", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane506']
+   |    | child_window(auto_id="265370", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane507']
+   |    | child_window(auto_id="265366", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane508']
+   |    | child_window(auto_id="265362", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane509']
+   |    | child_window(auto_id="265358", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane510']
+   |    | child_window(auto_id="265354", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane511']
+   |    | child_window(auto_id="265350", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane512']
+   |    | child_window(auto_id="265346", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane513']
+   |    | child_window(auto_id="265342", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane514']
+   |    | child_window(auto_id="265338", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane515']
+   |    | child_window(auto_id="265334", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane516']
+   |    | child_window(auto_id="265330", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane517']
+   |    | child_window(auto_id="265322", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane518']
+   |    | child_window(auto_id="265318", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane519']
+   |    | child_window(auto_id="265314", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane520']
+   |    | child_window(auto_id="265310", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane521']
+   |    | child_window(auto_id="265306", control_type="Pane")
+   |    | 
+   |    | Pane - ''    (L1805, T24, R1919, B1039)
+   |    | ['Pane522']
+   |    | child_window(auto_id="265162", control_type="Pane")
+   | 
+   | TitleBar - ''    (L16, T-5, R1920, B23)
+   | ['TitleBar']
