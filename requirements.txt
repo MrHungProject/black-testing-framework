@@ -1,0 +1,26 @@
+# ── Core ──────────────────────────────────────────────────
+pytest>=8.0.0
+pytest-html>=4.1.0
+pytest-xdist>=3.5.0          # parallel execution
+pytest-timeout>=2.3.0
+
+# ── Windows App Automation ────────────────────────────────
+pywinauto>=0.6.8              # Win32 / WPF / WinForms
+comtypes>=1.4.1               # required by pywinauto UIA backend
+
+# ── Device Communication ──────────────────────────────────
+pyserial>=3.5                 # USB Serial (COM port)
+pyserial-asyncio>=0.6         # async serial (optional)
+
+# ── Reporting ─────────────────────────────────────────────
+allure-pytest>=2.13.5         # rich HTML report
+openpyxl>=3.1.2               # Excel report
+
+# ── Config & Utilities ───────────────────────────────────
+pydantic>=2.6.0               # settings validation
+pydantic-settings>=2.2.0
+PyYAML>=6.0.1
+python-dotenv>=1.0.1
+
+# ── Optional: TestRail integration ────────────────────────
+# trcli>=1.8.0                # uncomment if using TestRail

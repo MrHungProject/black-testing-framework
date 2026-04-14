@@ -1,0 +1,46 @@
+# ══════════════════════════════════════════════════════════
+#  Framework Settings
+#  Các giá trị có thể override bằng environment variable:
+#    SERIAL_PORT=COM5 pytest ...
+# ══════════════════════════════════════════════════════════
+
+app:
+  name: "PC17"
+  exe_path: "C:/Apps/PC17/PC17.exe"
+  backend: "uia"                      # uia | win32
+  connect_timeout: 10
+  action_delay: 0.3
+
+serial:
+  default_port: "COM3"                # override bằng env: SERIAL_PORT=COMx
+  baudrate: 115200
+  bytesize: 8
+  parity: "N"
+  stopbits: 1
+  timeout: 2.0
+  write_timeout: 2.0
+  auto_detect: true
+
+relay:
+  enabled: false
+  port: "COM10"
+  baudrate: 9600
+  channels: 4
+  power_cycle_delay: 3.0
+
+report:
+  output_dir: "reports"
+  html_dir: "reports/html"
+  excel_dir: "reports/excel"
+  log_dir: "reports/logs"
+  excel_filename: "test_results.xlsx"
+  include_screenshots: true
+  screenshot_on_fail: true
+
+testrail:
+  enabled: false
+  url: "https://yourcompany.testrail.io"
+  username: ""
+  api_key: ""
+  project_id: 1
+  suite_id: 1

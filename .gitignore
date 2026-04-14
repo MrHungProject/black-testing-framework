@@ -1,0 +1,42 @@
+# ── Python ────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual environments ──────────────────────────────────
+.venv/
+venv/
+env/
+.env
+
+# ── Reports (generated — không commit vào git) ────────────
+reports/html/
+reports/excel/
+reports/logs/
+reports/screenshots/
+reports/allure-results/
+
+# ── pytest cache ──────────────────────────────────────────
+.pytest_cache/
+.cache/
+junit.xml
+
+# ── IDE ───────────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.user
+
+# ── OS ────────────────────────────────────────────────────
+Thumbs.db
+.DS_Store
+
+# ── Secrets / local config ────────────────────────────────
+config/settings.local.yaml
+.env.local
