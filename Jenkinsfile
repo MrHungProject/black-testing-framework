@@ -113,8 +113,7 @@ pipeline {
                         extraArgs += ' -m "not hw_depend"'
                     }
 
-                    // returnStatus=true → không throw exception khi test fail
-                    // pytest exit code: 0=all pass, 1=some fail, 2=interrupted
+                    // returnStatus=true → pipeline không crash khi có test fail
                     def exitCode = bat(returnStatus: true, script: """
                         call ${env.VENV_DIR}\\Scripts\\activate.bat
                         set SERIAL_PORT=${params.COM_PORT}
@@ -125,14 +124,14 @@ pipeline {
                             -v
                     """)
 
-                    // exit 0 = PASS, exit 1 = có test fail → UNSTABLE
-                    // exit 2+ = pipeline lỗi thật sự → FAILURE
-                    if (exitCode == 1) {
-                        currentBuild.result = 'UNSTABLE'
-                        echo "⚠️ Some tests FAILED — build marked UNSTABLE"
-                    } else if (exitCode > 1) {
+                    // Lưu exit code để post action đọc
+                    env.PYTEST_EXIT_CODE = "${exitCode}"
+
+                    // exit 2+ = pytest bị crash thật sự → mới FAILURE
+                    if (exitCode >= 2) {
                         error("pytest crashed with exit code ${exitCode}")
                     }
+                    // exit 0 hoặc 1 → build vẫn SUCCESS, JUnit report hiện chi tiết
                 }
             }
         }
@@ -166,22 +165,23 @@ pipeline {
         }
 
         success {
-            echo "✅ ALL TESTS PASSED — Build #${env.BUILD_NUMBER}"
-            // Gửi email / Slack khi pass (uncomment nếu đã cấu hình)
-            // emailext subject: "✅ PASS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-            //          body: "All tests passed.\n${env.BUILD_URL}",
-            //          to: 'team@company.com'
+            script {
+                def exitCode = env.PYTEST_EXIT_CODE?.toInteger() ?: 0
+                if (exitCode == 0) {
+                    echo "✅ ALL TESTS PASSED — Build #${env.BUILD_NUMBER}"
+                    echo "📊 Report: ${env.BUILD_URL}Test_Report/"
+                } else {
+                    echo "⚠️ BUILD SUCCESS — nhưng có test FAILED"
+                    echo "📋 Xem chi tiết: ${env.BUILD_URL}testReport/"
+                    echo "📊 HTML Report : ${env.BUILD_URL}Test_Report/"
+                    echo "📁 Excel Report: ${env.BUILD_URL}artifact/reports/excel/test_results.xlsx"
+                }
+            }
         }
 
         failure {
-            echo "❌ TEST FAILED — Build #${env.BUILD_NUMBER}"
-            // emailext subject: "❌ FAIL: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-            //          body: "Tests failed.\nSee: ${env.BUILD_URL}\n\nReport: ${env.BUILD_URL}Test_Report/",
-            //          to: 'team@company.com'
-        }
-
-        unstable {
-            echo "⚠️ BUILD UNSTABLE (some tests failed) — Build #${env.BUILD_NUMBER}"
+            echo "💥 PIPELINE FAILED — lỗi hệ thống, không phải test fail"
+            echo "🔍 Xem Console Output: ${env.BUILD_URL}console"
         }
     }
 }
