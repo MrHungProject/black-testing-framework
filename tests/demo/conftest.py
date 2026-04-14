@@ -19,18 +19,22 @@ class MockAppController:
         }
 
     def click(self, identifier):
-        # Giả lập click button
-        if "On" in str(identifier) or "on" in str(identifier):
+        id_str = str(identifier)
+        # Dùng key cụ thể để tránh nhầm "on" trong "btnConnect"
+        if "AttenuatorOn" in id_str:
             self._state["attenuator"] = "ON"
-        elif "Off" in str(identifier) or "off" in str(identifier):
+        elif "AttenuatorOff" in id_str:
             self._state["attenuator"] = "OFF"
-        elif "Connect" in str(identifier):
+        elif "Disconnect" in id_str:
+            self._state["connection"] = "Disconnected"
+        elif "Connect" in id_str:
             self._state["connection"] = "Connected"
 
     def get_text(self, identifier) -> str:
-        if "Attenuator" in str(identifier) or "Status" in str(identifier):
+        id_str = str(identifier)
+        if "lblAttenuatorStatus" in id_str:
             return self._state["attenuator"]
-        if "Conn" in str(identifier):
+        if "lblConnectionStatus" in id_str:
             return self._state["connection"]
         return "OK"
 
