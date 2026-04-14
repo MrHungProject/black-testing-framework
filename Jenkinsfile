@@ -113,7 +113,9 @@ pipeline {
                         extraArgs += ' -m "not hw_depend"'
                     }
 
-                    bat """
+                    // returnStatus=true → không throw exception khi test fail
+                    // pytest exit code: 0=all pass, 1=some fail, 2=interrupted
+                    def exitCode = bat(returnStatus: true, script: """
                         call ${env.VENV_DIR}\\Scripts\\activate.bat
                         set SERIAL_PORT=${params.COM_PORT}
                         python -m pytest ${testPath} ${extraArgs} ^
@@ -121,7 +123,16 @@ pipeline {
                             --html=reports/html/report.html ^
                             --self-contained-html ^
                             -v
-                    """
+                    """)
+
+                    // exit 0 = PASS, exit 1 = có test fail → UNSTABLE
+                    // exit 2+ = pipeline lỗi thật sự → FAILURE
+                    if (exitCode == 1) {
+                        currentBuild.result = 'UNSTABLE'
+                        echo "⚠️ Some tests FAILED — build marked UNSTABLE"
+                    } else if (exitCode > 1) {
+                        error("pytest crashed with exit code ${exitCode}")
+                    }
                 }
             }
         }
