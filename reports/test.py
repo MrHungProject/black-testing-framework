@@ -1,5 +1,5 @@
-from pywinauto import Application
 import time
+from pywinauto import Application
 
 APP_PATH = r"C:\PC17\PC17.exe"
 

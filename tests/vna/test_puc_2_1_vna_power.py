@@ -1,5 +1,5 @@
 """
-VNA test suite — PUC_2.1 Power ON/OFF
+VNA test suite — PUC_2.1 Power ON/OFF + Detail
 """
 
 
@@ -47,6 +47,19 @@ def test_vna_puc_2_1_0001(s2vna_ctrl: AppController, main_page: MainPage):
     assert s2vna_ctrl.is_running(), "S2VNA chưa được khởi động — PC17 sẽ không thể Connected"
     assert main_page.is_connected(), "PC17 không đạt trạng thái 'Connected'"
     assert main_page.has_text("Disconnect"), "Nút 'Disconnect' không xuất hiện trên UI"
+    main_page.click_detail()
+
+    temperature = main_page.get_temperature()
+    serial      = main_page.get_serial_number()
+
+    errors = []
+    if temperature in [None, "", ":"]:
+        errors.append(f"Temperature không hợp lệ: {temperature!r}")
+    if serial in [None, "", ":"]:
+        errors.append(f"Serial Number không hợp lệ: {serial!r}")
+
+    assert not errors, "\n".join(errors)
+
 
 
 # ════════════════════════════════════════════════════════════════════════════

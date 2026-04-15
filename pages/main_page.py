@@ -82,3 +82,22 @@ class MainPage(BasePage):
 
     def click_disconnect(self) -> None:
         self._ctrl.click_by_text("Disconnect")
+
+    # ── Detail panel ──────────────────────────────────────────────────────────
+
+    def click_detail(self) -> bool:
+        """Click tab/button 'Detail' để mở panel thông tin thiết bị."""
+        ok = self._ctrl.click_by_text("Detail")
+        if not ok:
+            raise RuntimeError("PC17: Không click được 'Detail'")
+        import time
+        time.sleep(2)
+        return ok
+
+    def get_temperature(self) -> str:
+        """Lấy giá trị Temperature từ Detail panel."""
+        return self._ctrl.get_text_after_label("Temperature")
+
+    def get_serial_number(self) -> str:
+        """Lấy Serial Number từ Detail panel."""
+        return self._ctrl.get_text_after_label("Serial Number")
