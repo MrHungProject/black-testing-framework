@@ -52,19 +52,19 @@ pipeline {
             steps {
                 script {
                     // Kill app cũ nếu còn sót từ lần trước
-                    bat 'taskkill /f /im S2VNA.exe 2>nul || echo S2VNA not running'
-                    bat 'taskkill /f /im PC17.exe   2>nul || echo PC17 not running'
-                    bat 'timeout /t 2 /nobreak'
+                    bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
+                    bat(returnStatus: true, script: 'taskkill /f /im PC17.exe   2>nul')
+                    bat 'ping -n 3 127.0.0.1 > nul'
 
                     // Launch S2VNA trong interactive session qua Task Scheduler
                     bat 'schtasks /run /tn "CI_LaunchS2VNA"'
                     echo 'Waiting for S2VNA to start...'
-                    bat 'timeout /t 10 /nobreak'
+                    bat 'ping -n 11 127.0.0.1 > nul'
 
                     // Launch PC17 trong interactive session qua Task Scheduler
                     bat 'schtasks /run /tn "CI_LaunchPC17"'
                     echo 'Waiting for PC17 to start...'
-                    bat 'timeout /t 8 /nobreak'
+                    bat 'ping -n 9 127.0.0.1 > nul'
                 }
             }
         }
@@ -173,8 +173,8 @@ pipeline {
 
         cleanup {
             // Tắt app sau mỗi build (pass hay fail)
-            bat 'taskkill /f /im S2VNA.exe 2>nul || echo S2VNA already closed'
-            bat 'taskkill /f /im PC17.exe   2>nul || echo PC17 already closed'
+            bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
+            bat(returnStatus: true, script: 'taskkill /f /im PC17.exe   2>nul')
         }
     }
 }
