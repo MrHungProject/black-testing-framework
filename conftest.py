@@ -15,7 +15,6 @@ import pytest
 
 from config import get_settings
 from core.app_controller import AppController
-from core.relay_controller import RelayController
 from core.serial_device import SerialDevice
 from core.testcase_decorator import TestCaseMetadata
 from pages.main_page import MainPage

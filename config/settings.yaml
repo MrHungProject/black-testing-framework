@@ -6,14 +6,14 @@
 
 app:
   name: "FormMainEliteRF"
-  exe_path: "C:\PC17\PC17.exe"   # <<< cập nhật đường dẫn thật nếu khác
+  exe_path: "C:/PC17/PC17.exe"   # <<< cập nhật đường dẫn thật nếu khác
   backend: "uia"                       # uia | win32
   connect_timeout: 15
   action_delay: 0.3
 
 s2vna:
   name: "S2VNA"
-  exe_path: "C:\VNA\S2VNA\S2VNA.exe" # <<< cập nhật đường dẫn thật
+  exe_path: "C:/VNA/S2VNA/S2VNA.exe" # <<< cập nhật đường dẫn thật
   backend: "uia"
   connect_timeout: 15
   startup_wait: 3                      # giây chờ sau khi launch

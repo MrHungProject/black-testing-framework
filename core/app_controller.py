@@ -282,6 +282,27 @@ class AppController:
 
     # ── Utility ───────────────────────────────────────────────────────────────
 
+    def get_text_after_label(self, label: str) -> str:
+        """
+        Lấy text của control ngay sau control có window_text chứa label.
+        Dùng khi app không có auto_id ổn định (WinForms text-scan pattern).
+        """
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return ""
+        texts = []
+        for ctrl in self._main_window.descendants():
+            try:
+                t = ctrl.window_text().strip()
+                if t:
+                    texts.append(t)
+            except Exception:
+                pass
+        for i, t in enumerate(texts):
+            if label.lower() in t.lower() and i + 1 < len(texts):
+                return texts[i + 1]
+        logger.warning(f"get_text_after_label({label!r}) — label not found")
+        return ""
+
     def print_ui_tree(self, depth: int = 5) -> None:
         """Print UI element tree — useful when finding element identifiers."""
         if self._main_window is None:

@@ -135,3 +135,66 @@ else:
 
     # dừng chương trình (chuẩn automation)
     raise Exception("TEST FAILED: Connection không thành công")
+# ===== CLICK DETAIL =====
+print("\n👉 Click Detail")
+
+if not click_text(main, "Detail"):
+    print("❌ Không click được Detail")
+    raise Exception("FAIL: Cannot open Detail panel")
+
+time.sleep(2)
+
+# ===== LẤY TEXT =====
+def get_texts(root):
+    texts = []
+    for c in root.descendants():
+        try:
+            t = c.window_text().strip()
+            if t:
+                texts.append(t)
+        except:
+            pass
+    return texts
+
+
+texts = get_texts(main)
+
+# ===== EXTRACT DATA (FIX CHUẨN) =====
+temperature_value = None
+serial_value = None
+
+texts = get_texts(main)
+
+for i, t in enumerate(texts):
+    # ===== TEMPERATURE =====
+    if "Temperature" in t:
+        # lấy text ngay sau nó
+        if i + 1 < len(texts):
+            temperature_value = texts[i + 1]
+
+    # ===== SERIAL NUMBER =====
+    if "Serial Number" in t:
+        if i + 1 < len(texts):
+            serial_value = texts[i + 1]
+
+# ===== PRINT RESULT =====
+print("\n===== DETAIL DATA =====")
+
+print(f"🌡 Temperature: {temperature_value}")
+print(f"🔢 Serial Number: {serial_value}")
+
+# ===== VALIDATION =====
+temp_ok = temperature_value not in [None, "", ":"]
+serial_ok = serial_value not in [None, "", ":"]
+
+print("\n===== VALIDATION =====")
+
+print(f"Temperature valid: {'✅' if temp_ok else '❌'}")
+print(f"Serial valid: {'✅' if serial_ok else '❌'}")
+
+# ===== FINAL RESULT =====
+if temp_ok and serial_ok:
+    print("\n🎉 DETAIL CHECK PASS")
+else:
+    print("\n💥 DETAIL CHECK FAIL")
+    raise Exception("FAIL: Detail data invalid")

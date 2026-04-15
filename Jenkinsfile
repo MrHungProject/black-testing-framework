@@ -6,8 +6,18 @@ pipeline {
     parameters {
         choice(
             name: 'TEST_SUITE',
-            choices: ['vna', 'attenuator', 'all'],
-            description: 'Chọn bộ test cần chạy'
+            choices: ['vna', 'attenuator', 'demo', 'all'],
+            description: 'Module cần chạy: vna | attenuator | demo | all'
+        )
+        string(
+            name: 'TEST_CASE',
+            defaultValue: '',
+            description: 'Tên test case cụ thể (để trống = chạy cả module). VD: test_vna_puc_2_1_normal'
+        )
+        string(
+            name: 'GIT_COMMIT_ID',
+            defaultValue: '',
+            description: 'Commit SHA muốn chạy (để trống = HEAD của nhánh). VD: abc1234'
         )
         string(
             name: 'COM_PORT',
@@ -41,6 +51,14 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                script {
+                    if (params.GIT_COMMIT_ID?.trim()) {
+                        echo "Checking out specific commit: ${params.GIT_COMMIT_ID}"
+                        bat "git checkout ${params.GIT_COMMIT_ID}"
+                    } else {
+                        echo "Using HEAD commit: ${bat(returnStdout: true, script: 'git rev-parse --short HEAD').trim()}"
+                    }
+                }
             }
         }
 
@@ -73,10 +91,16 @@ pipeline {
                     switch(params.TEST_SUITE) {
                         case 'vna':        testPath = 'tests/vna/';        break
                         case 'attenuator': testPath = 'tests/attenuator/'; break
+                        case 'demo':       testPath = 'tests/demo/';       break
                         default:           testPath = 'tests/'
                     }
 
-                    def extraArgs = params.SKIP_HW_TESTS ? '-m "not hw_depend"' : ''
+                    // Nếu TEST_CASE được điền → chạy đúng test case đó (dùng -k)
+                    def filterArgs = params.TEST_CASE?.trim() ? "-k \"${params.TEST_CASE}\"" : ''
+                    def markerArgs = params.SKIP_HW_TESTS ? '-m "not hw_depend"' : ''
+                    def extraArgs  = [filterArgs, markerArgs].findAll { it }.join(' ')
+
+                    echo "Running: pytest ${testPath} ${extraArgs}"
 
                     def exitCode = bat(returnStatus: true, script: """
                         call ${env.VENV_DIR}\\Scripts\\activate.bat
