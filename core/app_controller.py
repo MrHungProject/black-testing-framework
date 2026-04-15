@@ -31,6 +31,12 @@ from utils.logger import get_logger
 logger = get_logger(__name__)
 
 try:
+    import comtypes
+    comtypes.CoInitialize()
+except Exception:
+    pass
+
+try:
     import pywinauto
     from pywinauto import Application, Desktop
     from pywinauto.controls.uiawrapper import UIAWrapper

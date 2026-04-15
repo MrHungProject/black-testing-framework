@@ -51,20 +51,24 @@ pipeline {
         stage('Pre-launch Apps') {
             steps {
                 script {
-                    // Kill app cũ nếu còn sót từ lần trước
-                    bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
-                    bat(returnStatus: true, script: 'taskkill /f /im PC17.exe   2>nul')
-                    bat 'ping -n 3 127.0.0.1 > nul'
+                    // Chỉ launch nếu app chưa chạy — tránh tạo instance thứ 2
+                    def s2vnaRunning = bat(returnStatus: true, script: 'tasklist /fi "imagename eq S2VNA.exe" | findstr /i S2VNA.exe > nul 2>&1')
+                    if (s2vnaRunning != 0) {
+                        echo 'S2VNA not running — launching via Task Scheduler...'
+                        bat 'schtasks /run /tn "CI_LaunchS2VNA"'
+                        bat 'ping -n 11 127.0.0.1 > nul'
+                    } else {
+                        echo 'S2VNA already running — skipping launch'
+                    }
 
-                    // Launch S2VNA trong interactive session qua Task Scheduler
-                    bat 'schtasks /run /tn "CI_LaunchS2VNA"'
-                    echo 'Waiting for S2VNA to start...'
-                    bat 'ping -n 11 127.0.0.1 > nul'
-
-                    // Launch PC17 trong interactive session qua Task Scheduler
-                    bat 'schtasks /run /tn "CI_LaunchPC17"'
-                    echo 'Waiting for PC17 to start...'
-                    bat 'ping -n 9 127.0.0.1 > nul'
+                    def pc17Running = bat(returnStatus: true, script: 'tasklist /fi "imagename eq PC17.exe" | findstr /i PC17.exe > nul 2>&1')
+                    if (pc17Running != 0) {
+                        echo 'PC17 not running — launching via Task Scheduler...'
+                        bat 'schtasks /run /tn "CI_LaunchPC17"'
+                        bat 'ping -n 9 127.0.0.1 > nul'
+                    } else {
+                        echo 'PC17 already running — skipping launch'
+                    }
                 }
             }
         }

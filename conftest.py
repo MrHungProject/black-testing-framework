@@ -13,6 +13,12 @@ from typing import Dict, Iterator, List
 
 import pytest
 
+try:
+    import comtypes
+    comtypes.CoInitialize()
+except Exception:
+    pass
+
 from config import get_settings
 from core.app_controller import AppController
 from core.serial_device import SerialDevice
