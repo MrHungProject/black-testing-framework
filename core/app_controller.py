@@ -261,6 +261,12 @@ class AppController:
         """Gửi phím tắt trực tiếp vào main window (dùng cho menu keyboard nav)."""
         if not PYWINAUTO_AVAILABLE or self._main_window is None:
             return
+        try:
+            self._main_window.set_focus()
+            self._main_window.bring_to_top()
+            time.sleep(0.3)
+        except Exception:
+            pass
         self._main_window.type_keys(keys)
         time.sleep(self.action_delay)
 

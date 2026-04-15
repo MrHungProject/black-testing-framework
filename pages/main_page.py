@@ -47,6 +47,14 @@ class MainPage(BasePage):
 
     def _open_rf_test_set(self) -> None:
         """Tools → RF Test Set → switch sang cửa sổ FormMainEliteRF."""
+        # Bring window to foreground trước khi interact (quan trọng khi chạy CI)
+        try:
+            self._ctrl._main_window.set_focus()
+            self._ctrl._main_window.bring_to_top()
+        except Exception:
+            pass
+        time.sleep(1)
+
         try:
             self._ctrl._main_window.child_window(
                 title="Tools", control_type="MenuItem"
@@ -54,6 +62,13 @@ class MainPage(BasePage):
         except Exception:
             self._ctrl.click_by_text("Tools")
         time.sleep(1)
+
+        # Set focus lại sau khi click menu để đảm bảo type_keys hoạt động
+        try:
+            self._ctrl._main_window.set_focus()
+        except Exception:
+            pass
+
         # WinForms menu không expose submenu qua UIA → keyboard fallback
         self._ctrl.type_keys_on_window("{DOWN}{DOWN}{DOWN}{ENTER}")
         time.sleep(self.NAV_WAIT)
