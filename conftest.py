@@ -45,6 +45,7 @@ def app_ctrl() -> Iterator[AppController]:
     except Exception:
         logger.info("PC17 not running — launching...")
         ctrl.launch()
+        time.sleep(5)  # đợi PC17 fully load trước khi interact UI
     yield ctrl
     ctrl.disconnect()
 

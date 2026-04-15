@@ -22,8 +22,8 @@ class MainPage(BasePage):
     """Page Object cho FormMainEliteRF — cửa sổ chính của PC17."""
 
     MAIN_WINDOW_TITLE_RE = ".*FormMainEliteRF.*"
-    NAV_WAIT        = 3   # giây chờ sau khi mở RF Test Set
-    CONNECT_TIMEOUT = 15  # giây chờ trạng thái Connected
+    NAV_WAIT        = 6   # giây chờ sau khi mở RF Test Set
+    CONNECT_TIMEOUT = 30  # giây chờ trạng thái Connected
 
     # ── Setup flow (gọi 1 lần trong fixture) ─────────────────────────────────
 
@@ -57,7 +57,7 @@ class MainPage(BasePage):
         # WinForms menu không expose submenu qua UIA → keyboard fallback
         self._ctrl.type_keys_on_window("{DOWN}{DOWN}{DOWN}{ENTER}")
         time.sleep(self.NAV_WAIT)
-        self._ctrl.switch_window(self.MAIN_WINDOW_TITLE_RE, timeout=20)
+        self._ctrl.switch_window(self.MAIN_WINDOW_TITLE_RE, timeout=40)
         time.sleep(2)  # đợi FormMainEliteRF ổn định trước khi click System
 
     # ── Trạng thái kết nối ────────────────────────────────────────────────────
