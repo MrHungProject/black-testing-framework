@@ -48,6 +48,27 @@ pipeline {
 
     stages {
 
+        stage('Pre-launch Apps') {
+            steps {
+                script {
+                    // Kill app cũ nếu còn sót từ lần trước
+                    bat 'taskkill /f /im S2VNA.exe 2>nul || echo S2VNA not running'
+                    bat 'taskkill /f /im PC17.exe   2>nul || echo PC17 not running'
+                    bat 'timeout /t 2 /nobreak'
+
+                    // Launch S2VNA trong interactive session qua Task Scheduler
+                    bat 'schtasks /run /tn "CI_LaunchS2VNA"'
+                    echo 'Waiting for S2VNA to start...'
+                    bat 'timeout /t 10 /nobreak'
+
+                    // Launch PC17 trong interactive session qua Task Scheduler
+                    bat 'schtasks /run /tn "CI_LaunchPC17"'
+                    echo 'Waiting for PC17 to start...'
+                    bat 'timeout /t 8 /nobreak'
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -148,6 +169,12 @@ pipeline {
 
         failure {
             echo "PIPELINE FAILED — xem Console Output để biết lý do"
+        }
+
+        cleanup {
+            // Tắt app sau mỗi build (pass hay fail)
+            bat 'taskkill /f /im S2VNA.exe 2>nul || echo S2VNA already closed'
+            bat 'taskkill /f /im PC17.exe   2>nul || echo PC17 already closed'
         }
     }
 }
