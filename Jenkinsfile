@@ -130,6 +130,7 @@ pipeline {
                     def exitCode = bat(returnStatus: true, script: """
                         call ${env.VENV_DIR}\\Scripts\\activate.bat
                         set SERIAL_PORT=${params.COM_PORT}
+                        set TEST_SUITE=${params.TEST_SUITE}
                         python -m pytest ${testPath} ${extraArgs} -v
                     """)
 

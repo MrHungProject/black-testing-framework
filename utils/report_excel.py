@@ -86,7 +86,10 @@ class ExcelReporter:
     def __init__(self, output_path: Optional[str] = None):
         from config import get_settings
         cfg = get_settings().report
-        self.output_path = Path(output_path or cfg.excel_dir) / cfg.excel_filename
+        if output_path:
+            self.output_path = Path(output_path)
+        else:
+            self.output_path = Path(cfg.excel_dir) / cfg.excel_filename
 
     def generate(self, results: List[TestResult]) -> Path:
         if not OPENPYXL_AVAILABLE:

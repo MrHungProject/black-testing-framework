@@ -196,9 +196,43 @@ def pytest_runtest_logreport(report):  # noqa: F811  (intentional re-def for ite
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """Generate Excel report at end of session."""
+    """Generate Excel report at end of session.
+    - TEST_SUITE=vna        → reports/excel/vna_report.xlsx
+    - TEST_SUITE=attenuator → reports/excel/attenuator_report.xlsx
+    - TEST_SUITE=all        → reports/excel/vna_report.xlsx + attenuator_report.xlsx + all_report.xlsx
+    - (local run, no env)   → group tự động theo module folder
+    """
     if not _session_results:
         return
-    reporter = ExcelReporter()
-    reporter.generate(_session_results)
+
+    import os
+    excel_dir = Path(get_settings().report.excel_dir)
+    excel_dir.mkdir(parents=True, exist_ok=True)
+
+    test_suite = os.getenv("TEST_SUITE", "").strip().lower()
+
+    if test_suite and test_suite != "all":
+        # Chạy 1 suite cụ thể → 1 file tên theo suite
+        filename = f"{test_suite}_report.xlsx"
+        ExcelReporter(output_path=str(excel_dir / filename)).generate(_session_results)
+        logger.info(f"Report: {filename} ({len(_session_results)} tests)")
+
+    else:
+        # all hoặc không set → group theo module folder
+        modules: dict = {}
+        for result in _session_results:
+            parts = Path(result.nodeid.split("::")[0]).parts
+            module = parts[1] if len(parts) >= 2 else "other"
+            modules.setdefault(module, []).append(result)
+
+        for module, results in modules.items():
+            filename = f"{module}_report.xlsx"
+            ExcelReporter(output_path=str(excel_dir / filename)).generate(results)
+            logger.info(f"Module report: {filename} ({len(results)} tests)")
+
+        # combined all
+        if len(modules) > 1 or test_suite == "all":
+            ExcelReporter(output_path=str(excel_dir / "all_report.xlsx")).generate(_session_results)
+            logger.info(f"Combined report: all_report.xlsx ({len(_session_results)} tests)")
+
     logger.info(f"Session finished — {len(_session_results)} test(s) collected")
