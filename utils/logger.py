@@ -8,6 +8,12 @@ from pathlib import Path
 
 
 def get_logger(name: str, level: int = logging.DEBUG) -> logging.Logger:
+    """
+    @brief  Tạo hoặc lấy logger đã cấu hình với console handler và file handler
+    @param  name: Tên logger, thường truyền __name__ của module gọi
+    @param  level: Logging level tối thiểu (default: logging.DEBUG)
+    @retval logging.Logger — logger đã cấu hình sẵn 2 handler: stdout + file framework.log
+    """
     logger = logging.getLogger(name)
     if logger.handlers:
         return logger  # already configured

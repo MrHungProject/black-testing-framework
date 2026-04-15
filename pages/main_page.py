@@ -28,6 +28,10 @@ class MainPage(BasePage):
     # ── Setup flow (gọi 1 lần trong fixture) ─────────────────────────────────
 
     def setup_connection(self) -> None:
+        """
+        @brief  Thực hiện toàn bộ flow setup kết nối: mở RF Test Set → click System → Connect → Connection → đợi "Connected"
+        @retval None
+        """
         self._open_rf_test_set()
         if not self._ctrl.click_by_text("System"):
             try:
@@ -46,7 +50,10 @@ class MainPage(BasePage):
             raise RuntimeError("PC17: Device did not reach 'Connected' state")
 
     def _open_rf_test_set(self) -> None:
-        """Tools → RF Test Set → switch sang cửa sổ FormMainEliteRF."""
+        """
+        @brief  Điều hướng qua menu Tools → RF Test Set rồi switch sang cửa sổ FormMainEliteRF
+        @retval None
+        """
         # Bring window to foreground trước khi interact (quan trọng khi chạy CI)
         try:
             self._ctrl._main_window.set_focus()
@@ -78,15 +85,26 @@ class MainPage(BasePage):
     # ── Trạng thái kết nối ────────────────────────────────────────────────────
 
     def is_connected(self) -> bool:
+        """
+        @brief  Kiểm tra trạng thái kết nối bằng cách tìm control có text "Connected"
+        @retval bool — True nếu control "Connected" tồn tại và enabled, False nếu không
+        """
         return self._ctrl.has_element_with_text("Connected")
 
     def click_disconnect(self) -> None:
+        """
+        @brief  Click button "Disconnect" để ngắt kết nối thiết bị
+        @retval None
+        """
         self._ctrl.click_by_text("Disconnect")
 
     # ── Detail panel ──────────────────────────────────────────────────────────
 
     def click_detail(self) -> bool:
-        """Click tab/button 'Detail' để mở panel thông tin thiết bị."""
+        """
+        @brief  Click tab/button "Detail" để mở panel thông tin thiết bị
+        @retval bool — True nếu click thành công
+        """
         ok = self._ctrl.click_by_text("Detail")
         if not ok:
             raise RuntimeError("PC17: Không click được 'Detail'")
@@ -95,9 +113,15 @@ class MainPage(BasePage):
         return ok
 
     def get_temperature(self) -> str:
-        """Lấy giá trị Temperature từ Detail panel."""
+        """
+        @brief  Lấy giá trị Temperature từ Detail panel
+        @retval str — giá trị temperature hiển thị trên UI; chuỗi rỗng nếu không tìm thấy
+        """
         return self._ctrl.get_text_after_label("Temperature")
 
     def get_serial_number(self) -> str:
-        """Lấy Serial Number từ Detail panel."""
+        """
+        @brief  Lấy Serial Number từ Detail panel
+        @retval str — serial number hiển thị trên UI; chuỗi rỗng nếu không tìm thấy
+        """
         return self._ctrl.get_text_after_label("Serial Number")

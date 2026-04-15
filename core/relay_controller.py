@@ -28,6 +28,10 @@ class RelayController:
     """Controls a USB relay board for power-cycling the DUT."""
 
     def __init__(self):
+        """
+        @brief  Khởi tạo RelayController, đọc cấu hình từ settings.relay
+        @retval None
+        """
         cfg = get_settings().relay
         self.enabled      = cfg.enabled
         self.port         = cfg.port
@@ -40,6 +44,10 @@ class RelayController:
     # ── Connection ────────────────────────────────────────────────────────────
 
     def connect(self) -> "RelayController":
+        """
+        @brief  Mở kết nối serial tới relay board; bỏ qua nếu relay.enabled=false
+        @retval RelayController — self (để chain)
+        """
         if not self.enabled:
             logger.info("RelayController is DISABLED (relay.enabled=false in settings)")
             return self
@@ -48,37 +56,67 @@ class RelayController:
         return self
 
     def disconnect(self) -> None:
+        """
+        @brief  Đóng kết nối serial tới relay board
+        @retval None
+        """
         if self._ser and self._ser.is_open:
             self._ser.close()
             logger.info("Relay board disconnected")
 
     def is_connected(self) -> bool:
+        """
+        @brief  Kiểm tra kết nối serial tới relay board có đang mở không
+        @retval bool — True nếu serial port đang mở, False nếu không
+        """
         return self._ser is not None and self._ser.is_open
 
     # ── Relay control ─────────────────────────────────────────────────────────
 
     def on(self, channel: int = 1) -> None:
+        """
+        @brief  Bật relay ở channel chỉ định
+        @param  channel: Số thứ tự channel (1-based, default: 1)
+        @retval None
+        """
         self._validate_channel(channel)
         logger.info(f"Relay CH{channel} → ON")
         if self.is_connected():
             self._send_relay_command(channel, state=True)
 
     def off(self, channel: int = 1) -> None:
+        """
+        @brief  Tắt relay ở channel chỉ định
+        @param  channel: Số thứ tự channel (1-based, default: 1)
+        @retval None
+        """
         self._validate_channel(channel)
         logger.info(f"Relay CH{channel} → OFF")
         if self.is_connected():
             self._send_relay_command(channel, state=False)
 
     def all_on(self) -> None:
+        """
+        @brief  Bật tất cả các relay channel
+        @retval None
+        """
         for ch in range(1, self.channels + 1):
             self.on(ch)
 
     def all_off(self) -> None:
+        """
+        @brief  Tắt tất cả các relay channel
+        @retval None
+        """
         for ch in range(1, self.channels + 1):
             self.off(ch)
 
     def power_cycle(self, channel: int = 1) -> None:
-        """OFF → wait → ON."""
+        """
+        @brief  Power cycle relay channel: OFF → chờ cycle_delay giây → ON
+        @param  channel: Số thứ tự channel cần power cycle (1-based, default: 1)
+        @retval None
+        """
         logger.info(f"Power cycling relay CH{channel} (delay={self.cycle_delay}s)")
         self.off(channel)
         time.sleep(self.cycle_delay)
@@ -88,12 +126,23 @@ class RelayController:
     # ── Internal ──────────────────────────────────────────────────────────────
 
     def _validate_channel(self, channel: int) -> None:
+        """
+        @brief  Kiểm tra channel number hợp lệ, raise nếu ngoài phạm vi
+        @param  channel: Số thứ tự channel cần kiểm tra
+        @retval None
+        """
         if not (1 <= channel <= self.channels):
             raise RelayControllerError(
                 f"Invalid channel {channel}. Valid range: 1–{self.channels}"
             )
 
     def _send_relay_command(self, channel: int, state: bool) -> None:
+        """
+        @brief  Gửi gói lệnh CH340 4-byte để bật/tắt relay
+        @param  channel: Số thứ tự channel (1-based)
+        @param  state: True để bật (0x01), False để tắt (0x00)
+        @retval None
+        """
         cmd_byte = 0x01 if state else 0x00
         checksum = (0xA0 + channel + cmd_byte) & 0xFF
         packet = bytes([0xA0, channel, cmd_byte, checksum])
@@ -103,8 +152,16 @@ class RelayController:
     # ── Context manager ───────────────────────────────────────────────────────
 
     def __enter__(self) -> "RelayController":
+        """
+        @brief  Context manager entry — gọi connect() và trả về self
+        @retval RelayController — self sau khi kết nối
+        """
         return self.connect()
 
     def __exit__(self, *_) -> None:
+        """
+        @brief  Context manager exit — tắt tất cả relay rồi ngắt kết nối
+        @retval None
+        """
         self.all_off()
         self.disconnect()

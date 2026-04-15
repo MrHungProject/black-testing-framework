@@ -36,18 +36,36 @@ _WHITE  = "FFFFFFFF"
 
 
 def _fill(hex_color: str) -> "PatternFill":
+    """
+    @brief  Tạo PatternFill màu solid từ mã hex
+    @param  hex_color: Mã màu hex 8 ký tự ARGB (ví dụ: "FF92D050")
+    @retval PatternFill — openpyxl fill object để tô màu cell
+    """
     return PatternFill("solid", fgColor=hex_color)
 
 
 def _bold(size: int = 11) -> "Font":
+    """
+    @brief  Tạo Font bold với kích thước chỉ định
+    @param  size: Kích thước font (default: 11)
+    @retval Font — openpyxl font object
+    """
     return Font(bold=True, size=size)
 
 
 def _center() -> "Alignment":
+    """
+    @brief  Tạo Alignment căn giữa theo cả chiều ngang và dọc, bật wrap text
+    @retval Alignment — openpyxl alignment object
+    """
     return Alignment(horizontal="center", vertical="center", wrap_text=True)
 
 
 def _thin_border() -> "Border":
+    """
+    @brief  Tạo Border với đường viền thin ở 4 phía của cell
+    @retval Border — openpyxl border object
+    """
     side = Side(style="thin")
     return Border(left=side, right=side, top=side, bottom=side)
 
@@ -62,6 +80,11 @@ class TestResult:
     )
 
     def __init__(self, **kwargs):
+        """
+        @brief  Khởi tạo TestResult từ keyword arguments; các field không truyền mặc định là chuỗi rỗng
+        @param  kwargs: Các field của TestResult (test_id, brief, test_level, test_type, execution_type, hw_depend, outcome, duration, error_message, nodeid)
+        @retval None
+        """
         for slot in self.__slots__:
             setattr(self, slot, kwargs.get(slot, ""))
 
@@ -84,6 +107,11 @@ class ExcelReporter:
     ]
 
     def __init__(self, output_path: Optional[str] = None):
+        """
+        @brief  Khởi tạo ExcelReporter với đường dẫn file đầu ra
+        @param  output_path: Đường dẫn file Excel đầu ra; mặc định lấy từ settings.report nếu None
+        @retval None
+        """
         from config import get_settings
         cfg = get_settings().report
         if output_path:
@@ -92,6 +120,11 @@ class ExcelReporter:
             self.output_path = Path(cfg.excel_dir) / cfg.excel_filename
 
     def generate(self, results: List[TestResult]) -> Path:
+        """
+        @brief  Tạo file Excel report với 2 sheets: Summary và Test Results
+        @param  results: Danh sách TestResult từ session pytest
+        @retval Path — đường dẫn file Excel đã tạo
+        """
         if not OPENPYXL_AVAILABLE:
             logger.error("Cannot generate Excel report: openpyxl not installed")
             return self.output_path
@@ -109,6 +142,12 @@ class ExcelReporter:
     # ── Summary sheet ─────────────────────────────────────────────────────────
 
     def _build_summary_sheet(self, wb: "Workbook", results: List[TestResult]) -> None:
+        """
+        @brief  Tạo sheet "Summary" với thống kê tổng hợp: Total, PASSED, FAILED, SKIPPED, ERROR, pass rate
+        @param  wb: Workbook openpyxl đang được build
+        @param  results: Danh sách TestResult cần thống kê
+        @retval None
+        """
         ws = wb.active
         ws.title = "Summary"
 
@@ -151,6 +190,12 @@ class ExcelReporter:
     # ── Details sheet ─────────────────────────────────────────────────────────
 
     def _build_details_sheet(self, wb: "Workbook", results: List[TestResult]) -> None:
+        """
+        @brief  Tạo sheet "Test Results" với header màu xanh và mỗi row tô màu theo outcome
+        @param  wb: Workbook openpyxl đang được build
+        @param  results: Danh sách TestResult cần ghi vào sheet
+        @retval None
+        """
         ws = wb.create_sheet("Test Results")
 
         # Header row
