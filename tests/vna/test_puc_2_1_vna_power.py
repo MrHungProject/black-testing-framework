@@ -25,17 +25,19 @@ def test_vna_puc_2_1_0001(s2vna_ctrl: AppController, main_page: MainPage):
     @pre:- Máy tính đã cài S2VNA và PC17
          - Không có instance nào đang chạy trước khi test
 
-    @test_procedure:
-                    [code]
-                        - Fixture s2vna_ctrl tự động khởi động S2VNA
-                        - Fixture app_ctrl tự động khởi động PC17
-                        - Fixture main_page tự động: Tools → RF Test Set
-                          → System → Connect → Connection → đợi Connected
-                        - Assert trạng thái Connected trên UI
-                    [!code]
+    @test_procedure:    - Khởi chạy App S2VNA
+                        - Khởi động App PC17
+                        - Sau đó vào UI của PC17 tại thanh Menu
+                        [code]
+                            # Tools → RF Test Set
+                            - Chờ nó sẽ ra 1 UI khác tên là FormMainEliteRF lúc này sẽ làm việc trên UI này
+                            → System → Connect → Connection → đợi Connected
+                        [!code]
 
     @pass_criteria:- UI PC17 hiển thị trạng thái "Connected"
-                   - Nút "Disconnect" xuất hiện và enabled
+                   - Nút "Disconnect" xuất hiện
+                   - Sau khi Connection thành công , check tại mục Detail kiểm tra xem các 
+                   thông tin của VNA(Temperature, Serial Number) đã được load chưa
 
     @test_level: software
     @test_type: functional
@@ -81,9 +83,9 @@ def test_vna_puc_2_1_0002(main_page: MainPage, device: SerialDevice):
     @test_procedure:
                     [code]
                         - Xác nhận thiết bị đã khởi động hoàn tất trên UI
-                        - Tắt nguồn module VNA từ UI
+                        - Disable module VNA từ UI
                         - Quan sát đèn báo nguồn VNA và ghi nhận trạng thái UI
-                        - Bật nguồn module VNA từ UI
+                        - Connection module VNA từ UI
                         - Quan sát đèn báo nguồn VNA và ghi nhận trạng thái khởi động thành công
                         - Lặp lại 5 lần
                     [!code]
@@ -97,4 +99,3 @@ def test_vna_puc_2_1_0002(main_page: MainPage, device: SerialDevice):
     @execution_type: Manual
     @hw_depend: yes
     """
-   

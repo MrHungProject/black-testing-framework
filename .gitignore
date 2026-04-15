@@ -16,11 +16,8 @@ env/
 .env
 
 # ── Reports (generated — không commit vào git) ────────────
-reports/html/
-reports/excel/
-reports/logs/
-reports/screenshots/
-reports/allure-results/
+reports/
+**/reports/
 
 # ── pytest cache ──────────────────────────────────────────
 .pytest_cache/
