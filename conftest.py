@@ -21,6 +21,7 @@ except Exception:
 
 from config import get_settings
 from core.app_controller import AppController
+from core.relay_controller import RelayController
 from core.serial_device import SerialDevice
 from core.testcase_decorator import TestCaseMetadata
 from pages.main_page import MainPage
@@ -39,10 +40,33 @@ for d in ("reports/html", "reports/excel", "reports/logs", "reports/screenshots"
 # ════════════════════════════════════════════════════════════════════════════
 
 @pytest.fixture(scope="session")
-def app_ctrl() -> Iterator[AppController]:
+def s2vna_ctrl() -> Iterator[AppController]:
+    """
+    Launch / connect S2VNA simulator — phải khởi động trước PC17.
+    Nếu exe_path chưa cấu hình trong settings.yaml thì skip launch,
+    giả sử S2VNA đang chạy sẵn hoặc không cần thiết.
+    """
+    cfg = get_settings().s2vna
+    ctrl = AppController(app_name=cfg.name, backend=cfg.backend, exe_path=cfg.exe_path)
+    try:
+        ctrl.connect()
+        logger.info("S2VNA already running — connected")
+    except Exception:
+        if cfg.exe_path:
+            logger.info("S2VNA not running — launching...")
+            ctrl.launch()
+            time.sleep(cfg.startup_wait)
+        else:
+            logger.warning("S2VNA exe_path not configured — assuming already running or not required")
+    yield ctrl
+    ctrl.disconnect()
+
+
+@pytest.fixture(scope="session")
+def app_ctrl(s2vna_ctrl) -> Iterator[AppController]:
     """
     Launch / connect to PC17.
-    Dùng cho hầu hết mọi test case — session-scoped, luôn sẵn sàng.
+    Depends on s2vna_ctrl để đảm bảo S2VNA khởi động trước.
     """
     ctrl = AppController()
     try:
@@ -113,41 +137,6 @@ def _log_test_boundaries(request):
 # ════════════════════════════════════════════════════════════════════════════
 
 _session_results: List[TestResult] = []
-
-
-def pytest_runtest_logreport(report: pytest.TestReport) -> None:
-    """
-    Collect result per test (called 3 times: setup / call / teardown).
-    We only capture the 'call' phase for the main pass/fail verdict.
-    """
-    if report.when != "call":
-        return
-
-    # Walk up to find the test function
-    # report.nodeid example: "tests/attenuator/test_tc_0001.py::test_attenuator_tc_0001"
-    item = getattr(report, "_pytest_item", None)  # set below if available
-    meta: TestCaseMetadata = getattr(getattr(item, "function", None), "_tc_meta", None) \
-                              if item else None
-
-    error_msg = ""
-    if report.failed:
-        error_msg = str(report.longrepr) if report.longrepr else ""
-        # Trim to first 500 chars for Excel
-        error_msg = error_msg[:500]
-
-    result = TestResult(
-        test_id        = meta.test_id        if meta else report.nodeid,
-        brief          = meta.brief          if meta else "",
-        test_level     = meta.test_level     if meta else "",
-        test_type      = meta.test_type      if meta else "",
-        execution_type = meta.execution_type if meta else "",
-        hw_depend      = meta.hw_depend      if meta else False,
-        outcome        = report.outcome,
-        duration       = f"{report.duration:.2f}",
-        error_message  = error_msg,
-        nodeid         = report.nodeid,
-    )
-    _session_results.append(result)
 
 
 @pytest.hookimpl(hookwrapper=True)

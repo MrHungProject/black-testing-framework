@@ -49,17 +49,23 @@ except ImportError:
 class AppController:
     """High-level controller for the target Windows application."""
 
-    def __init__(self, app_name: Optional[str] = None, backend: Optional[str] = None):
+    def __init__(
+        self,
+        app_name: Optional[str] = None,
+        backend: Optional[str] = None,
+        exe_path: Optional[str] = None,
+    ):
         """
         @brief  Khởi tạo AppController với tên app và backend pywinauto
         @param  app_name: Tên cửa sổ app (dùng title_re matching). Mặc định lấy từ settings.app.name
         @param  backend: Backend pywinauto — "uia" hoặc "win32". Mặc định lấy từ settings.app.backend
+        @param  exe_path: Đường dẫn tới exe cần launch. Mặc định lấy từ settings.app.exe_path
         @retval None
         """
         cfg = get_settings().app
         self.app_name   = app_name or cfg.name
         self.backend    = backend  or cfg.backend
-        self.exe_path   = cfg.exe_path
+        self.exe_path   = exe_path if exe_path is not None else cfg.exe_path
         self.timeout    = cfg.connect_timeout
         self.action_delay = cfg.action_delay
 
@@ -403,6 +409,92 @@ class AppController:
                 return texts[i + 1]
         logger.warning(f"get_text_after_label({label!r}) — label not found")
         return ""
+
+    def click_button_by_text(self, text: str, retries: int = 5) -> bool:
+        """
+        @brief  Tìm và click control có control_type=Button với window_text() khớp text
+        @param  text: Chuỗi text cần khớp (không phân biệt hoa/thường)
+        @param  retries: Số lần thử lại, mỗi lần cách 0.5s (default: 5)
+        @retval bool — True nếu click thành công, False nếu không tìm thấy
+        """
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return False
+        for _ in range(retries):
+            for ctrl in self._main_window.descendants():
+                try:
+                    if (
+                        ctrl.window_text().strip().lower() == text.lower()
+                        and ctrl.is_enabled()
+                        and "Button" in str(ctrl.element_info.control_type)
+                    ):
+                        ctrl.click_input()
+                        time.sleep(self.action_delay)
+                        logger.info(f"click_button_by_text({text!r}) OK")
+                        return True
+                except Exception:
+                    pass
+            time.sleep(0.5)
+        logger.warning(f"click_button_by_text({text!r}) — not found after {retries} retries")
+        return False
+
+    def set_field_by_label(self, label: str, value: str) -> bool:
+        """
+        @brief  Tìm Edit control ngay sau label và set giá trị mới (Ctrl+A → xóa → gõ → Enter)
+        @param  label: Text chính xác của label cần tìm
+        @param  value: Giá trị cần nhập vào Edit field
+        @retval bool — True nếu tìm và set thành công, False nếu không tìm thấy
+        """
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return False
+        controls = list(self._main_window.descendants())
+        for i, ctrl in enumerate(controls):
+            try:
+                if ctrl.window_text().strip() == label:
+                    for j in range(i + 1, min(i + 10, len(controls))):
+                        target = controls[j]
+                        try:
+                            if "Edit" in str(target.element_info.control_type):
+                                target.click_input()
+                                time.sleep(0.2)
+                                target.type_keys("^a{BACKSPACE}")
+                                target.set_edit_text(str(value))
+                                target.type_keys("{ENTER}")
+                                logger.info(f"set_field_by_label({label!r}) = {value!r}")
+                                return True
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+        logger.warning(f"set_field_by_label({label!r}) — field not found")
+        return False
+
+    def select_from_desktop_popup(self, value: str, retries: int = 5) -> bool:
+        """
+        @brief  Chọn item từ popup window ở Desktop level (ví dụ: dropdown Trace selector)
+        @param  value: Text chính xác của item cần chọn
+        @param  retries: Số lần thử lại, mỗi lần cách 0.5s (default: 5)
+        @retval bool — True nếu chọn thành công, False nếu không tìm thấy
+        """
+        if not PYWINAUTO_AVAILABLE:
+            return False
+        from pywinauto import Desktop
+        for _ in range(retries):
+            for win in Desktop(backend="uia").windows():
+                try:
+                    for ctrl in win.descendants():
+                        try:
+                            if ctrl.window_text().strip() == value and ctrl.is_enabled():
+                                ctrl.click_input()
+                                time.sleep(self.action_delay)
+                                logger.info(f"select_from_desktop_popup({value!r}) OK")
+                                return True
+                        except Exception:
+                            pass
+                except Exception:
+                    pass
+            time.sleep(0.5)
+        logger.warning(f"select_from_desktop_popup({value!r}) — not found after {retries} retries")
+        return False
 
     def print_ui_tree(self, depth: int = 5) -> None:
         """

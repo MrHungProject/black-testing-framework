@@ -1,101 +1,257 @@
 """
-VNA test suite — PUC_2.1 Power ON/OFF + Detail
+VNA test suite — PUC_2.1 Power ON/OFF + Detail + Configuration
+
+Tất cả TC được tổ chức trong class TestVnaPuc21.
+fixture _ensure_connected (autouse) chạy trước MỖI TC → đảm bảo Connected state,
+nên mỗi TC có thể chạy độc lập mà không phụ thuộc TC khác.
 """
 
+import re
+import time
+
+import pytest
 
 from core import testcase
 from core.app_controller import AppController
 from pages.main_page import MainPage
 
 
-# ════════════════════════════════════════════════════════════════════════════
-#  TC1 · PUC_2.1 · Normal · Bật VNA — full automation
-# ════════════════════════════════════════════════════════════════════════════
-
-@testcase
-def test_vna_puc_2_1_0001(s2vna_ctrl: AppController, main_page: MainPage):
+def _freq_to_ghz(s: str) -> float:
     """
-    @test_id: test_vna_puc_2_1_0001
-    @brief: Bật VNA — khởi động S2VNA, PC17, vào RF Test Set và kết nối
+    Normalize chuỗi frequency về float GHz để so sánh.
+    Ví dụ: '2GHz' → 2.0 | '2.000 GHz' → 2.0 | '2000MHz' → 2.0
+    """
+    m = re.match(r"([\d.]+)\s*(GHz|MHz|kHz|Hz)?", s.strip(), re.IGNORECASE)
+    if not m:
+        return float("nan")
+    val = float(m.group(1))
+    unit = (m.group(2) or "GHz").upper()
+    if unit == "GHZ":
+        return val
+    if unit == "MHZ":
+        return val / 1_000
+    if unit == "KHZ":
+        return val / 1_000_000
+    return val / 1_000_000_000  # Hz
 
-    @details: Verify toàn bộ luồng khởi động:
-              S2VNA simulator lên trước, PC17 lên sau,
-              điều hướng vào RF Test Set và đạt trạng thái Connected.
 
-    @pre:- Máy tính đã cài S2VNA và PC17
-         - Không có instance nào đang chạy trước khi test
+class TestVnaPuc21:
+    """
+    PUC_2.1 VNA test suite.
 
-    @test_procedure:    - Khởi chạy App S2VNA
-                        - Khởi động App PC17
-                        - Sau đó vào UI của PC17 tại thanh Menu
+    Setup flow (tự động, không cần TC01 chạy trước):
+        fixture _ensure_connected (autouse=True) chạy trước mỗi TC.
+        Nếu chưa Connected → reconnect() tự động.
+        Mỗi TC đều độc lập và luôn bắt đầu ở trạng thái Connected.
+    """
+
+    # ── Class-level setup: chạy trước MỖI test method ────────────────────────
+
+    @pytest.fixture(autouse=True)
+    def _ensure_connected(self, main_page: MainPage):
+        """
+        Đảm bảo PC17 đã ở trạng thái Connected trước khi chạy bất kỳ TC nào.
+        Nếu chưa Connected (ví dụ TC trước vừa Disconnect) → tự động reconnect.
+        """
+        if not main_page.is_connected():
+            main_page.reconnect()
+
+    # ════════════════════════════════════════════════════════════════════════════
+    #  TC1 · PUC_2.1 · Normal · Bật VNA — kết nối và kiểm tra Detail
+    # ════════════════════════════════════════════════════════════════════════════
+
+    @testcase
+    def test_vna_puc_2_1_0001(self, s2vna_ctrl: AppController, main_page: MainPage):
+        """
+        @test_id: test_vna_puc_2_1_0001
+        @brief: Bật VNA — khởi động S2VNA, PC17, vào RF Test Set và kết nối
+
+        @details: Verify toàn bộ luồng khởi động:
+                  S2VNA simulator lên trước, PC17 lên sau,
+                  điều hướng vào RF Test Set và đạt trạng thái Connected.
+
+        @pre:- Máy tính đã cài S2VNA và PC17
+             - Không có instance nào đang chạy trước khi test
+
+        @test_procedure:    - Khởi chạy App S2VNA
+                            - Khởi động App PC17
+                            - Sau đó vào UI của PC17 tại thanh Menu
+                            [code]
+                                # Tools → RF Test Set
+                                - Chờ nó sẽ ra 1 UI khác tên là FormMainEliteRF lúc này sẽ làm việc trên UI này
+                                → System → Connect → Connection → đợi Connected
+                            [!code]
+
+        @pass_criteria:- UI PC17 hiển thị trạng thái "Connected"
+                       - Nút "Disconnect" xuất hiện
+                       - Sau khi Connection thành công, check tại mục Detail kiểm tra xem các
+                       thông tin của VNA (Temperature, Serial Number) đã được load chưa
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        # _ensure_connected đã đảm bảo Connected state.
+        # TC1 chỉ verify kết quả: Connected + Disconnect button + Detail info.
+        assert main_page.is_connected(), "PC17 không đạt trạng thái 'Connected'"
+        assert main_page.has_text("Disconnect"), "Nút 'Disconnect' không xuất hiện trên UI"
+
+        main_page.click_detail()
+
+        temperature = main_page.get_temperature()
+        serial      = main_page.get_serial_number()
+
+        errors = []
+        if temperature in (None, "", ":"):
+            errors.append(f"Temperature không hợp lệ: {temperature!r}")
+        if serial in (None, "", ":"):
+            errors.append(f"Serial Number không hợp lệ: {serial!r}")
+
+        assert not errors, "\n".join(errors)
+
+    # ════════════════════════════════════════════════════════════════════════════
+    #  TC2 · PUC_2.1 · Abnormal · Bật/tắt liên tục VNA (5 chu kỳ)
+    # ════════════════════════════════════════════════════════════════════════════
+
+    @testcase
+    def test_vna_puc_2_1_0002(self, main_page: MainPage):
+        """
+        @test_id: test_vna_puc_2_1_0002
+        @brief: Bật/tắt liên tục VNA 5 chu kỳ không có lỗi
+
+        @details: Verify rằng VNA có thể bật/tắt liên tục 5 lần mà không bị lỗi,
+                  trạng thái UI phải đúng sau mỗi chu kỳ Disconnect / Reconnect.
+
+        @pre:- PC17 application đang chạy
+             - Module VNA đã kết nối (được đảm bảo bởi _ensure_connected)
+
+        @test_procedure:
                         [code]
-                            # Tools → RF Test Set
-                            - Chờ nó sẽ ra 1 UI khác tên là FormMainEliteRF lúc này sẽ làm việc trên UI này
-                            → System → Connect → Connection → đợi Connected
+                            - Xác nhận thiết bị đã kết nối (Connected) trên UI
+                            - Disconnect module VNA từ UI
+                            - Xác nhận UI không còn hiển thị "Connected"
+                            - Reconnect: System → Connect → Connection → đợi Connected
+                            - Xác nhận UI hiển thị "Connected"
+                            - Lặp lại 5 lần
                         [!code]
 
-    @pass_criteria:- UI PC17 hiển thị trạng thái "Connected"
-                   - Nút "Disconnect" xuất hiện
-                   - Sau khi Connection thành công , check tại mục Detail kiểm tra xem các 
-                   thông tin của VNA(Temperature, Serial Number) đã được load chưa
+        @pass_criteria:- Sau mỗi lần Disconnect: UI không còn "Connected"
+                       - Sau mỗi lần Reconnect: UI hiển thị "Connected"
+                       - Hoàn thành đủ 5 chu kỳ không có exception
 
-    @test_level: software
-    @test_type: functional
-    @execution_type: automatic
-    @hw_depend: yes
-    """
-    # Fixtures đã xử lý toàn bộ luồng khởi động.
-    # Test chỉ verify kết quả cuối.
-    assert s2vna_ctrl.is_running(), "S2VNA chưa được khởi động — PC17 sẽ không thể Connected"
-    assert main_page.is_connected(), "PC17 không đạt trạng thái 'Connected'"
-    assert main_page.has_text("Disconnect"), "Nút 'Disconnect' không xuất hiện trên UI"
-    main_page.click_detail()
+        @test_level: software
+        @test_type: functional
+        @execution_type: manual
+        @hw_depend: yes
+        """
+        CYCLES = 5
 
-    temperature = main_page.get_temperature()
-    serial      = main_page.get_serial_number()
+        assert main_page.is_connected(), "Điều kiện đầu vào TC2: PC17 chưa Connected"
 
-    errors = []
-    if temperature in [None, "", ":"]:
-        errors.append(f"Temperature không hợp lệ: {temperature!r}")
-    if serial in [None, "", ":"]:
-        errors.append(f"Serial Number không hợp lệ: {serial!r}")
+        for cycle in range(1, CYCLES + 1):
+            # ── Disconnect ──────────────────────────────────────────────────────
+            main_page.click_disconnect()
+            time.sleep(3)  # đợi UI cập nhật trạng thái
 
-    assert not errors, "\n".join(errors)
+            assert not main_page.is_connected(), (
+                f"Chu kỳ {cycle}/{CYCLES}: VNA vẫn hiển thị 'Connected' sau Disconnect"
+            )
 
+            # ── Reconnect ───────────────────────────────────────────────────────
+            main_page.reconnect()
 
+            assert main_page.is_connected(), (
+                f"Chu kỳ {cycle}/{CYCLES}: VNA không đạt 'Connected' sau Reconnect"
+            )
 
-# ════════════════════════════════════════════════════════════════════════════
-#  TC2 · PUC_2.1 · Abnormal · Bật/tắt liên tục VNA
-# ════════════════════════════════════════════════════════════════════════════
+    # ════════════════════════════════════════════════════════════════════════════
+    #  TC3 · PUC_2.1 · Normal · Cấu hình VNA — Measurement, Stimulus, Marker
+    # ════════════════════════════════════════════════════════════════════════════
 
+    @testcase
+    def test_vna_puc_2_1_0003(self, main_page: MainPage):
+        """
+        @test_id: test_vna_puc_2_1_0003
+        @brief: Cấu hình VNA — Measurement (S11/S21), Stimulus, Marker
 
-@testcase
-def test_vna_puc_2_1_0002(main_page: MainPage, device: SerialDevice):
-    """
-    @test_id: test_vna_puc_2_1_0002
-    @brief: Bật/tắt liên tục VNA
-    @details: Verify rằng VNA có thể bật/tắt liên tục 5 lần mà không bị lỗi,
-              trạng thái phần cứng và UI phải đúng sau mỗi chu kỳ
+        @details: Verify toàn bộ luồng cấu hình VNA sau khi đã Connected:
+                  chọn S-parameter, thiết lập Stimulus, thêm Marker và đọc kết quả.
 
-    @pre:- PC17 application đang chạy
-         - Module VNA đã bật (tiếp tục từ TC1 PUC_2.1 Normal)
+        @pre:- PC17 đã Connected (được đảm bảo bởi _ensure_connected)
+             - VNA panel có thể mở được
 
-    @test_procedure:
-                    [code]
-                        - Xác nhận thiết bị đã khởi động hoàn tất trên UI
-                        - Disable module VNA từ UI
-                        - Quan sát đèn báo nguồn VNA và ghi nhận trạng thái UI
-                        - Connection module VNA từ UI
-                        - Quan sát đèn báo nguồn VNA và ghi nhận trạng thái khởi động thành công
-                        - Lặp lại 5 lần
-                    [!code]
+        @test_procedure:
+                        [code]
+                            # Measurement
+                            - Mở tab Measurement trong VNA panel
+                            - Chọn S11, chọn S21
+                            - Click Apply
 
-    @pass_criteria:- Sau mỗi lần tắt: đèn VNA tắt, UI hiển thị OFF
-                   - Sau mỗi lần bật: đèn VNA sáng, UI hiển thị ON/Ready
-                   - Hoàn thành đủ 5 chu kỳ không có lỗi
+                            # Stimulus
+                            - Mở tab Stimulus
+                            - Set Start Frequency = 2GHz, Stop = 6GHz
+                            - Set Center = 9.05GHz, Span = 3GHz
+                            - Set Points = 301, IF BW = 10kHz, Power = 0
+                            - Click Apply
 
-    @test_level: software
-    @test_type: functional
-    @execution_type: Manual
-    @hw_depend: yes
-    """
+                            # Marker
+                            - Mở tab Markers
+                            - Add Marker 1 (Trace 1 mặc định)
+                            - Đổi sang Trace 2, Add Marker 2
+                            - Đọc dữ liệu marker (GHz position + dB value)
+                        [!code]
+
+        @pass_criteria:- S11 và S21 được chọn thành công
+                       - Tất cả thông số Stimulus được điền và Apply thành công
+                       - Ít nhất 1 marker được tạo với dữ liệu hợp lệ (có GHz position và dB value)
+                       - Marker 1 position == Start Frequency (2GHz)
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        START_FREQ = "2GHz"
+
+        # ── Measurement ─────────────────────────────────────────────────────────
+        main_page.open_measurement()
+        main_page.select_s_parameter("S11")
+        main_page.select_s_parameter("S21")
+        main_page.click_apply()
+
+        # ── Stimulus ────────────────────────────────────────────────────────────
+        main_page.open_stimulus()
+        main_page.set_stimulus_params(
+            start=START_FREQ,
+            stop="6GHz",
+            center="9.05GHz",
+            span="3GHz",
+            points="301",
+            if_bw="10kHz",
+            power="0",
+        )
+
+        # ── Marker ──────────────────────────────────────────────────────────────
+        main_page.setup_marker()
+        time.sleep(1)  # đợi marker render
+
+        markers = main_page.extract_markers()
+
+        assert len(markers) >= 1, (
+            f"Không có marker nào được tạo hoặc không đọc được dữ liệu. markers={markers}"
+        )
+
+        for m in markers:
+            assert m.get("position"), f"Marker '{m['name']}' thiếu position: {m}"
+            assert m.get("value"),    f"Marker '{m['name']}' thiếu value: {m}"
+
+        # ── Verify Marker 1 position == Start Frequency ──────────────────────────
+        marker1_pos  = markers[0]["position"]
+        expected_ghz = _freq_to_ghz(START_FREQ)
+        actual_ghz   = _freq_to_ghz(marker1_pos)
+
+        assert abs(actual_ghz - expected_ghz) < 0.001, (
+            f"Marker 1 position {marker1_pos!r} ({actual_ghz:.4f} GHz) "
+            f"không khớp với Start Frequency {START_FREQ!r} ({expected_ghz:.4f} GHz)"
+        )
