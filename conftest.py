@@ -20,6 +20,18 @@ except Exception:
     pass
 
 from config import get_settings
+
+def _capture_screenshot(filename: str) -> str:
+    """Chụp toàn màn hình, trả về path đã lưu hoặc chuỗi rỗng nếu lỗi."""
+    path = Path("reports/screenshots") / filename
+    path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        from PIL import ImageGrab
+        ImageGrab.grab().save(str(path))
+        return str(path)
+    except Exception as e:
+        logger.warning(f"Screenshot failed: {e}")
+        return ""
 from core.app_controller import AppController
 from core.relay_controller import RelayController
 from core.serial_device import SerialDevice
@@ -200,31 +212,29 @@ def pytest_runtest_logreport(report):  # noqa: F811  (intentional re-def for ite
     if report.when != "call":
         return
 
-    # Screenshot on failure
-    if report.failed and item:
-        cfg = get_settings()
-        if cfg.report.screenshot_on_fail:
-            ctrl: AppController = item.funcargs.get("app_ctrl")
-            if ctrl:
-                ts = time.strftime("%Y%m%d_%H%M%S")
-                safe_id = (meta.test_id if meta else "unknown").replace("/", "_")
-                ctrl.take_screenshot(f"FAIL_{safe_id}_{ts}.png")
+    ts = time.strftime("%Y%m%d_%H%M%S")
+    safe_id = (meta.test_id if meta else "unknown").replace("/", "_").replace(":", "_")
+    prefix  = report.outcome.upper()
+
+    # Chụp màn hình sau mỗi testcase (pass hoặc fail)
+    screenshot_path = _capture_screenshot(f"{prefix}_{safe_id}_{ts}.png")
 
     error_msg = ""
     if report.failed and report.longrepr:
         error_msg = str(report.longrepr)[:500]
 
     _session_results.append(TestResult(
-        test_id        = meta.test_id        if meta else report.nodeid,
-        brief          = meta.brief          if meta else "",
-        test_level     = meta.test_level     if meta else "",
-        test_type      = meta.test_type      if meta else "",
-        execution_type = meta.execution_type if meta else "",
-        hw_depend      = meta.hw_depend      if meta else False,
-        outcome        = report.outcome,
-        duration       = f"{report.duration:.2f}",
-        error_message  = error_msg,
-        nodeid         = report.nodeid,
+        test_id         = meta.test_id        if meta else report.nodeid,
+        brief           = meta.brief          if meta else "",
+        test_level      = meta.test_level     if meta else "",
+        test_type       = meta.test_type      if meta else "",
+        execution_type  = meta.execution_type if meta else "",
+        hw_depend       = meta.hw_depend      if meta else False,
+        outcome         = report.outcome,
+        duration        = f"{report.duration:.2f}",
+        error_message   = error_msg,
+        nodeid          = report.nodeid,
+        screenshot_path = screenshot_path,
     ))
 
 

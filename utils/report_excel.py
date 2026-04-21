@@ -77,7 +77,7 @@ class TestResult:
     __slots__ = (
         "test_id", "brief", "test_level", "test_type",
         "execution_type", "hw_depend", "outcome",
-        "duration", "error_message", "nodeid",
+        "duration", "error_message", "nodeid", "screenshot_path",
     )
 
     def __init__(self, **kwargs):
@@ -105,7 +105,11 @@ class ExcelReporter:
         ("Result",         10),
         ("Duration (s)",   13),
         ("Error / Notes",  50),
+        ("Screenshot",     30),
     ]
+
+    _SCREENSHOT_COL = 10   # cột J (1-based)
+    _ROW_HEIGHT_PX  = 80   # chiều cao row khi có ảnh
 
     def __init__(self, output_path: Optional[str] = None):
         """
@@ -235,6 +239,7 @@ class ExcelReporter:
                 outcome,
                 result.duration if result.duration == "—" else (f"{float(result.duration):.2f}" if result.duration else ""),
                 result.error_message,
+                "",  # placeholder cho cột Screenshot
             ]
 
             for col_idx, value in enumerate(values, start=1):
@@ -245,3 +250,25 @@ class ExcelReporter:
                     cell.fill = row_fill
                     cell.font = _bold()
                     cell.alignment = _center()
+
+            # Nhúng ảnh thumbnail vào cột Screenshot
+            screenshot = getattr(result, "screenshot_path", "")
+            if screenshot and Path(screenshot).exists():
+                try:
+                    from openpyxl.drawing.image import Image as XLImage
+                    from PIL import Image as PILImage
+
+                    # Resize về thumbnail trước khi nhúng để file nhẹ
+                    thumb_path = str(Path(screenshot).with_suffix(".thumb.png"))
+                    with PILImage.open(screenshot) as im:
+                        im.thumbnail((200, 130))
+                        im.save(thumb_path)
+
+                    xl_img = XLImage(thumb_path)
+                    xl_img.width  = 200
+                    xl_img.height = 130
+                    col_letter = ws.cell(r_idx, self._SCREENSHOT_COL).column_letter
+                    ws.add_image(xl_img, f"{col_letter}{r_idx}")
+                    ws.row_dimensions[r_idx].height = self._ROW_HEIGHT_PX
+                except Exception as e:
+                    ws.cell(r_idx, self._SCREENSHOT_COL, f"[img error: {e}]")
