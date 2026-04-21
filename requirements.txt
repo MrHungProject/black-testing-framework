@@ -15,6 +15,7 @@ pyserial-asyncio>=0.6         # async serial (optional)
 # ── Reporting ─────────────────────────────────────────────
 allure-pytest>=2.13.5         # rich HTML report
 openpyxl>=3.1.2               # Excel report
+Pillow>=10.0.0                # screenshot capture + Excel thumbnail
 
 # ── Config & Utilities ───────────────────────────────────
 pydantic>=2.6.0               # settings validation
