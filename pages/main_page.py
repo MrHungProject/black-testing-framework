@@ -133,25 +133,38 @@ class MainPage(BasePage):
 
     def reconnect(self) -> None:
         """
-        @brief  Kết nối lại: nếu đang Connected thì Disconnect trước, sau đó System → Connect → Connection
+        @brief  Kết nối lại theo flow: mở System card nếu chưa mở → Connect → Connection → Connected
         @retval None
         """
-        logger.info("Reconnect: kiểm tra trạng thái hiện tại …")
+        logger.info("Reconnect: kiểm tra System card …")
 
-        # Nếu đang connected → bấm Disconnect trước
+        # Chỉ click System để mở nếu "Connect" chưa thấy — tránh toggle đóng card
+        if not self._ctrl.has_element_with_text("Connect"):
+            logger.info("Reconnect: System card đang đóng → mở card …")
+            try:
+                self._ctrl._main_window.child_window(
+                    auto_id="CardSystem", control_type="Pane"
+                ).click_input()
+            except Exception:
+                self._ctrl.click_by_text("System")
+            time.sleep(2)
+
+        logger.info("Reconnect: click Connect để mở panel …")
+        ok = self._ctrl.click_by_text("Connect", retries=5)
+        if not ok:
+            raise RuntimeError("PC17: Không click được 'Connect' khi reconnect")
+        time.sleep(2)
+
+        # Nếu thấy "Disconnect" trong panel → đang connected, disconnect trước
         if self._ctrl.has_element_with_text("Disconnect"):
-            logger.info("Reconnect: đang Connected → Disconnect trước")
+            logger.info("Reconnect: đang Connected → Disconnect rồi reconnect …")
             self._ctrl.click_by_text("Disconnect")
             time.sleep(2)
 
-        logger.info("Reconnect: System → Connect → Connection …")
-        self._ctrl.click_by_text("System")
-        time.sleep(1)
-        self._ctrl.click_by_text("Connect")
-        time.sleep(2)
         ok = self._ctrl.click_by_text("Connection", retries=5)
         if not ok:
             raise RuntimeError("PC17: Không click được 'Connection' khi reconnect")
+
         if not self._ctrl.wait_for_text("Connected", timeout=self.CONNECT_TIMEOUT):
             raise RuntimeError("PC17: Device không đạt 'Connected' sau reconnect")
         logger.info("Reconnect: Connected OK")
