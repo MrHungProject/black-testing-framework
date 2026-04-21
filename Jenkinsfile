@@ -6,8 +6,8 @@ pipeline {
     parameters {
         choice(
             name: 'TEST_SUITE',
-            choices: ['vna', 'attenuator', 'demo', 'all'],
-            description: 'Module cần chạy: vna | attenuator | demo | all'
+            choices: ['all', 'vna', 'power', 'spectrumanalyzer', 'amplifier', 'attenuator'],
+            description: 'Module cần chạy: all | vna | power | spectrumanalyzer | amplifier | attenuator'
         )
         string(
             name: 'TEST_CASE',
@@ -114,10 +114,12 @@ pipeline {
                 script {
                     def testPath
                     switch(params.TEST_SUITE) {
-                        case 'vna':        testPath = 'tests/vna/';        break
-                        case 'attenuator': testPath = 'tests/attenuator/'; break
-                        case 'demo':       testPath = 'tests/demo/';       break
-                        default:           testPath = 'tests/'
+                        case 'vna':              testPath = 'tests/vna/';             break
+                        case 'power':            testPath = 'tests/power/';           break
+                        case 'spectrumanalyzer': testPath = 'tests/spectrumanalyzer/'; break
+                        case 'amplifier':        testPath = 'tests/amplifier/';       break
+                        case 'attenuator':       testPath = 'tests/attenuator/';      break
+                        default:                 testPath = 'tests/'
                     }
 
                     // Nếu TEST_CASE được điền → chạy đúng test case đó (dùng -k)
