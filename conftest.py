@@ -110,6 +110,27 @@ def relay() -> Iterator[RelayController]:
 
 
 # ════════════════════════════════════════════════════════════════════════════
+#  Collection hook — skip manual tests unless explicitly requested
+# ════════════════════════════════════════════════════════════════════════════
+
+_MANUAL_SKIP_REASON = "__execution_type_manual__"
+
+
+def pytest_collection_modifyitems(config, items):
+    """Skip tests với execution_type=manual theo mặc định.
+    Để chạy manual: pytest -m manual
+    """
+    if config.option.markexpr:
+        return
+
+    skip_manual = pytest.mark.skip(reason=_MANUAL_SKIP_REASON)
+    for item in items:
+        meta = getattr(getattr(item, "function", None), "_tc_meta", None)
+        if meta and meta.execution_type == "manual":
+            item.add_marker(skip_manual)
+
+
+# ════════════════════════════════════════════════════════════════════════════
 #  Per-test fixtures
 # ════════════════════════════════════════════════════════════════════════════
 
@@ -148,13 +169,36 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_runtest_logreport(report):  # noqa: F811  (intentional re-def for item attach)
-    if report.when != "call":
-        return
-
     item = getattr(report, "_pytest_item", None)
     meta: TestCaseMetadata = getattr(
         getattr(item, "function", None), "_tc_meta", None
     ) if item else None
+
+    # Manual tests bị skip ở phase "setup" — ghi vào report với outcome "manual"
+    if report.when == "setup" and report.skipped:
+        skip_reason = ""
+        if hasattr(report, "wasxfail"):
+            skip_reason = report.wasxfail
+        elif report.longrepr:
+            skip_reason = str(report.longrepr)
+
+        if _MANUAL_SKIP_REASON in skip_reason:
+            _session_results.append(TestResult(
+                test_id        = meta.test_id        if meta else report.nodeid,
+                brief          = meta.brief          if meta else "",
+                test_level     = meta.test_level     if meta else "",
+                test_type      = meta.test_type      if meta else "",
+                execution_type = "manual",
+                hw_depend      = meta.hw_depend      if meta else False,
+                outcome        = "manual",
+                duration       = "—",
+                error_message  = "",
+                nodeid         = report.nodeid,
+            ))
+        return
+
+    if report.when != "call":
+        return
 
     # Screenshot on failure
     if report.failed and item:

@@ -33,6 +33,7 @@ _YELLOW = "FFFFC000"
 _BLUE   = "FF4472C4"
 _GREY   = "FFD9D9D9"
 _WHITE  = "FFFFFFFF"
+_PURPLE = "FFB8CCE4"  # manual tests
 
 
 def _fill(hex_color: str) -> "PatternFill":
@@ -156,6 +157,8 @@ class ExcelReporter:
         failed  = sum(1 for r in results if r.outcome == "failed")
         skipped = sum(1 for r in results if r.outcome == "skipped")
         errors  = sum(1 for r in results if r.outcome == "error")
+        manual  = sum(1 for r in results if r.outcome == "manual")
+        auto_total = total - manual  # chỉ tính pass rate trên các TC automatic
 
         rows = [
             ("Report generated", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
@@ -164,7 +167,8 @@ class ExcelReporter:
             ("FAILED",  failed),
             ("SKIPPED", skipped),
             ("ERROR",   errors),
-            ("Pass rate", f"{(passed/total*100):.1f}%" if total else "N/A"),
+            ("MANUAL",  manual),
+            ("Pass rate", f"{(passed/auto_total*100):.1f}%" if auto_total else "N/A"),
         ]
 
         ws.column_dimensions["A"].width = 20
@@ -186,6 +190,8 @@ class ExcelReporter:
                 value_cell.fill = _fill(_RED)
             elif label == "SKIPPED":
                 value_cell.fill = _fill(_YELLOW)
+            elif label == "MANUAL":
+                value_cell.fill = _fill(_PURPLE)
 
     # ── Details sheet ─────────────────────────────────────────────────────────
 
@@ -216,6 +222,7 @@ class ExcelReporter:
                 "PASSED":  _fill(_GREEN),
                 "FAILED":  _fill(_RED),
                 "SKIPPED": _fill(_YELLOW),
+                "MANUAL":  _fill(_PURPLE),
             }.get(outcome, _fill(_WHITE))
 
             values = [
@@ -226,7 +233,7 @@ class ExcelReporter:
                 result.execution_type,
                 "Yes" if result.hw_depend else "No",
                 outcome,
-                f"{float(result.duration):.2f}" if result.duration else "",
+                result.duration if result.duration == "—" else (f"{float(result.duration):.2f}" if result.duration else ""),
                 result.error_message,
             ]
 
