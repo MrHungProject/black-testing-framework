@@ -108,8 +108,12 @@ class ExcelReporter:
         ("Screenshot",     30),
     ]
 
-    _SCREENSHOT_COL = 10   # cột J (1-based)
-    _ROW_HEIGHT_PX  = 80   # chiều cao row khi có ảnh
+    _SCREENSHOT_COL  = 10    # cột J (1-based)
+    _IMG_W_PX        = 180   # thumbnail width  (pixels)
+    _IMG_H_PX        = 100   # thumbnail height (pixels)
+    # Excel row height = points (1px = 0.75pt), column width = char units (~7px/unit)
+    _ROW_HEIGHT_PT   = 75    # 100px * 0.75 = 75pt
+    _COL_WIDTH_UNITS = 26    # 180px / 7px ≈ 26 char units
 
     def __init__(self, output_path: Optional[str] = None):
         """
@@ -215,7 +219,11 @@ class ExcelReporter:
             cell.fill = _fill(_BLUE)
             cell.alignment = _center()
             cell.border = _thin_border()
-            ws.column_dimensions[cell.column_letter].width = width
+            # Cột Screenshot dùng width tính theo pixel → char units
+            if col_idx == self._SCREENSHOT_COL:
+                ws.column_dimensions[cell.column_letter].width = self._COL_WIDTH_UNITS
+            else:
+                ws.column_dimensions[cell.column_letter].width = width
 
         ws.row_dimensions[1].height = 24
 
@@ -258,17 +266,17 @@ class ExcelReporter:
                     from openpyxl.drawing.image import Image as XLImage
                     from PIL import Image as PILImage
 
-                    # Resize về thumbnail trước khi nhúng để file nhẹ
                     thumb_path = str(Path(screenshot).with_suffix(".thumb.png"))
                     with PILImage.open(screenshot) as im:
-                        im.thumbnail((200, 130))
+                        im.thumbnail((self._IMG_W_PX, self._IMG_H_PX))
                         im.save(thumb_path)
 
                     xl_img = XLImage(thumb_path)
-                    xl_img.width  = 200
-                    xl_img.height = 130
+                    xl_img.width  = self._IMG_W_PX
+                    xl_img.height = self._IMG_H_PX
                     col_letter = ws.cell(r_idx, self._SCREENSHOT_COL).column_letter
                     ws.add_image(xl_img, f"{col_letter}{r_idx}")
-                    ws.row_dimensions[r_idx].height = self._ROW_HEIGHT_PX
+                    # height tính bằng points (1px = 0.75pt)
+                    ws.row_dimensions[r_idx].height = self._ROW_HEIGHT_PT
                 except Exception as e:
                     ws.cell(r_idx, self._SCREENSHOT_COL, f"[img error: {e}]")
