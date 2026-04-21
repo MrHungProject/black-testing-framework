@@ -18,6 +18,14 @@ s2vna:
   connect_timeout: 15
   startup_wait: 3                      # giây chờ sau khi launch
 
+spike:
+  name: "Spike"
+  exe_path: "C:/Program Files/Signal Hound/Spike/Spike.exe"  # <<< cập nhật nếu khác
+  backend: "uia"
+  connect_timeout: 15
+  startup_wait: 3                      # giây chờ sau khi launch
+                                       # override bằng env: SPIKE_EXE_PATH=...
+
 serial:
   default_port: "COM3"                # override bằng env: SERIAL_PORT=COMx
   baudrate: 115200

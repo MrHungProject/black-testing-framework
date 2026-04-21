@@ -24,9 +24,9 @@ class TestPuc33PowerAverage:
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_3_3_tc25(self, main_page: MainPage):
+    def test_power_puc_3_3_tc_0025(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_3_tc25
+        @test_id: test_power_puc_3_3_tc_0025
         @brief: Test normal — Average 1→100, SignalGen 5GHz 10dBm
 
         @details: Verify rằng:
@@ -57,9 +57,9 @@ class TestPuc33PowerAverage:
         """
 
     @testcase
-    def test_puc_3_3_tc26(self, main_page: MainPage):
+    def test_power_puc_3_3_tc_0026(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_3_tc26
+        @test_id: test_power_puc_3_3_tc_0026
         @brief: Test abnormal — Average=0, SignalGen 5GHz 10dBm
 
         @details: Average=0 nằm ngoài dải hợp lệ. PC17 phải báo lỗi.
@@ -85,9 +85,9 @@ class TestPuc33PowerAverage:
         """
 
     @testcase
-    def test_puc_3_3_tc27(self, main_page: MainPage):
+    def test_power_puc_3_3_tc_0027(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_3_tc27
+        @test_id: test_power_puc_3_3_tc_0027
         @brief: Test abnormal — Average=-1, SignalGen 5GHz 10dBm
 
         @details: Average=-1 nằm ngoài dải hợp lệ. PC17 phải báo lỗi.
@@ -113,9 +113,9 @@ class TestPuc33PowerAverage:
         """
 
     @testcase
-    def test_puc_3_3_tc28(self, main_page: MainPage):
+    def test_power_puc_3_3_tc_0028(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_3_tc28
+        @test_id: test_power_puc_3_3_tc_0028
         @brief: Test abnormal — Average=2001, SignalGen 5GHz 10dBm
 
         @details: Average=2001 vượt giới hạn trên cho phép. PC17 phải báo lỗi.

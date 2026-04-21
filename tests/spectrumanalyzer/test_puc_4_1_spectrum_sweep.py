@@ -25,7 +25,7 @@ class TestPuc41SpectrumSweep:
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_1_tc03(self, main_page: MainPage):
+    def test_puc_4_1_tc_0003(self, main_page: MainPage):
         """
         @test_id: test_spectrum_puc_4_1_tc03
         @brief: Sweep mode — SignalGen 1MHz -18dBm → 1 cột phổ tại 1MHz, công suất -20dBm

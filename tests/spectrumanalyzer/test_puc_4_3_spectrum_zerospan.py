@@ -24,9 +24,9 @@ class TestPuc43SpectrumZeroSpan:
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_3_tc15(self, main_page: MainPage):
+    def test_spectrum_puc_4_3_tc_0015(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_4_3_tc15
+        @test_id: test_spectrum_puc_4_3_tc_0015
         @brief: Zero-span mode — Center 1MHz, SignalGen 1MHz -18dBm → AM vs Time và Spectrum Plot
 
         @details: Verify PC17 Spectrum Analyzer chạy đúng chế độ Zero-span mode.

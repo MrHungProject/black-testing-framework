@@ -15,8 +15,8 @@ from pydantic import BaseModel, Field
 
 
 class AppConfig(BaseModel):
-    name: str = "FormMainEliteRF"   # tiêu đề cửa sổ chính sau khi mở RF Test Set
-    exe_path: str = r"C:\PC17\PC17.exe"
+    name: str = "FormMainEliteRF"
+    exe_path: str = ""
     backend: str = "uia"
     connect_timeout: int = 15
     action_delay: float = 0.3
@@ -68,9 +68,18 @@ class TestRailConfig(BaseModel):
     suite_id: int = 1
 
 
+class SpikeConfig(BaseModel):
+    name: str = "Spike"
+    exe_path: str = ""
+    backend: str = "uia"
+    connect_timeout: int = 15
+    startup_wait: int = 3
+
+
 class Settings(BaseModel):
     app: AppConfig = Field(default_factory=AppConfig)
     s2vna: S2VnaConfig = Field(default_factory=S2VnaConfig)
+    spike: SpikeConfig = Field(default_factory=SpikeConfig)
     serial: SerialConfig = Field(default_factory=SerialConfig)
     relay: RelayConfig = Field(default_factory=RelayConfig)
     report: ReportConfig = Field(default_factory=ReportConfig)
@@ -96,5 +105,7 @@ def get_settings() -> Settings:
         settings.relay.port = relay_port
     if s2vna_exe := os.getenv("S2VNA_EXE_PATH"):
         settings.s2vna.exe_path = s2vna_exe
+    if spike_exe := os.getenv("SPIKE_EXE_PATH"):
+        settings.spike.exe_path = spike_exe
 
     return settings

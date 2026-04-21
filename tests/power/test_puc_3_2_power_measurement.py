@@ -1,5 +1,5 @@
 """
-Power Measurement test suite — PUC_3.2 / PUC_3.3 / PUC_3.4
+Power Measurement test suite — PUC_3.2
 Đo công suất tín hiệu đơn tần trong dải 1MHz–26.5GHz, -60dBm đến 26dBm.
 Sai số công suất cho phép: < 1.71%.
 Execution type: manual.
@@ -12,7 +12,7 @@ from pages.main_page import MainPage
 
 
 class TestPuc32PowerMeasurement:
-    """PUC_3.2 / PUC_3.3 / PUC_3.4 — Power Measurement manual test suite."""
+    """PUC_3.2 — Power Measurement manual test suite."""
 
     @pytest.fixture(autouse=True)
     def _ensure_connected(self, main_page: MainPage):
@@ -25,9 +25,9 @@ class TestPuc32PowerMeasurement:
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_3_2_tc03(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0003(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc03
+        @test_id: test_power_puc_3_2_tc_0003
         @brief: Test biên — SignalGen 1MHz, 0dBm
 
         @details: Kiểm tra đo công suất tại tần số biên dưới 1MHz với công suất 0dBm.
@@ -52,9 +52,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc04(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0004(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc04
+        @test_id: test_power_puc_3_2_tc_0004
         @brief: Test biên — SignalGen 26.5GHz, 0dBm
 
         @details: Kiểm tra đo công suất tại tần số biên trên 26.5GHz với công suất 0dBm.
@@ -79,9 +79,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc05(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0005(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc05
+        @test_id: test_power_puc_3_2_tc_0005
         @brief: Test biên — SignalGen 20MHz, -60dBm
 
         @details: Kiểm tra đo công suất tại mức công suất biên dưới -60dBm.
@@ -106,9 +106,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc06(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0006(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc06
+        @test_id: test_power_puc_3_2_tc_0006
         @brief: Test biên — SignalGen 20MHz, 26dBm
 
         @details: Kiểm tra đo công suất tại mức công suất biên trên 26dBm.
@@ -137,9 +137,9 @@ class TestPuc32PowerMeasurement:
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_3_2_tc07(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0007(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc07
+        @test_id: test_power_puc_3_2_tc_0007
         @brief: Test normal — SignalGen 10MHz, -59dBm
 
         @pre:- PC17 đã Connected
@@ -156,9 +156,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc08(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0008(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc08
+        @test_id: test_power_puc_3_2_tc_0008
         @brief: Test normal — SignalGen 10MHz, -25dBm
 
         @pre:- PC17 đã Connected
@@ -175,9 +175,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc09(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0009(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc09
+        @test_id: test_power_puc_3_2_tc_0009
         @brief: Test normal — SignalGen 10MHz, 15dBm
 
         @pre:- PC17 đã Connected
@@ -194,9 +194,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc10(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0010(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc10
+        @test_id: test_power_puc_3_2_tc_0010
         @brief: Test normal — SignalGen 10MHz, 25dBm
 
         @pre:- PC17 đã Connected
@@ -213,9 +213,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc11(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0011(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc11
+        @test_id: test_power_puc_3_2_tc_0011
         @brief: Test normal — SignalGen 5GHz, -58dBm
 
         @pre:- PC17 đã Connected
@@ -232,9 +232,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc12(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0012(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc12
+        @test_id: test_power_puc_3_2_tc_0012
         @brief: Test normal — SignalGen 5GHz, -23dBm
 
         @pre:- PC17 đã Connected
@@ -251,9 +251,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc13(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0013(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc13
+        @test_id: test_power_puc_3_2_tc_0013
         @brief: Test normal — SignalGen 5GHz, 17dBm
 
         @pre:- PC17 đã Connected
@@ -270,9 +270,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc14(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0014(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc14
+        @test_id: test_power_puc_3_2_tc_0014
         @brief: Test normal — SignalGen 5GHz, -24dBm
 
         @pre:- PC17 đã Connected
@@ -289,9 +289,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc15(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0015(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc15
+        @test_id: test_power_puc_3_2_tc_0015
         @brief: Test normal — SignalGen 15MHz, -57dBm
 
         @pre:- PC17 đã Connected
@@ -308,9 +308,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc16(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0016(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc16
+        @test_id: test_power_puc_3_2_tc_0016
         @brief: Test normal — SignalGen 15MHz, -21dBm
 
         @pre:- PC17 đã Connected
@@ -327,9 +327,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc17(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0017(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc17
+        @test_id: test_power_puc_3_2_tc_0017
         @brief: Test normal — SignalGen 15MHz, 13dBm
 
         @pre:- PC17 đã Connected
@@ -346,9 +346,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc18(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0018(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc18
+        @test_id: test_power_puc_3_2_tc_0018
         @brief: Test normal — SignalGen 15MHz, 22dBm
 
         @pre:- PC17 đã Connected
@@ -365,9 +365,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc19(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0019(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc19
+        @test_id: test_power_puc_3_2_tc_0019
         @brief: Test normal — SignalGen 24GHz, -58dBm
 
         @pre:- PC17 đã Connected
@@ -384,9 +384,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc20(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0020(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc20
+        @test_id: test_power_puc_3_2_tc_0020
         @brief: Test normal — SignalGen 24GHz, -23dBm
 
         @pre:- PC17 đã Connected
@@ -403,9 +403,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc21(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0021(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc21
+        @test_id: test_power_puc_3_2_tc_0021
         @brief: Test normal — SignalGen 24GHz, 17dBm
 
         @pre:- PC17 đã Connected
@@ -422,9 +422,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc22(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0022(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc22
+        @test_id: test_power_puc_3_2_tc_0022
         @brief: Test normal — SignalGen 24GHz, -24dBm
 
         @pre:- PC17 đã Connected
@@ -445,9 +445,9 @@ class TestPuc32PowerMeasurement:
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_3_2_tc23(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0023(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc23
+        @test_id: test_power_puc_3_2_tc_0023
         @brief: Test abnormal — SignalGen 27GHz vượt dải tần cho phép
 
         @details: Tần số 27GHz vượt giới hạn trên 26.5GHz.
@@ -472,9 +472,9 @@ class TestPuc32PowerMeasurement:
         """
 
     @testcase
-    def test_puc_3_2_tc24(self, main_page: MainPage):
+    def test_power_puc_3_2_tc_0024(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_2_tc24
+        @test_id: test_power_puc_3_2_tc_0024
         @brief: Test abnormal — SignalGen 999,999Hz dưới dải tần cho phép
 
         @details: Tần số 999,999Hz thấp hơn giới hạn dưới 1MHz.
@@ -492,248 +492,6 @@ class TestPuc32PowerMeasurement:
         @pass_criteria:- PC17 hiển thị thông báo lỗi "out of range" tần số
                        - Không crash hoặc treo ứng dụng
 
-        @test_level: software
-        @test_type: functional
-        @execution_type: manual
-        @hw_depend: yes
-        """
-
-    # ════════════════════════════════════════════════════════════════════════════
-    #  PUC_3.3 · Average parameter tests (TC25–TC28)
-    # ════════════════════════════════════════════════════════════════════════════
-
-    @testcase
-    def test_puc_3_3_tc25(self, main_page: MainPage):
-        """
-        @test_id: test_puc_3_3_tc25
-        @brief: Test normal — Average 1→100, SignalGen 5GHz 10dBm
-
-        @details: Verify rằng:
-                  - Công suất hiển thị trong dải sai số < 1.71%
-                  - Khi Average=1: độ biến thiên công suất cao
-                  - Khi Average=100: độ biến thiên công suất nhỏ lại
-
-        @pre:- Bật nguồn Powermeter và Signal Generator
-             - Kết nối đầu ra SignalGen với đầu vào Powermeter
-             - PC17 đã Connected, hiển thị chế độ dBm
-
-        @test_procedure:
-            [code]
-                - Set tần số Powermeter trên PC17 = 5GHz
-                - Set SignalGen: FREQ=5GHz, POW=10dBm, OUTPUT ON
-                - Set Average = 1, quan sát độ biến thiên công suất trên PC17
-                - Set Average = 100, quan sát độ biến thiên công suất trên PC17
-                - Ghi nhận sai số công suất so với giá trị đặt
-            [!code]
-
-        @pass_criteria:- Công suất hiển thị trong dải sai số < 1.71%
-                       - Độ biến thiên ở Average=100 nhỏ hơn rõ rệt so với Average=1
-
-        @test_level: software
-        @test_type: functional
-        @execution_type: manual
-        @hw_depend: yes
-        """
-
-    @testcase
-    def test_puc_3_3_tc26(self, main_page: MainPage):
-        """
-        @test_id: test_puc_3_3_tc26
-        @brief: Test abnormal — Average=0, SignalGen 5GHz 10dBm
-
-        @details: Average=0 nằm ngoài dải hợp lệ. PC17 phải báo lỗi.
-
-        @pre:- PC17 đã Connected
-             - Signal Generator đã kết nối
-
-        @test_procedure:
-            [code]
-                - Set tần số Powermeter = 5GHz
-                - Set SignalGen: FREQ=5GHz, POW=10dBm, OUTPUT ON
-                - Set Average = 0 trên PC17
-                - Ghi nhận phản hồi của PC17
-            [!code]
-
-        @pass_criteria:- PC17 hiển thị thông báo lỗi "Average out of range"
-                       - Không crash hoặc treo ứng dụng
-
-        @test_level: software
-        @test_type: functional
-        @execution_type: manual
-        @hw_depend: yes
-        """
-
-    @testcase
-    def test_puc_3_3_tc27(self, main_page: MainPage):
-        """
-        @test_id: test_puc_3_3_tc27
-        @brief: Test abnormal — Average=-1, SignalGen 5GHz 10dBm
-
-        @details: Average=-1 nằm ngoài dải hợp lệ. PC17 phải báo lỗi.
-
-        @pre:- PC17 đã Connected
-             - Signal Generator đã kết nối
-
-        @test_procedure:
-            [code]
-                - Set tần số Powermeter = 5GHz
-                - Set SignalGen: FREQ=5GHz, POW=10dBm, OUTPUT ON
-                - Set Average = -1 trên PC17
-                - Ghi nhận phản hồi của PC17
-            [!code]
-
-        @pass_criteria:- PC17 hiển thị thông báo lỗi "Average out of range"
-                       - Không crash hoặc treo ứng dụng
-
-        @test_level: software
-        @test_type: functional
-        @execution_type: manual
-        @hw_depend: yes
-        """
-
-    @testcase
-    def test_puc_3_3_tc28(self, main_page: MainPage):
-        """
-        @test_id: test_puc_3_3_tc28
-        @brief: Test abnormal — Average=2001, SignalGen 5GHz 10dBm
-
-        @details: Average=2001 vượt giới hạn trên cho phép. PC17 phải báo lỗi.
-
-        @pre:- PC17 đã Connected
-             - Signal Generator đã kết nối
-
-        @test_procedure:
-            [code]
-                - Set tần số Powermeter = 5GHz
-                - Set SignalGen: FREQ=5GHz, POW=10dBm, OUTPUT ON
-                - Set Average = 2001 trên PC17
-                - Ghi nhận phản hồi của PC17
-            [!code]
-
-        @pass_criteria:- PC17 hiển thị thông báo lỗi "Average out of range"
-                       - Không crash hoặc treo ứng dụng
-
-        @test_level: software
-        @test_type: functional
-        @execution_type: manual
-        @hw_depend: yes
-        """
-
-    # ════════════════════════════════════════════════════════════════════════════
-    #  PUC_3.4 · Chế độ hiển thị Linear (TC29–TC33)
-    # ════════════════════════════════════════════════════════════════════════════
-
-    @testcase
-    def test_puc_3_4_tc29(self, main_page: MainPage):
-        """
-        @test_id: test_puc_3_4_tc29
-        @brief: Linear display — SignalGen 5GHz, 10dBm → expected 10mW
-
-        @details: Verify PC17 hiển thị đúng giá trị công suất ở chế độ Linear (mW).
-                  10dBm tương đương 10mW trên thang tuyến tính.
-
-        @pre:- Bật nguồn Powermeter và Signal Generator
-             - Kết nối đầu ra SignalGen với đầu vào Powermeter
-             - PC17 đã Connected, Average=10, Display=dB
-
-        @test_procedure:
-            [code]
-                - Set Average=10, tần số Powermeter = 5GHz trên PC17
-                - Set SignalGen: FREQ=5GHz, POW=10dBm, OUTPUT ON
-                - Chuyển chế độ hiển thị sang Linear (mW)
-                - Ghi nhận giá trị công suất mW trên PC17
-                - Kiểm tra: giá trị = 10mW, sai số < 1.71%
-            [!code]
-
-        @pass_criteria:- PC17 hiển thị ~10mW
-                       - Sai số < 1.71%
-
-        @test_level: software
-        @test_type: functional
-        @execution_type: manual
-        @hw_depend: yes
-        """
-
-    @testcase
-    def test_puc_3_4_tc30(self, main_page: MainPage):
-        """
-        @test_id: test_puc_3_4_tc30
-        @brief: Linear display — SignalGen 5GHz, 7dBm → expected 5.01mW
-
-        @pre:- Bật nguồn Powermeter và Signal Generator, PC17 Connected, Average=10
-        @test_procedure:
-            [code]
-                - Set Average=10, tần số Powermeter = 5GHz
-                - Set SignalGen: FREQ=5GHz, POW=7dBm, OUTPUT ON
-                - Chuyển hiển thị sang Linear (mW)
-                - Ghi nhận giá trị mW, kiểm tra ≈ 5.01mW, sai số < 1.71%
-            [!code]
-        @pass_criteria:- PC17 hiển thị ~5.01mW, sai số < 1.71%
-        @test_level: software
-        @test_type: functional
-        @execution_type: manual
-        @hw_depend: yes
-        """
-
-    @testcase
-    def test_puc_3_4_tc31(self, main_page: MainPage):
-        """
-        @test_id: test_puc_3_4_tc31
-        @brief: Linear display — SignalGen 5GHz, 0dBm → expected 1mW
-
-        @pre:- Bật nguồn Powermeter và Signal Generator, PC17 Connected, Average=10
-        @test_procedure:
-            [code]
-                - Set Average=10, tần số Powermeter = 5GHz
-                - Set SignalGen: FREQ=5GHz, POW=0dBm, OUTPUT ON
-                - Chuyển hiển thị sang Linear (mW)
-                - Ghi nhận giá trị mW, kiểm tra = 1mW, sai số < 1.71%
-            [!code]
-        @pass_criteria:- PC17 hiển thị ~1mW, sai số < 1.71%
-        @test_level: software
-        @test_type: functional
-        @execution_type: manual
-        @hw_depend: yes
-        """
-
-    @testcase
-    def test_puc_3_4_tc32(self, main_page: MainPage):
-        """
-        @test_id: test_puc_3_4_tc32
-        @brief: Linear display — SignalGen 5GHz, -13dBm → expected 0.0501mW
-
-        @pre:- Bật nguồn Powermeter và Signal Generator, PC17 Connected, Average=10
-        @test_procedure:
-            [code]
-                - Set Average=10, tần số Powermeter = 5GHz
-                - Set SignalGen: FREQ=5GHz, POW=-13dBm, OUTPUT ON
-                - Chuyển hiển thị sang Linear (mW)
-                - Ghi nhận giá trị mW, kiểm tra ≈ 0.0501mW, sai số < 1.71%
-            [!code]
-        @pass_criteria:- PC17 hiển thị ~0.0501mW, sai số < 1.71%
-        @test_level: software
-        @test_type: functional
-        @execution_type: manual
-        @hw_depend: yes
-        """
-
-    @testcase
-    def test_puc_3_4_tc33(self, main_page: MainPage):
-        """
-        @test_id: test_puc_3_4_tc33
-        @brief: Linear display — SignalGen 5GHz, -55dBm → expected 3.16nW
-
-        @details: -55dBm tương đương 3.162nW (3.162e-6 mW) trên thang tuyến tính.
-
-        @pre:- Bật nguồn Powermeter và Signal Generator, PC17 Connected, Average=10
-        @test_procedure:
-            [code]
-                - Set Average=10, tần số Powermeter = 5GHz
-                - Set SignalGen: FREQ=5GHz, POW=-55dBm, OUTPUT ON
-                - Chuyển hiển thị sang Linear (mW/nW)
-                - Ghi nhận giá trị, kiểm tra ≈ 3.16nW, sai số < 1.71%
-            [!code]
-        @pass_criteria:- PC17 hiển thị ~3.16nW, sai số < 1.71%
         @test_level: software
         @test_type: functional
         @execution_type: manual

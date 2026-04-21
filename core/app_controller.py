@@ -71,6 +71,7 @@ class AppController:
 
         self._app: Optional["Application"] = None
         self._main_window = None
+        self._cache: list = []  # UI element cache — build bằng build_cache()
 
     # ── Connection ────────────────────────────────────────────────────────────
 
@@ -388,6 +389,55 @@ class AppController:
 
     # ── Utility ───────────────────────────────────────────────────────────────
 
+    def build_cache(self) -> list:
+        """
+        @brief  Scan toàn bộ descendants của main window và lưu vào internal cache
+        @retval list[dict] — danh sách {"text", "type", "element"} của tất cả controls
+        """
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return []
+        self._cache = []
+        for ctrl in self._main_window.descendants():
+            try:
+                self._cache.append({
+                    "text":    ctrl.window_text().strip(),
+                    "type":    str(ctrl.element_info.control_type),
+                    "element": ctrl,
+                })
+            except Exception:
+                pass
+        logger.info(f"build_cache: {len(self._cache)} controls cached")
+        return self._cache
+
+    def invalidate_cache(self) -> None:
+        """
+        @brief  Xóa cache UI — gọi sau khi UI thay đổi lớn (mở panel mới, navigate, v.v.)
+        @retval None
+        """
+        self._cache = []
+        logger.info("invalidate_cache: cache cleared")
+
+    def _get_controls(self) -> list:
+        """
+        @brief  Trả về internal cache nếu đã build, ngược lại scan fresh descendants và normalize thành list[dict]
+        @retval list[dict] — danh sách {"text", "type", "element"} sẵn sàng để tìm kiếm
+        """
+        if self._cache:
+            return self._cache
+        if self._main_window is None:
+            return []
+        result = []
+        for ctrl in self._main_window.descendants():
+            try:
+                result.append({
+                    "text":    ctrl.window_text().strip(),
+                    "type":    str(ctrl.element_info.control_type),
+                    "element": ctrl,
+                })
+            except Exception:
+                pass
+        return result
+
     def get_text_after_label(self, label: str) -> str:
         """
         @brief  Lấy text của control ngay sau control có window_text chứa label (WinForms text-scan pattern)
@@ -446,14 +496,15 @@ class AppController:
         """
         if not PYWINAUTO_AVAILABLE or self._main_window is None:
             return False
-        controls = list(self._main_window.descendants())
-        for i, ctrl in enumerate(controls):
+        controls = self._get_controls()
+        for i, item in enumerate(controls):
             try:
-                if ctrl.window_text().strip() == label:
+                if item["text"] == label:
                     for j in range(i + 1, min(i + 10, len(controls))):
-                        target = controls[j]
+                        entry = controls[j]
                         try:
-                            if "Edit" in str(target.element_info.control_type):
+                            if "Edit" in entry["type"]:
+                                target = entry["element"]
                                 target.click_input()
                                 time.sleep(0.2)
                                 target.type_keys("^a{BACKSPACE}")
@@ -466,6 +517,72 @@ class AppController:
             except Exception:
                 pass
         logger.warning(f"set_field_by_label({label!r}) — field not found")
+        return False
+
+    def select_by_label(self, label: str, value: str) -> bool:
+        """
+        @brief  Tìm ComboBox ngay sau label trong descendants rồi click và chọn value
+        @param  label: Text chính xác của label cần tìm
+        @param  value: Text item cần chọn trong ComboBox
+        @retval bool — True nếu chọn thành công, False nếu không tìm thấy
+        """
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return False
+        controls = self._get_controls()
+        for i, item in enumerate(controls):
+            try:
+                if item["text"] == label:
+                    for j in range(i + 1, min(i + 6, len(controls))):
+                        entry = controls[j]
+                        try:
+                            if "ComboBox" in entry["type"]:
+                                entry["element"].click_input()
+                                time.sleep(0.2)
+                                for child in entry["element"].descendants():
+                                    try:
+                                        if child.window_text().strip() == value:
+                                            child.click_input()
+                                            time.sleep(self.action_delay)
+                                            logger.info(f"select_by_label({label!r}) = {value!r}")
+                                            return True
+                                    except Exception:
+                                        pass
+                                break
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+        logger.warning(f"select_by_label({label!r}) = {value!r} — not found")
+        return False
+
+    def set_checkbox_by_label(self, label: str, check: bool = True) -> bool:
+        """
+        @brief  Tìm CheckBox ngay sau label trong descendants rồi set trạng thái check/uncheck
+        @param  label: Text chính xác của label cần tìm
+        @param  check: True để check, False để uncheck
+        @retval bool — True nếu set thành công, False nếu không tìm thấy
+        """
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return False
+        controls = self._get_controls()
+        for i, item in enumerate(controls):
+            try:
+                if item["text"] == label:
+                    for j in range(i + 1, min(i + 4, len(controls))):
+                        entry = controls[j]
+                        try:
+                            if "CheckBox" in entry["type"]:
+                                state = entry["element"].get_toggle_state()
+                                if (check and state == 0) or (not check and state == 1):
+                                    entry["element"].click_input()
+                                time.sleep(self.action_delay)
+                                logger.info(f"set_checkbox_by_label({label!r}) = {check}")
+                                return True
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+        logger.warning(f"set_checkbox_by_label({label!r}) — not found")
         return False
 
     def select_from_desktop_popup(self, value: str, retries: int = 5) -> bool:
@@ -494,6 +611,31 @@ class AppController:
                     pass
             time.sleep(0.5)
         logger.warning(f"select_from_desktop_popup({value!r}) — not found after {retries} retries")
+        return False
+
+    def scroll_to_text(self, keyword: str, max_scroll: int = 20) -> bool:
+        """
+        @brief  Scroll window cho đến khi tìm thấy element có text chứa keyword
+        @param  keyword: Chuỗi cần tìm (không phân biệt hoa/thường)
+        @param  max_scroll: Số lần scroll tối đa (default: 20)
+        @retval bool — True nếu tìm thấy, False nếu không
+        """
+        if not PYWINAUTO_AVAILABLE or self._main_window is None:
+            return False
+        for _ in range(max_scroll):
+            for ctrl in self._main_window.descendants():
+                try:
+                    if keyword.lower() in ctrl.window_text().lower():
+                        logger.info(f"scroll_to_text: found {keyword!r}")
+                        return True
+                except Exception:
+                    pass
+            try:
+                self._main_window.wheel_mouse_input(wheel_dist=-3)
+            except Exception:
+                pass
+            time.sleep(0.1)
+        logger.warning(f"scroll_to_text({keyword!r}) — not found after {max_scroll} scrolls")
         return False
 
     def print_ui_tree(self, depth: int = 5) -> None:

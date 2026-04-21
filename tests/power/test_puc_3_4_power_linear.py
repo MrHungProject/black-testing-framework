@@ -24,9 +24,9 @@ class TestPuc34PowerLinear:
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_3_4_tc29(self, main_page: MainPage):
+    def test_power_puc_3_4_tc_0029(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_4_tc29
+        @test_id: test_power_puc_3_4_tc_0029
         @brief: Linear display — SignalGen 5GHz, 10dBm → expected 10mW
 
         @details: Verify PC17 hiển thị đúng giá trị công suất ở chế độ Linear (mW).
@@ -55,9 +55,9 @@ class TestPuc34PowerLinear:
         """
 
     @testcase
-    def test_puc_3_4_tc30(self, main_page: MainPage):
+    def test_power_puc_3_4_tc_0030(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_4_tc30
+        @test_id: test_power_puc_3_4_tc_0030
         @brief: Linear display — SignalGen 5GHz, 7dBm → expected 5.01mW
 
         @pre:- Bật nguồn Powermeter và Signal Generator, PC17 Connected, Average=10
@@ -76,9 +76,9 @@ class TestPuc34PowerLinear:
         """
 
     @testcase
-    def test_puc_3_4_tc31(self, main_page: MainPage):
+    def test_power_puc_3_4_tc_0031(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_4_tc31
+        @test_id: test_power_puc_3_4_tc_0031
         @brief: Linear display — SignalGen 5GHz, 0dBm → expected 1mW
 
         @pre:- Bật nguồn Powermeter và Signal Generator, PC17 Connected, Average=10
@@ -97,9 +97,9 @@ class TestPuc34PowerLinear:
         """
 
     @testcase
-    def test_puc_3_4_tc32(self, main_page: MainPage):
+    def test_power_puc_3_4_tc_0032(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_4_tc32
+        @test_id: test_power_puc_3_4_tc_0032
         @brief: Linear display — SignalGen 5GHz, -13dBm → expected 0.0501mW
 
         @pre:- Bật nguồn Powermeter và Signal Generator, PC17 Connected, Average=10
@@ -118,9 +118,9 @@ class TestPuc34PowerLinear:
         """
 
     @testcase
-    def test_puc_3_4_tc33(self, main_page: MainPage):
+    def test_power_puc_3_4_tc_0033(self, main_page: MainPage):
         """
-        @test_id: test_puc_3_4_tc33
+        @test_id: test_power_puc_3_4_tc_0033
         @brief: Linear display — SignalGen 5GHz, -55dBm → expected 3.16nW
 
         @details: -55dBm tương đương 3.162nW (3.162e-6 mW) trên thang tuyến tính.
