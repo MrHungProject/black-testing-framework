@@ -7,11 +7,39 @@ Root conftest.py
 """
 from __future__ import annotations
 
+import subprocess
 import time
 from pathlib import Path
 from typing import Dict, Iterator, List
 
 import pytest
+
+_MANAGED_APPS = ["Spike.exe", "S2VNA.exe", "PC17.exe"]
+_last_test_module: str = ""
+
+
+def _kill_all_apps() -> None:
+    """Kill tất cả managed apps để trả lại môi trường sạch."""
+    for exe in _MANAGED_APPS:
+        subprocess.run(["taskkill", "/f", "/im", exe], capture_output=True)
+
+
+def pytest_runtest_setup(item) -> None:
+    """Detect module transition → kill all apps trước khi module mới bắt đầu."""
+    global _last_test_module
+    try:
+        current_module = Path(item.fspath).relative_to(Path("tests")).parts[0]
+    except (ValueError, IndexError):
+        return
+
+    if _last_test_module and _last_test_module != current_module:
+        from utils.logger import get_logger as _get_logger
+        _get_logger("conftest").info(
+            f"Module transition: {_last_test_module} → {current_module} — killing all apps"
+        )
+        _kill_all_apps()
+
+    _last_test_module = current_module
 
 try:
     import comtypes
