@@ -133,9 +133,17 @@ class MainPage(BasePage):
 
     def reconnect(self) -> None:
         """
-        @brief  Kết nối lại sau khi đã Disconnect: System → Connect → Connection → đợi Connected
+        @brief  Kết nối lại: nếu đang Connected thì Disconnect trước, sau đó System → Connect → Connection
         @retval None
         """
+        logger.info("Reconnect: kiểm tra trạng thái hiện tại …")
+
+        # Nếu đang connected → bấm Disconnect trước
+        if self._ctrl.has_element_with_text("Disconnect"):
+            logger.info("Reconnect: đang Connected → Disconnect trước")
+            self._ctrl.click_by_text("Disconnect")
+            time.sleep(2)
+
         logger.info("Reconnect: System → Connect → Connection …")
         self._ctrl.click_by_text("System")
         time.sleep(1)
