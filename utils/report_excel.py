@@ -142,10 +142,40 @@ class ExcelReporter:
 
         wb = Workbook()
         self._build_summary_sheet(wb, results)
-        self._build_details_sheet(wb, results)
+        self._build_details_sheet(wb, results, sheet_name="Test Results")
 
         wb.save(self.output_path)
         logger.info(f"Excel report saved: {self.output_path}")
+        return self.output_path
+
+    def generate_multi_sheet(self, modules: dict) -> Path:
+        """
+        @brief  Tạo file Excel với sheet All + sheet riêng cho từng module
+        @param  modules: dict {module_name: List[TestResult]} — key "All" chứa toàn bộ
+        @retval Path — đường dẫn file Excel đã tạo
+        """
+        if not OPENPYXL_AVAILABLE:
+            logger.error("Cannot generate Excel report: openpyxl not installed")
+            return self.output_path
+
+        self.output_path.parent.mkdir(parents=True, exist_ok=True)
+        wb = Workbook()
+
+        # Sheet Summary tổng hợp (dùng kết quả All)
+        all_results = modules.get("All", [])
+        self._build_summary_sheet(wb, all_results)
+
+        # Sheet All
+        self._build_details_sheet(wb, all_results, sheet_name="All")
+
+        # Sheet từng module
+        for module_name, results in modules.items():
+            if module_name == "All":
+                continue
+            self._build_details_sheet(wb, results, sheet_name=module_name)
+
+        wb.save(self.output_path)
+        logger.info(f"Excel multi-sheet report saved: {self.output_path}")
         return self.output_path
 
     # ── Summary sheet ─────────────────────────────────────────────────────────
@@ -203,14 +233,15 @@ class ExcelReporter:
 
     # ── Details sheet ─────────────────────────────────────────────────────────
 
-    def _build_details_sheet(self, wb: "Workbook", results: List[TestResult]) -> None:
+    def _build_details_sheet(self, wb: "Workbook", results: List[TestResult], sheet_name: str = "Test Results") -> None:
         """
-        @brief  Tạo sheet "Test Results" với header màu xanh và mỗi row tô màu theo outcome
+        @brief  Tạo sheet chi tiết với header màu xanh và mỗi row tô màu theo outcome
         @param  wb: Workbook openpyxl đang được build
         @param  results: Danh sách TestResult cần ghi vào sheet
+        @param  sheet_name: Tên sheet (default: "Test Results")
         @retval None
         """
-        ws = wb.create_sheet("Test Results")
+        ws = wb.create_sheet(sheet_name)
 
         # Header row
         for col_idx, (header, width) in enumerate(self.COLUMNS, start=1):

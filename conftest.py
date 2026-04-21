@@ -289,21 +289,24 @@ def pytest_sessionfinish(session, exitstatus):
         logger.info(f"Report: {filename} ({len(_session_results)} tests)")
 
     else:
-        # all hoặc không set → group theo module folder
+        # all hoặc không set → group theo module folder, xuất 1 file all_report với nhiều sheets
         modules: dict = {}
         for result in _session_results:
             parts = Path(result.nodeid.split("::")[0]).parts
             module = parts[1] if len(parts) >= 2 else "other"
             modules.setdefault(module, []).append(result)
 
-        for module, results in modules.items():
-            filename = f"{module}_report.xlsx"
-            ExcelReporter(output_path=str(excel_dir / filename)).generate(results)
-            logger.info(f"Module report: {filename} ({len(results)} tests)")
-
-        # combined all
         if len(modules) > 1 or test_suite == "all":
-            ExcelReporter(output_path=str(excel_dir / "all_report.xlsx")).generate(_session_results)
-            logger.info(f"Combined report: all_report.xlsx ({len(_session_results)} tests)")
+            # 1 file all_report.xlsx: sheet Summary + sheet All + sheet per module
+            sheet_data = {"All": _session_results}
+            sheet_data.update(modules)
+            ExcelReporter(output_path=str(excel_dir / "all_report.xlsx")).generate_multi_sheet(sheet_data)
+            logger.info(f"Combined report: all_report.xlsx ({len(_session_results)} tests, {len(modules)} modules)")
+        else:
+            # chỉ 1 module → file đơn
+            module = list(modules.keys())[0]
+            filename = f"{module}_report.xlsx"
+            ExcelReporter(output_path=str(excel_dir / filename)).generate(_session_results)
+            logger.info(f"Module report: {filename} ({len(_session_results)} tests)")
 
     logger.info(f"Session finished — {len(_session_results)} test(s) collected")
