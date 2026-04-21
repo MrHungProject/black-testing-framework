@@ -48,22 +48,33 @@ pipeline {
 
     stages {
 
-        stage('Pre-launch Apps') {
+        stage('Health Check Apps') {
             steps {
                 script {
-                    // Kill trước để đảm bảo không bị duplicate instance khi test framework connect
-                    bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
-                    bat(returnStatus: true, script: 'taskkill /f /im PC17.exe   2>nul')
-                    bat(returnStatus: true, script: 'taskkill /f /im Spike.exe  2>nul')
-                    bat 'ping -n 3 127.0.0.1 > nul'
+                    // Mở từng app, xác nhận đang chạy, rồi đóng hết
+                    // Test case sẽ tự mở lại khi cần
 
-                    echo 'Launching S2VNA via Task Scheduler...'
+                    echo 'Health check S2VNA...'
                     bat 'schtasks /run /tn "CI_LaunchS2VNA"'
                     bat 'ping -n 11 127.0.0.1 > nul'
+                    def s2vnaOk = bat(returnStatus: true, script: 'tasklist /fi "imagename eq S2VNA.exe" | findstr /i S2VNA.exe > nul 2>&1')
+                    if (s2vnaOk != 0) error('S2VNA không khởi động được — dừng pipeline')
+                    echo 'S2VNA OK'
 
-                    echo 'Launching PC17 via Task Scheduler...'
+                    echo 'Health check PC17...'
                     bat 'schtasks /run /tn "CI_LaunchPC17"'
                     bat 'ping -n 9 127.0.0.1 > nul'
+                    def pc17Ok = bat(returnStatus: true, script: 'tasklist /fi "imagename eq PC17.exe" | findstr /i PC17.exe > nul 2>&1')
+                    if (pc17Ok != 0) error('PC17 không khởi động được — dừng pipeline')
+                    echo 'PC17 OK'
+
+                    // Đóng hết — test case tự mở lại
+                    echo 'Đóng tất cả app trước khi chạy test...'
+                    bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
+                    bat(returnStatus: true, script: 'taskkill /f /im PC17.exe  2>nul')
+                    bat(returnStatus: true, script: 'taskkill /f /im Spike.exe 2>nul')
+                    bat 'ping -n 3 127.0.0.1 > nul'
+                    echo 'Health check hoàn tất — sẵn sàng chạy test'
                 }
             }
         }
