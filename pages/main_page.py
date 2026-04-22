@@ -1,246 +1,82 @@
 """
 MainPage — Page Object cho cửa sổ FormMainEliteRF của PC17.
 
-Luồng setup (gọi một lần qua setup_connection()):
-    1. PC17.exe đã được start → top_window là cửa sổ khởi động ban đầu
-    2. Tools → RF Test Set  (keyboard nav: DOWN×3 + ENTER)
-    3. Đợi cửa sổ FormMainEliteRF xuất hiện
-    4. Click System → Connect → Connection
-    5. Đợi trạng thái "Connected"
-
-Tìm element bằng scan descendants() theo window_text() vì app dùng WinForms
-và auto_id không ổn định.
+Đây là facade mỏng: mỗi method delegate xuống panel tương ứng.
+Logic thực tế nằm trong pages/panels/:
+    - SystemPanel   — kết nối / ngắt kết nối
+    - DetailPanel   — Temperature, Serial Number
+    - VnaPanel      — Measurement, Stimulus, Markers
+    - SpectrumPanel — (chưa implement)
+    - AttenuatorPanel — (chưa implement)
+    - SignalPanel   — (chưa implement)
 """
 from __future__ import annotations
 
-import time
-
+from core.app_controller import AppController
 from pages.base_page import BasePage
-from utils.logger import get_logger
-
-logger = get_logger(__name__)
+from pages.panels import (
+    AttenuatorPanel,
+    DetailPanel,
+    SignalPanel,
+    SpectrumPanel,
+    SystemPanel,
+    VnaPanel,
+)
 
 
 class MainPage(BasePage):
-    """Page Object cho FormMainEliteRF — cửa sổ chính của PC17."""
+    """Facade cho FormMainEliteRF — compose các panel con."""
 
-    MAIN_WINDOW_TITLE_RE = ".*FormMainEliteRF.*"
-    NAV_WAIT        = 6   # giây chờ sau khi mở RF Test Set
-    CONNECT_TIMEOUT = 30  # giây chờ trạng thái Connected
+    def __init__(self, controller: AppController):
+        super().__init__(controller)
+        self.system     = SystemPanel(controller)
+        self.detail     = DetailPanel(controller)
+        self.vna        = VnaPanel(controller)
+        self.spectrum   = SpectrumPanel(controller)
+        self.attenuator = AttenuatorPanel(controller)
+        self.signal     = SignalPanel(controller)
 
-    # ── Setup flow (gọi 1 lần trong fixture) ─────────────────────────────────
+    # ── System / Connection ───────────────────────────────────────────────────
 
     def setup_connection(self) -> None:
-        """
-        @brief  Thực hiện toàn bộ flow setup kết nối: mở RF Test Set → click System → Connect → Connection → đợi "Connected"
-        @retval None
-        """
-        self._open_rf_test_set()
-        if not self._ctrl.click_by_text("System"):
-            try:
-                self._ctrl._main_window.child_window(
-                    auto_id="CardSystem", control_type="Pane"
-                ).click_input()
-            except Exception:
-                raise RuntimeError("PC17: Không click được 'System'")
-        time.sleep(1)
-        self._ctrl.click_by_text("Connect")
-        time.sleep(2)
-        ok = self._ctrl.click_by_text("Connection", retries=5)
-        if not ok:
-            raise RuntimeError("PC17: Không click được 'Connection'")
-        if not self._ctrl.wait_for_text("Connected", timeout=self.CONNECT_TIMEOUT):
-            raise RuntimeError("PC17: Device did not reach 'Connected' state")
-
-    def _open_rf_test_set(self) -> None:
-        """
-        @brief  Điều hướng qua menu Tools → RF Test Set rồi switch sang cửa sổ FormMainEliteRF
-        @retval None
-        """
-        # Bring window to foreground trước khi interact (quan trọng khi chạy CI)
-        try:
-            self._ctrl._main_window.set_focus()
-            self._ctrl._main_window.bring_to_top()
-        except Exception:
-            pass
-        time.sleep(1)
-
-        try:
-            self._ctrl._main_window.child_window(
-                title="Tools", control_type="MenuItem"
-            ).click_input()
-        except Exception:
-            self._ctrl.click_by_text("Tools")
-        time.sleep(1)
-
-        # Set focus lại sau khi click menu để đảm bảo type_keys hoạt động
-        try:
-            self._ctrl._main_window.set_focus()
-        except Exception:
-            pass
-
-        # WinForms menu không expose submenu qua UIA → keyboard fallback
-        self._ctrl.type_keys_on_window("{DOWN}{DOWN}{DOWN}{ENTER}")
-        time.sleep(self.NAV_WAIT)
-        self._ctrl.switch_window(self.MAIN_WINDOW_TITLE_RE, timeout=40)
-        time.sleep(2)  # đợi FormMainEliteRF ổn định trước khi click System
-
-    # ── Trạng thái kết nối ────────────────────────────────────────────────────
+        self.system.setup_connection()
 
     def is_connected(self) -> bool:
-        """
-        @brief  Kiểm tra trạng thái kết nối bằng cách tìm control có text "Connected"
-        @retval bool — True nếu control "Connected" tồn tại và enabled, False nếu không
-        """
-        return self._ctrl.has_element_with_text("Connected")
+        return self.system.is_connected()
 
     def click_disconnect(self) -> None:
-        """
-        @brief  Click button "Disconnect" để ngắt kết nối thiết bị
-        @retval None
-        """
-        self._ctrl.click_by_text("Disconnect")
+        self.system.click_disconnect()
+
+    def reconnect(self) -> None:
+        self.system.reconnect()
 
     # ── Detail panel ──────────────────────────────────────────────────────────
 
     def click_detail(self) -> bool:
-        """
-        @brief  Click tab/button "Detail" để mở panel thông tin thiết bị
-        @retval bool — True nếu click thành công
-        """
-        ok = self._ctrl.click_by_text("Detail")
-        if not ok:
-            raise RuntimeError("PC17: Không click được 'Detail'")
-        import time
-        time.sleep(2)
-        return ok
+        return self.detail.click_detail()
 
     def get_temperature(self) -> str:
-        """
-        @brief  Lấy giá trị Temperature từ Detail panel
-        @retval str — giá trị temperature hiển thị trên UI; chuỗi rỗng nếu không tìm thấy
-        """
-        return self._ctrl.get_text_after_label("Temperature")
+        return self.detail.get_temperature()
 
     def get_serial_number(self) -> str:
-        """
-        @brief  Lấy Serial Number từ Detail panel
-        @retval str — serial number hiển thị trên UI; chuỗi rỗng nếu không tìm thấy
-        """
-        return self._ctrl.get_text_after_label("Serial Number")
+        return self.detail.get_serial_number()
 
-    # ── Reconnect ─────────────────────────────────────────────────────────────
-
-    def reconnect(self) -> None:
-        """
-        @brief  Kết nối lại theo flow: mở System card nếu chưa mở → Connect → Connection → Connected
-        @retval None
-        """
-        logger.info("Reconnect: kiểm tra System card …")
-
-        # Chỉ click System để mở nếu "Connect" chưa thấy — tránh toggle đóng card
-        if not self._ctrl.has_element_with_text("Connect"):
-            logger.info("Reconnect: System card đang đóng → mở card …")
-            try:
-                self._ctrl._main_window.child_window(
-                    auto_id="CardSystem", control_type="Pane"
-                ).click_input()
-            except Exception:
-                self._ctrl.click_by_text("System")
-            time.sleep(2)
-
-        logger.info("Reconnect: click Connect để mở panel …")
-        ok = self._ctrl.click_by_text("Connect", retries=5)
-        if not ok:
-            raise RuntimeError("PC17: Không click được 'Connect' khi reconnect")
-        time.sleep(2)
-
-        # Nếu thấy "Disconnect" trong panel → đang connected, disconnect trước
-        if self._ctrl.has_element_with_text("Disconnect"):
-            logger.info("Reconnect: đang Connected → Disconnect rồi reconnect …")
-            self._ctrl.click_by_text("Disconnect")
-            time.sleep(2)
-
-        ok = self._ctrl.click_by_text("Connection", retries=5)
-        if not ok:
-            raise RuntimeError("PC17: Không click được 'Connection' khi reconnect")
-
-        if not self._ctrl.wait_for_text("Connected", timeout=self.CONNECT_TIMEOUT):
-            raise RuntimeError("PC17: Device không đạt 'Connected' sau reconnect")
-        logger.info("Reconnect: Connected OK")
-
-    # ── VNA Panel ─────────────────────────────────────────────────────────────
-
-    _VNA_TAB_KEYWORDS = ("Stimulus", "Measurement", "Markers")
+    # ── VNA panel ─────────────────────────────────────────────────────────────
 
     def ensure_vna_open(self) -> None:
-        """
-        @brief  Đảm bảo VNA panel đang mở (có ít nhất 1 trong các tab Stimulus/Measurement/Markers)
-        @retval None
-        """
-        if self._ctrl._main_window is None:
-            return
-        for ctrl in self._ctrl._main_window.descendants():
-            try:
-                if ctrl.window_text().strip() in self._VNA_TAB_KEYWORDS:
-                    return  # already open
-            except Exception:
-                pass
-        # Open via CardCollapeVNA pane
-        try:
-            vna_panel = self._ctrl._main_window.child_window(
-                auto_id="CardCollapeVNA", control_type="Pane"
-            )
-            vna_panel.wait("exists ready", timeout=10)
-            vna_panel.click_input()
-            time.sleep(1)
-        except Exception:
-            pass
-
-    # ── Measurement tab ───────────────────────────────────────────────────────
+        self.vna.ensure_vna_open()
 
     def open_measurement(self) -> None:
-        """
-        @brief  Click tab Measurement trong VNA panel
-        @retval None
-        """
-        logger.info("VNA: mở tab Measurement")
-        self.ensure_vna_open()
-        if not self._ctrl.click_by_text("Measurement", retries=10):
-            raise RuntimeError("VNA: Không click được 'Measurement'")
-        time.sleep(2)
+        self.vna.open_measurement()
 
     def select_s_parameter(self, name: str) -> None:
-        """
-        @brief  Chọn S-parameter (ví dụ: 'S11', 'S21') trong Measurement panel
-        @param  name: Tên S-parameter cần chọn
-        @retval None
-        """
-        if not self._ctrl.click_by_text(name):
-            raise RuntimeError(f"VNA: Không chọn được S-parameter '{name}'")
-        logger.info(f"VNA: S-parameter '{name}' đã chọn")
+        self.vna.select_s_parameter(name)
 
     def click_apply(self) -> None:
-        """
-        @brief  Click nút Apply (text scan)
-        @retval None
-        """
-        if not self._ctrl.click_by_text("Apply"):
-            raise RuntimeError("VNA: Không click được 'Apply'")
-        logger.info("VNA: Apply OK")
-
-    # ── Stimulus tab ──────────────────────────────────────────────────────────
+        self.vna.click_apply()
 
     def open_stimulus(self) -> None:
-        """
-        @brief  Click tab Stimulus trong VNA panel
-        @retval None
-        """
-        logger.info("VNA: mở tab Stimulus")
-        self.ensure_vna_open()
-        if not self._ctrl.click_by_text("Stimulus", retries=5):
-            raise RuntimeError("VNA: Không click được 'Stimulus'")
-        time.sleep(2)
+        self.vna.open_stimulus()
 
     def set_stimulus_params(
         self,
@@ -252,141 +88,25 @@ class MainPage(BasePage):
         if_bw: str = "10kHz",
         power: str = "0",
     ) -> None:
-        """
-        @brief  Điền toàn bộ thông số Stimulus rồi click Apply
-        @param  start: Start Frequency (default: "2GHz")
-        @param  stop: Stop Frequency (default: "6GHz")
-        @param  center: Center Frequency (default: "9.05GHz")
-        @param  span: Span Frequency (default: "3GHz")
-        @param  points: Number of Points (default: "301")
-        @param  if_bw: IF Bandwidth (default: "10kHz")
-        @param  power: Power dBm (default: "0")
-        @retval None
-        """
-        logger.info(
-            f"VNA Stimulus: start={start}, stop={stop}, center={center}, "
-            f"span={span}, points={points}, IF_BW={if_bw}, power={power}"
+        self.vna.set_stimulus_params(
+            start=start, stop=stop, center=center,
+            span=span, points=points, if_bw=if_bw, power=power,
         )
-        self._ctrl.set_field_by_label("Start Frequency", start)
-        self._ctrl.set_field_by_label("Stop Frequency", stop)
-        self._ctrl.set_field_by_label("Center Frequency", center)
-        self._ctrl.set_field_by_label("Span Frequency", span)
-        self._ctrl.set_field_by_label("Number of Points", points)
-        self._ctrl.set_field_by_label("IF Bandwidth", if_bw)
-        self._ctrl.set_field_by_label("Power", power)
-        self.click_apply()
-        logger.info("VNA Stimulus: tất cả thông số đã được set và Apply")
-
-    # ── Markers tab ───────────────────────────────────────────────────────────
 
     def open_markers(self) -> None:
-        """
-        @brief  Click tab Markers trong VNA panel
-        @retval None
-        """
-        logger.info("VNA: mở tab Markers")
-        self.ensure_vna_open()
-        if not self._ctrl.click_by_text("Markers", retries=5):
-            raise RuntimeError("VNA: Không click được 'Markers'")
-        time.sleep(1)
+        self.vna.open_markers()
 
     def click_add_marker(self) -> None:
-        """
-        @brief  Click nút 'Add Marker' (thử Button-type trước, fallback text scan)
-        @retval None
-        """
-        if not self._ctrl.click_button_by_text("Add Marker"):
-            if not self._ctrl.click_by_text("Add Marker"):
-                raise RuntimeError("VNA: Không click được 'Add Marker'")
-        logger.info("VNA: Add Marker OK")
+        self.vna.click_add_marker()
 
     def open_trace_dropdown(self) -> None:
-        """
-        @brief  Click 'Trace 1' để mở dropdown chọn trace cho marker
-        @retval None
-        """
-        if not self._ctrl.click_by_text("Trace 1", retries=5):
-            raise RuntimeError("VNA: Không mở được Trace dropdown")
-        time.sleep(1)
+        self.vna.open_trace_dropdown()
 
     def select_trace(self, value: str = "Trace 2") -> None:
-        """
-        @brief  Chọn trace từ popup xuất hiện ở Desktop level
-        @param  value: Tên trace cần chọn (default: "Trace 2")
-        @retval None
-        """
-        if not self._ctrl.select_from_desktop_popup(value):
-            raise RuntimeError(f"VNA: Không chọn được trace '{value}'")
-        logger.info(f"VNA: Trace '{value}' đã chọn")
+        self.vna.select_trace(value)
 
     def setup_marker(self) -> None:
-        """
-        @brief  Tạo 2 marker: Marker 1 trên Trace 1 (mặc định), Marker 2 trên Trace 2
-        @retval None
-        """
-        logger.info("VNA: setup marker — Marker1 (Trace1) + Marker2 (Trace2)")
-        self.open_markers()
-        time.sleep(0.5)
-        # Marker 1 — Trace 1 (default)
-        self.click_add_marker()
-        logger.info("VNA: Marker 1 thêm vào Trace 1")
-        time.sleep(0.5)
-        # Chuyển sang Trace 2, thêm Marker 2
-        self.open_trace_dropdown()
-        self.select_trace("Trace 2")
-        self.click_add_marker()
-        logger.info("VNA: Marker 2 thêm vào Trace 2")
+        self.vna.setup_marker()
 
     def extract_markers(self) -> list:
-        """
-        @brief  Đọc dữ liệu marker từ panel 'Active Markers' (vị trí GHz + giá trị dB)
-        @retval list[dict] — danh sách {"name", "position", "value"}, rỗng nếu không tìm thấy
-        """
-        if self._ctrl._main_window is None:
-            return []
-        # Tìm panel Active Markers
-        panel = None
-        for ctrl in self._ctrl._main_window.descendants():
-            try:
-                if "Active Markers" in ctrl.window_text():
-                    panel = ctrl.parent()
-                    break
-            except Exception:
-                pass
-        if not panel:
-            raise RuntimeError("VNA: Không tìm thấy panel 'Active Markers'")
-        # Thu thập text từ panel
-        texts = []
-        for ctrl in panel.descendants():
-            try:
-                t = ctrl.window_text().strip()
-                if t:
-                    texts.append(t)
-            except Exception:
-                pass
-        # Lọc giá trị GHz (position) và dB (value)
-        values = [t for t in texts if "GHz" in t or "dB" in t]
-        markers = []
-        i = 0
-        while i < len(values) - 1:
-            if "GHz" in values[i] and "dB" in values[i + 1]:
-                markers.append({
-                    "name": f"Marker {len(markers) + 1}",
-                    "position": values[i],
-                    "value": values[i + 1],
-                })
-                i += 2
-            else:
-                i += 1
-
-        # ── Log kết quả marker ───────────────────────────────────────────────
-        if markers:
-            logger.info(f"VNA: extract_markers — tìm thấy {len(markers)} marker(s)")
-            for m in markers:
-                logger.info(
-                    f"  {m['name']:10s} | position = {m['position']:>12s} | value = {m['value']}"
-                )
-        else:
-            logger.warning("VNA: extract_markers — không tìm thấy marker nào trong 'Active Markers' panel")
-
-        return markers
+        return self.vna.extract_markers()
