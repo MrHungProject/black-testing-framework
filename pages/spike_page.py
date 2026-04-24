@@ -146,7 +146,7 @@ class SpikePage(BasePage):
         @param  rbw:       Resolution Bandwidth (ví dụ: "300 kHz"), None để bỏ qua
         @param  vbw:       Video Bandwidth (ví dụ: "300 kHz"), None để bỏ qua
         @param  auto_rbw:  True/False để set checkbox Auto RBW, None để bỏ qua
-        @param  auto_vbw:  True/False để set checkbox Auto VBW, None để bỏ qua
+        @param  auto_vbw:  True/False để set checkbox Auto VBW, None để bỏ  qua
         @retval None
         """
         logger.info(f"set_bandwidth: rbw_shape={rbw_shape} rbw={rbw} vbw={vbw} auto_rbw={auto_rbw} auto_vbw={auto_vbw}")

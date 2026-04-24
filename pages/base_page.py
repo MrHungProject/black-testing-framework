@@ -140,3 +140,43 @@ class BasePage:
         @retval bool — True nếu tìm thấy control phù hợp, False nếu không
         """
         return self._ctrl.has_element_with_text(text)
+
+    # ── Validation error helpers (dùng chung cho mọi panel) ──────────────────
+
+    def check_validation_errors(self) -> list:
+        """
+        @brief  Quét toàn bộ UI tìm thông báo lỗi inline xuất hiện bên dưới các field sau khi Apply
+        @retval list[str] — danh sách chuỗi lỗi tìm thấy; rỗng nếu không có lỗi
+        """
+        if self._ctrl._main_window is None:
+            return []
+        _KEYWORDS = ("cannot", "invalid", "out of range")
+        errors = []
+        for ctrl in self._ctrl._main_window.descendants():
+            try:
+                t = ctrl.window_text().strip()
+                if t and any(kw in t.lower() for kw in _KEYWORDS):
+                    errors.append(t)
+            except Exception:
+                pass
+        return errors
+
+    def get_error_near_label(self, label: str) -> str:
+        """
+        @brief  Lấy thông báo lỗi inline xuất hiện gần label chỉ định (tìm trong 5 control kế tiếp)
+        @param  label: Text của label cần tìm (ví dụ: "Start Frequency")
+        @retval str — chuỗi lỗi nếu tìm thấy; chuỗi rỗng nếu không có lỗi
+        """
+        if self._ctrl._main_window is None:
+            return ""
+        controls = list(self._ctrl._main_window.descendants())
+        for i, ctrl in enumerate(controls):
+            try:
+                if ctrl.window_text().strip() == label:
+                    for j in range(i + 1, min(i + 5, len(controls))):
+                        t = controls[j].window_text().strip()
+                        if t and any(kw in t.lower() for kw in ("cannot", "invalid", "out of range")):
+                            return t
+            except Exception:
+                pass
+        return ""

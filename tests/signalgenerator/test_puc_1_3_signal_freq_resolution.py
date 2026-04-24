@@ -42,12 +42,12 @@ class TestSignalPuc13FreqResolution:
             [code]
                 - Kết nối output của Signal Generator vào input của Power Meter
                 - Setting Signal Generator: tần số = 585,495,239 Hz (trung tâm), công suất = 0dBm
-                - Điều chỉnh 5 điểm tần số nhỏ hơn (step 1Hz): 585,495,234 → 585,495,238 Hz
+                - Điều chỉnh 5 điểm tần số nhỏ hơn (step 1Hz): 585,495,234 → 585,495,238  
                 - Điều chỉnh 5 điểm tần số lớn hơn (step 1Hz): 585,495,240 → 585,495,244 Hz
                 - Ghi nhận giá trị công suất và tần số mà Power Meter đo được tại mỗi điểm
             [!code]
 
-        @pass_criteria:- UI PC17 cho phép setting tần số có độ phân giải 1Hz
+        @pass_criteria:- UI PC17 cho phép setting tần số có độ phân giải 0.001Hz
                        - Sai số công suất và tần số theo thông số của hãng (TBD)
 
         @test_level: software

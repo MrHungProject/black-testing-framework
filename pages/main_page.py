@@ -110,3 +110,48 @@ class MainPage(BasePage):
 
     def extract_markers(self) -> list:
         return self.vna.extract_markers()
+
+    # ── Signal panel ──────────────────────────────────────────────────────────
+
+    def ensure_signal_panel_open(self) -> None:
+        self.signal.ensure_signal_panel_open()
+
+    def signal_power_on(self) -> None:
+        self.signal.power_on()
+
+    def signal_power_off(self) -> None:
+        self.signal.power_off()
+
+    def signal_is_on(self) -> bool:
+        return self.signal.is_on()
+
+    def open_rf1_output(self) -> None:
+        self.signal.open_rf1_output()
+
+    def set_rf1_params(self, rf1_out: str = "0", power_level: str = "0") -> None:
+        self.signal.set_rf1_params(rf1_out=rf1_out, power_level=power_level)
+
+    def open_trigger_output(self) -> None:
+        self.signal.open_trigger_output()
+
+    def set_trigger_params(
+        self,
+        start_freq: str = "",
+        stop_freq: str = "",
+        step: str = "",
+        dwell_time: str = "",
+        cycles: str = "",
+    ) -> None:
+        self.signal.set_trigger_params(
+            start_freq=start_freq, stop_freq=stop_freq,
+            step=step, dwell_time=dwell_time, cycles=cycles,
+        )
+
+    def signal_check_validation_errors(self) -> list:
+        return self.signal.check_validation_errors()
+
+    def signal_get_error_near_label(self, label: str) -> str:
+        return self.signal.get_error_near_label(label)
+
+    def signal_get_temperature(self) -> str:
+        return self.signal.get_temperature()
