@@ -35,7 +35,7 @@ pipeline {
         PYTHONDONTWRITEBYTECODE = '1'
         PYTHONUNBUFFERED        = '1'
         VENV_DIR                = '.venv'
-        APP_EXE_PATH            = 'C:\\PC17\\PC17.exe'
+        APP_EXE_PATH            = 'C:\\EliteRF\\PC17.exe'
         S2VNA_EXE_PATH          = 'C:\\VNA\\S2VNA\\S2VNA.exe'
     }
 
