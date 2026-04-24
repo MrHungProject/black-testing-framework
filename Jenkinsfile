@@ -55,17 +55,23 @@ pipeline {
                     // Test case sẽ tự mở lại khi cần
 
                     echo 'Health check S2VNA...'
-                    bat 'schtasks /run /tn "CI_LaunchS2VNA"'
+                    bat "start \"\" \"${env.S2VNA_EXE_PATH}\""
                     bat 'ping -n 11 127.0.0.1 > nul'
                     def s2vnaOk = bat(returnStatus: true, script: 'tasklist /fi "imagename eq S2VNA.exe" | findstr /i S2VNA.exe > nul 2>&1')
                     if (s2vnaOk != 0) error('S2VNA không khởi động được — dừng pipeline')
                     echo 'S2VNA OK'
 
                     echo 'Health check PC17...'
-                    bat 'schtasks /run /tn "CI_LaunchPC17"'
-                    bat 'ping -n 9 127.0.0.1 > nul'
-                    def pc17Ok = bat(returnStatus: true, script: 'tasklist /fi "imagename eq PC17.exe" | findstr /i PC17.exe > nul 2>&1')
-                    if (pc17Ok != 0) error('PC17 không khởi động được — dừng pipeline')
+                    bat "start \"\" \"${env.APP_EXE_PATH}\""
+                    // Retry mỗi 5s, tối đa 60s — PC17 khởi động chậm hơn S2VNA
+                    def pc17Ok = false
+                    for (int i = 0; i < 12; i++) {
+                        bat 'ping -n 6 127.0.0.1 > nul'
+                        def rc = bat(returnStatus: true, script: 'tasklist /fi "imagename eq PC17.exe" | findstr /i PC17.exe > nul 2>&1')
+                        if (rc == 0) { pc17Ok = true; break }
+                        echo "PC17 chưa sẵn sàng — thử lại (${i+1}/12)..."
+                    }
+                    if (!pc17Ok) error('PC17 không khởi động được sau 60s — dừng pipeline')
                     echo 'PC17 OK'
 
                     // Đóng hết — test case tự mở lại
