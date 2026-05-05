@@ -303,7 +303,7 @@ class AppController:
                         return True
                 except Exception:
                     pass
-            time.sleep(1)
+            time.sleep(0.3)
         logger.warning(f"click_by_text({text!r}) — not found after {retries} retries")
         return False
 
@@ -323,7 +323,7 @@ class AppController:
                         return True
                 except Exception:
                     pass
-            time.sleep(1)
+            time.sleep(0.2)
         logger.warning(f"wait_for_text({text!r}) — timeout after {timeout}s")
         return False
 

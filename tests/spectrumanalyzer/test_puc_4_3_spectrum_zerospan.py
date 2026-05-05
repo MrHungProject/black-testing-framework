@@ -1,23 +1,75 @@
 """
 Spectrum Analyzer Zero-span mode test suite — PUC_4.3
 Chạy chế độ Zero-span: hiển thị AM vs Time và Spectrum Plot.
-Execution type: manual.
+Execution type: automatic.
 """
+
+import time
 
 import pytest
 
 from core import testcase
 from pages.main_page import MainPage
 
+_SPECTRUM_LABEL   = "SPECTRUM"
+_SIGNAL_GEN_LABEL = "Signal Genarator"
+
 
 class TestPuc43SpectrumZeroSpan:
-    """PUC_4.3 — Spectrum Analyzer Zero-span mode manual test suite."""
+    """
+    PUC_4.3 — Spectrum Analyzer Zero-span mode automatic test suite.
+
+    Setup flow (tự động, không cần TC trước chạy trước):
+        fixture _ensure_connected (autouse=True) chạy trước mỗi TC.
+        Nếu SPECTRUM hoặc Signal Generator chưa Connected → mở System → Connect
+        và kết nối từng thiết bị.
+        Mỗi TC đều độc lập và luôn bắt đầu ở trạng thái cả hai thiết bị đã Connected.
+    """
 
     @pytest.fixture(autouse=True)
     def _ensure_connected(self, main_page: MainPage):
-        """Đảm bảo PC17 Connected trước mỗi TC."""
-        if not main_page.is_connected():
-            main_page.reconnect()
+        """Connect nếu chưa connected. Sau mỗi TC nhấn Preset để reset UI."""
+        main_page.open_connect_panel()
+
+        if not main_page.is_device_connected(_SPECTRUM_LABEL):
+            main_page.connect_device(_SPECTRUM_LABEL)
+            time.sleep(3)
+
+        if not main_page.is_device_connected(_SIGNAL_GEN_LABEL):
+            main_page.connect_device(_SIGNAL_GEN_LABEL)
+            time.sleep(3)
+
+        yield
+
+    # ── Helper dùng chung ────────────────────────────────────────────────────
+
+    def _run_zerospan_tc(
+        self,
+        main_page: MainPage,
+        center: str,
+        rf1_out: str,
+        power_level: str,
+    ) -> None:
+        """
+        Luồng chung cho các TC PUC_4.3:
+          1. Analysis Mode → chọn Zero-span
+          2. Zero-span Setting → Center = center, Step = 20MHz
+          3. SignalGen → RF1 OUT = rf1_out, Power = power_level
+        """
+        # Chọn Zero-span mode (Preset reset về Sweep, nên phải chọn lại)
+        main_page.open_analysis_mode()
+        main_page.select_analysis_mode("Zero-span")
+
+        # Zero-span: Capture Setting → Center + Step
+        main_page.open_zerospan_setting()
+        main_page.open_capture_setting()
+        errs = main_page.set_capture_setting_params(center=center, step="20MHz")
+        assert not errs, f"Zero-span Capture Setting validation errors: {errs}"
+
+        # Signal Generator: RF1
+        main_page.open_rf1_output()
+        errs = main_page.set_rf1_params(rf1_out=rf1_out, power_level=power_level)
+        assert not errs, f"Signal Generator RF1 validation errors: {errs}"
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC15 · PUC_4.3 · Normal · Zero-span Center 1MHz, SignalGen 1MHz -18dBm
@@ -58,6 +110,12 @@ class TestPuc43SpectrumZeroSpan:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        self._run_zerospan_tc(
+            main_page,
+            center="1MHz",
+            rf1_out="1MHz",
+            power_level="-18",
+        )

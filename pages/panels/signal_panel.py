@@ -36,7 +36,7 @@ class SignalPanel(BasePage):
         logger.info("SignalPanel: mở Signal Gen card …")
         if not self._ctrl.click_by_text("SIGNAL GEN", retries=5):
             raise RuntimeError("SignalPanel: Không click được 'SIGNAL GEN'")
-        time.sleep(1)
+        self._ctrl.wait_for_text("RF1 output", timeout=5)
 
     # ── RF1 Output tab ────────────────────────────────────────────────────────
 
@@ -49,7 +49,7 @@ class SignalPanel(BasePage):
         self.ensure_signal_panel_open()
         if not self._ctrl.click_by_text("RF1 output", retries=5):
             raise RuntimeError("SignalPanel: Không click được 'RF1 output'")
-        time.sleep(1)
+        self._ctrl.wait_for_text("Set RF 1 OUT", timeout=5)
 
     def set_rf1_params(
         self,
@@ -63,10 +63,14 @@ class SignalPanel(BasePage):
         @retval list[str] — danh sách lỗi validation nếu có; rỗng nếu OK
         """
         logger.info(f"SignalPanel RF1: rf1_out={rf1_out}, power_level={power_level}")
-        self._ctrl.set_field_by_label("Set RF 1 OUT", rf1_out)
-        self._ctrl.set_field_by_label("Set Power Level", power_level)
+        self._ctrl.build_cache()
+        try:
+            self._ctrl.set_field_by_label("Set RF 1 OUT", rf1_out)
+            self._ctrl.set_field_by_label("Set Power Level", power_level)
+        finally:
+            self._ctrl.invalidate_cache()
         self._click_apply()
-        time.sleep(0.5)
+        time.sleep(0.2)
         errs = self.check_validation_errors()
         if errs:
             logger.warning(f"SignalPanel RF1: validation errors — {errs}")
@@ -85,7 +89,7 @@ class SignalPanel(BasePage):
         self.ensure_signal_panel_open()
         if not self._ctrl.click_by_text("Trigger Output", retries=5):
             raise RuntimeError("SignalPanel: Không click được 'Trigger Output'")
-        time.sleep(1)
+        self._ctrl.wait_for_text("Dwell Time", timeout=5)
 
     def set_trigger_params(
         self,

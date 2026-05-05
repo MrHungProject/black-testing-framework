@@ -2,32 +2,84 @@
 Spectrum Analyzer Amplitude measurement test suite — PUC_4.2
 Đo được Amplitude công suất tín hiệu đơn tần đến 20dBm.
 Sweep mode: Start=100kHz, Stop=20GHz, Step=20MHz.
-Execution type: manual.
+Execution type: automatic.
 """
+
+import time
 
 import pytest
 
 from core import testcase
 from pages.main_page import MainPage
 
+_SPECTRUM_LABEL   = "SPECTRUM"
+_SIGNAL_GEN_LABEL = "Signal Genarator"
+
 
 class TestPuc42SpectrumAmplitude:
-    """PUC_4.2 — Spectrum Analyzer Amplitude measurement manual test suite."""
+    """
+    PUC_4.2 — Spectrum Analyzer Amplitude measurement automatic test suite.
+
+    Setup flow (tự động, không cần TC trước chạy trước):
+        fixture _ensure_connected (autouse=True) chạy trước mỗi TC.
+        Nếu SPECTRUM hoặc Signal Generator chưa Connected → mở System → Connect
+        và kết nối từng thiết bị.
+        Mỗi TC đều độc lập và luôn bắt đầu ở trạng thái cả hai thiết bị đã Connected.
+    """
 
     @pytest.fixture(autouse=True)
     def _ensure_connected(self, main_page: MainPage):
-        """Đảm bảo PC17 Connected trước mỗi TC."""
-        if not main_page.is_connected():
-            main_page.reconnect()
+        """Connect nếu chưa connected. Sau mỗi TC nhấn Preset để reset UI."""
+        main_page.open_connect_panel()
+
+        if not main_page.is_device_connected(_SPECTRUM_LABEL):
+            main_page.connect_device(_SPECTRUM_LABEL)
+            time.sleep(3)
+
+        if not main_page.is_device_connected(_SIGNAL_GEN_LABEL):
+            main_page.connect_device(_SIGNAL_GEN_LABEL)
+            time.sleep(3)
+
+        yield
+
+        main_page.click_spectrum_preset()
+
+    # ── Helper dùng chung ────────────────────────────────────────────────────
+
+    def _run_amplitude_tc(self, main_page: MainPage, rf1_out: str, power_level: str) -> list:
+        """
+        Luồng chung cho TC8–TC14 PUC_4.2:
+          1. Spectrum → Sweep Settings → Frequency (Start=100kHz Stop=20GHz Step=20MHz)
+          2. SignalGen → RF1 OUT = rf1_out, Power = power_level
+          3. Peak Search → trả về danh sách markers
+        """
+        # Spectrum: Frequency
+        main_page.open_sweep_settings()
+        main_page.open_frequency()
+        errs = main_page.set_frequency_params(start="100kHz", stop="20GHz", step="20MHz")
+        assert not errs, f"Spectrum Frequency validation errors: {errs}"
+
+        # Signal Generator: RF1
+        main_page.open_rf1_output()
+        errs = main_page.set_rf1_params(rf1_out=rf1_out, power_level=power_level)
+        assert not errs, f"Signal Generator RF1 validation errors: {errs}"
+
+        # Markers: xóa cũ rồi Peak Search
+        main_page.open_sweep_settings()
+        main_page.open_spectrum_markers()
+        main_page.remove_all_markers()
+        main_page.click_peak_search()
+        main_page.spectrum._click_apply()
+        return main_page.extract_spectrum_markers()
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC8 · PUC_4.2 · Normal · SignalGen 10MHz -20dBm
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_2_tc08(self, main_page: MainPage):
+    def test_spectrum_puc_4_2_tc_0008(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_4_2_tc08
+        @test_id: test_spectrum_puc_4_2_tc_0008
         @brief: Amplitude measurement — SignalGen 10MHz -20dBm
 
         @details: Verify PC17 Spectrum Analyzer đo đúng công suất tín hiệu đơn tần.
@@ -53,18 +105,19 @@ class TestPuc42SpectrumAmplitude:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        markers = self._run_amplitude_tc(main_page, rf1_out="10MHz", power_level="-20")
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC9 · PUC_4.2 · Normal · SignalGen 100MHz -15dBm
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_2_tc09(self, main_page: MainPage):
+    def test_spectrum_puc_4_2_tc_0009(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_4_2_tc09
+        @test_id: test_spectrum_puc_4_2_tc_0009
         @brief: Amplitude measurement — SignalGen 100MHz -15dBm
 
         @details: Tương tự TC8 nhưng SignalGen phát 100MHz, -15dBm.
@@ -87,18 +140,19 @@ class TestPuc42SpectrumAmplitude:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        markers = self._run_amplitude_tc(main_page, rf1_out="100MHz", power_level="-15")
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC10 · PUC_4.2 · Normal · SignalGen 100MHz -9dBm
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_2_tc10(self, main_page: MainPage):
+    def test_spectrum_puc_4_2_tc_0010(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_4_2_tc10
+        @test_id: test_spectrum_puc_4_2_tc_0010
         @brief: Amplitude measurement — SignalGen 100MHz -9dBm
 
         @details: Tương tự TC8 nhưng SignalGen phát 100MHz, -9dBm.
@@ -121,18 +175,19 @@ class TestPuc42SpectrumAmplitude:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        markers = self._run_amplitude_tc(main_page, rf1_out="100MHz", power_level="-9")
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC11 · PUC_4.2 · Normal · SignalGen 100MHz -1dBm
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_2_tc11(self, main_page: MainPage):
+    def test_spectrum_puc_4_2_tc_0011(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_4_2_tc11
+        @test_id: test_spectrum_puc_4_2_tc_0011
         @brief: Amplitude measurement — SignalGen 100MHz -1dBm
 
         @details: Tương tự TC8 nhưng SignalGen phát 100MHz, -1dBm.
@@ -155,18 +210,19 @@ class TestPuc42SpectrumAmplitude:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        markers = self._run_amplitude_tc(main_page, rf1_out="100MHz", power_level="-1")
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC12 · PUC_4.2 · Normal · SignalGen 100MHz 6dBm
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_2_tc12(self, main_page: MainPage):
+    def test_spectrum_puc_4_2_tc_0012(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_4_2_tc12
+        @test_id: test_spectrum_puc_4_2_tc_0012
         @brief: Amplitude measurement — SignalGen 100MHz 6dBm
 
         @details: Tương tự TC8 nhưng SignalGen phát 100MHz, 6dBm.
@@ -189,18 +245,19 @@ class TestPuc42SpectrumAmplitude:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        markers = self._run_amplitude_tc(main_page, rf1_out="100MHz", power_level="6")
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC13 · PUC_4.2 · Normal · SignalGen 100MHz 15dBm
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_2_tc13(self, main_page: MainPage):
+    def test_spectrum_puc_4_2_tc_0013(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_4_2_tc13
+        @test_id: test_spectrum_puc_4_2_tc_0013
         @brief: Amplitude measurement — SignalGen 100MHz 15dBm
 
         @details: Tương tự TC8 nhưng SignalGen phát 100MHz, 15dBm.
@@ -223,18 +280,19 @@ class TestPuc42SpectrumAmplitude:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        markers = self._run_amplitude_tc(main_page, rf1_out="100MHz", power_level="15")
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC14 · PUC_4.2 · Normal · SignalGen 100MHz 20dBm
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_2_tc14(self, main_page: MainPage):
+    def test_spectrum_puc_4_2_tc_0014(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_4_2_tc14
+        @test_id: test_spectrum_puc_4_2_tc_0014
         @brief: Amplitude measurement — SignalGen 100MHz 20dBm (giới hạn trên)
 
         @details: Tương tự TC8 nhưng SignalGen phát 100MHz, 20dBm — giá trị công suất
@@ -258,6 +316,7 @@ class TestPuc42SpectrumAmplitude:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        markers = self._run_amplitude_tc(main_page, rf1_out="100MHz", power_level="20")

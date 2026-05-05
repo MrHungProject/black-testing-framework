@@ -9,7 +9,7 @@ app:
   exe_path: "C:/EliteRF/PC17.exe"   # <<< cập nhật đường dẫn thật nếu khác
   backend: "uia"                       # uia | win32
   connect_timeout: 15
-  action_delay: 0.3
+  action_delay: 0.1
 
 s2vna:
   name: "S2VNA"

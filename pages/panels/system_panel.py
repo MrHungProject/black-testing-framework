@@ -27,25 +27,13 @@ class SystemPanel(BasePage):
 
     def setup_connection(self) -> None:
         """
-        @brief  Thực hiện toàn bộ flow setup kết nối: mở RF Test Set → click System → Connect → Connection → đợi "Connected"
+        @brief  Mở RF Test Set → điều hướng đến System → Connect panel.
+                Không tự động connect thiết bị nào — mỗi test suite tự connect
+                thiết bị cần thiết qua _ensure_connected fixture.
         @retval None
         """
         self._open_rf_test_set()
-        if not self._ctrl.click_by_text("System"):
-            try:
-                self._ctrl._main_window.child_window(
-                    auto_id="CardSystem", control_type="Pane"
-                ).click_input()
-            except Exception:
-                raise RuntimeError("PC17: Không click được 'System'")
-        time.sleep(1)
-        self._ctrl.click_by_text("Connect")
-        time.sleep(2)
-        ok = self._ctrl.click_by_text("Connection", retries=5)
-        if not ok:
-            raise RuntimeError("PC17: Không click được 'Connection'")
-        if not self._ctrl.wait_for_text("Connected", timeout=self.CONNECT_TIMEOUT):
-            raise RuntimeError("PC17: Device did not reach 'Connected' state")
+        self.open_connect_panel()
 
     def _open_rf_test_set(self) -> None:
         """
@@ -78,6 +66,81 @@ class SystemPanel(BasePage):
         self._ctrl.switch_window(self.MAIN_WINDOW_TITLE_RE, timeout=40)
         time.sleep(2)
 
+    def connect_device(self, device_label: str) -> bool:
+        """
+        @brief  Click nút Connection của thiết bị chỉ định trong panel System - Connect
+        @param  device_label: Tên thiết bị ("VNA Device", "Attenuator Device", "SPECTRUM", "Signal Genarator")
+        @retval bool — True nếu click được, False nếu không tìm thấy
+        """
+        if self._ctrl._main_window is None:
+            return False
+        controls = list(self._ctrl._main_window.descendants())
+        for i, c in enumerate(controls):
+            try:
+                if c.window_text().strip().lower() == device_label.lower():
+                    for j in range(i + 1, min(i + 20, len(controls))):
+                        try:
+                            t = controls[j].window_text().strip().lower()
+                            if t == "connection" and controls[j].is_enabled():
+                                logger.info(f"SystemPanel: connect '{device_label}'")
+                                controls[j].click_input()
+                                return True
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+        logger.warning(f"SystemPanel: không tìm thấy Connection button cho '{device_label}'")
+        return False
+
+    def disconnect_device(self, device_label: str) -> bool:
+        """
+        @brief  Click nút Disconnect của thiết bị chỉ định trong panel System - Connect
+        @param  device_label: Tên thiết bị cần ngắt kết nối
+        @retval bool — True nếu click được, False nếu không tìm thấy
+        """
+        if self._ctrl._main_window is None:
+            return False
+        controls = list(self._ctrl._main_window.descendants())
+        for i, c in enumerate(controls):
+            try:
+                if c.window_text().strip().lower() == device_label.lower():
+                    for j in range(i + 1, min(i + 20, len(controls))):
+                        try:
+                            t = controls[j].window_text().strip().lower()
+                            if t == "disconnect" and controls[j].is_enabled():
+                                logger.info(f"SystemPanel: disconnect '{device_label}'")
+                                controls[j].click_input()
+                                return True
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+        logger.warning(f"SystemPanel: không tìm thấy Disconnect button cho '{device_label}'")
+        return False
+
+    def is_device_connected(self, device_label: str) -> bool:
+        """
+        @brief  Kiểm tra thiết bị chỉ định có trạng thái Connected không
+        @param  device_label: Tên thiết bị cần kiểm tra
+        @retval bool — True nếu Connected, False nếu không
+        """
+        if self._ctrl._main_window is None:
+            return False
+        controls = list(self._ctrl._main_window.descendants())
+        for i, c in enumerate(controls):
+            try:
+                if c.window_text().strip().lower() == device_label.lower():
+                    for j in range(i + 1, min(i + 10, len(controls))):
+                        try:
+                            t = controls[j].window_text().strip().lower()
+                            if "connected" in t and "disconnect" not in t:
+                                return True
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+        return False
+
     def is_connected(self) -> bool:
         """
         @brief  Kiểm tra trạng thái kết nối bằng cách tìm control có text "Connected"
@@ -92,6 +155,27 @@ class SystemPanel(BasePage):
         """
         self._ctrl.click_by_text("Disconnect")
 
+    def open_connect_panel(self) -> None:
+        """
+        @brief  Mở System card → panel Connect (nếu chưa mở)
+        @retval None
+        """
+        if not self._ctrl.has_element_with_text("Connect"):
+            logger.info("SystemPanel: mở System card …")
+            try:
+                self._ctrl._main_window.child_window(
+                    auto_id="CardSystem", control_type="Pane"
+                ).click_input()
+            except Exception:
+                self._ctrl.click_by_text("System")
+            self._ctrl.wait_for_text("Connect", timeout=5)
+
+        ok = self._ctrl.click_by_text("Connect", retries=5)
+        if not ok:
+            raise RuntimeError("PC17: Không click được 'Connect'")
+        time.sleep(0.5)
+        logger.info("SystemPanel: Connect panel đã mở")
+
     def reconnect(self) -> None:
         """
         @brief  Kết nối lại theo flow: mở System card nếu chưa mở → Connect → Connection → Connected
@@ -99,21 +183,7 @@ class SystemPanel(BasePage):
         """
         logger.info("Reconnect: kiểm tra System card …")
 
-        if not self._ctrl.has_element_with_text("Connect"):
-            logger.info("Reconnect: System card đang đóng → mở card …")
-            try:
-                self._ctrl._main_window.child_window(
-                    auto_id="CardSystem", control_type="Pane"
-                ).click_input()
-            except Exception:
-                self._ctrl.click_by_text("System")
-            time.sleep(2)
-
-        logger.info("Reconnect: click Connect để mở panel …")
-        ok = self._ctrl.click_by_text("Connect", retries=5)
-        if not ok:
-            raise RuntimeError("PC17: Không click được 'Connect' khi reconnect")
-        time.sleep(2)
+        self.open_connect_panel()
 
         if self._ctrl.has_element_with_text("Disconnect"):
             logger.info("Reconnect: đang Connected → Disconnect rồi reconnect …")

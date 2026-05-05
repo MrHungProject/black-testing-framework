@@ -5,10 +5,10 @@ MainPage — Page Object cho cửa sổ FormMainEliteRF của PC17.
 Logic thực tế nằm trong pages/panels/:
     - SystemPanel   — kết nối / ngắt kết nối
     - DetailPanel   — Temperature, Serial Number
-    - VnaPanel      — Measurement, Stimulus, Markers
-    - SpectrumPanel — (chưa implement)
+    - VnaPanel        — Measurement, Stimulus, Markers
+    - SpectrumPanel   — connect/disconnect, Analysis Mode, Sweep Settings, Zero-span Setting
     - AttenuatorPanel — (chưa implement)
-    - SignalPanel   — (chưa implement)
+    - SignalPanel     — RF1 output, Trigger Output
 """
 from __future__ import annotations
 
@@ -40,6 +40,9 @@ class MainPage(BasePage):
 
     def setup_connection(self) -> None:
         self.system.setup_connection()
+
+    def open_connect_panel(self) -> None:
+        self.system.open_connect_panel()
 
     def is_connected(self) -> bool:
         return self.system.is_connected()
@@ -116,15 +119,6 @@ class MainPage(BasePage):
     def ensure_signal_panel_open(self) -> None:
         self.signal.ensure_signal_panel_open()
 
-    def signal_power_on(self) -> None:
-        self.signal.power_on()
-
-    def signal_power_off(self) -> None:
-        self.signal.power_off()
-
-    def signal_is_on(self) -> bool:
-        return self.signal.is_on()
-
     def open_rf1_output(self) -> None:
         self.signal.open_rf1_output()
 
@@ -155,3 +149,95 @@ class MainPage(BasePage):
 
     def signal_get_temperature(self) -> str:
         return self.signal.get_temperature()
+
+    # ── System — per-device connection ───────────────────────────────────────
+
+    def connect_device(self, device_label: str) -> bool:
+        return self.system.connect_device(device_label)
+
+    def disconnect_device(self, device_label: str) -> bool:
+        return self.system.disconnect_device(device_label)
+
+    def is_device_connected(self, device_label: str) -> bool:
+        return self.system.is_device_connected(device_label)
+
+    # ── Spectrum panel ────────────────────────────────────────────────────────
+
+    def click_spectrum_panel(self) -> None:
+        self.spectrum._click_spectrum_panel()
+
+    def ensure_spectrum_panel_open(self) -> None:
+        self.spectrum.ensure_spectrum_panel_open()
+
+    def open_analysis_mode(self) -> None:
+        self.spectrum.open_analysis_mode()
+
+    def select_analysis_mode(self, mode: str) -> bool:
+        return self.spectrum.select_analysis_mode(mode)
+
+    def open_sweep_settings(self) -> None:
+        self.spectrum.open_sweep_settings()
+
+    def open_zerospan_setting(self) -> None:
+        self.spectrum.open_zerospan_setting()
+
+    def open_capture_setting(self) -> None:
+        self.spectrum.open_capture_setting()
+
+    def set_capture_setting_params(
+        self,
+        center: str = "",
+        step: str = "",
+        ref_level: str = "",
+        swp_time: str = "",
+    ) -> list:
+        return self.spectrum.set_capture_setting_params(
+            center=center, step=step, ref_level=ref_level, swp_time=swp_time,
+        )
+
+    def open_frequency(self) -> None:
+        self.spectrum.open_frequency()
+
+    def set_frequency_params(
+        self,
+        start: str = "",
+        stop: str = "",
+        step: str = "",
+        center: str = "",
+        span: str = "",
+    ) -> list:
+        return self.spectrum.set_frequency_params(
+            start=start, stop=stop, step=step, center=center, span=span,
+        )
+
+    def open_amplitude(self) -> None:
+        self.spectrum.open_amplitude()
+
+    def set_amplitude_params(
+        self,
+        ref_level: str = "",
+        div: str = "",
+        gain: str = "",
+        atten: str = "",
+    ) -> list:
+        return self.spectrum.set_amplitude_params(
+            ref_level=ref_level, div=div, gain=gain, atten=atten,
+        )
+
+    def click_spectrum_preset(self) -> None:
+        self.spectrum.click_preset()
+
+    def open_spectrum_markers(self) -> None:
+        self.spectrum.open_markers()
+
+    def click_peak_search(self) -> None:
+        self.spectrum.click_peak_search()
+
+    def click_next_peak(self) -> None:
+        self.spectrum.click_next_peak()
+
+    def remove_all_markers(self) -> None:
+        self.spectrum.remove_all_markers()
+
+    def extract_spectrum_markers(self) -> list:
+        return self.spectrum.extract_markers()
