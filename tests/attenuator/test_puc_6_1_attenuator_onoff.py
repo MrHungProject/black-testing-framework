@@ -24,9 +24,9 @@ class TestPuc61AttenuatorOnOff:
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_6_1_tc01(self, main_page: MainPage):
+    def test_attenuator_puc_6_1_tc_0001(self, main_page: MainPage):
         """
-        @test_id: test_attenuator_puc_6_1_tc01
+        @test_id: test_attenuator_puc_6_1_tc_0001
         @brief: Bật Attenuator từ UI PC17 và xác nhận trạng thái khởi động thành công
 
         @details: Verify rằng Attenuator có thể được bật từ UI PC17:
@@ -57,9 +57,9 @@ class TestPuc61AttenuatorOnOff:
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_6_1_tc02(self, main_page: MainPage):
+    def test_attenuator_puc_6_1_tc_0002(self, main_page: MainPage):
         """
-        @test_id: test_attenuator_puc_6_1_tc02
+        @test_id: test_attenuator_puc_6_1_tc_0002
         @brief: Bật/tắt liên tục Attenuator 5 chu kỳ — LED và UI phải khớp nhau
 
         @details: Tiếp tục từ TC1 (Attenuator đang ON).

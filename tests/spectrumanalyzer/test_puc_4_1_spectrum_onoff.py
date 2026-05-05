@@ -1,32 +1,47 @@
 """
-Spectrum Analyzer ON/OFF test suite — PUC_2.1
+Spectrum Analyzer ON/OFF test suite — PUC_4.1
 Bật/tắt Spectrum Analyzer từ UI PC17, verify trạng thái LED/UI khớp nhau.
 Execution type: manual.
 """
+
+import time
 
 import pytest
 
 from core import testcase
 from pages.main_page import MainPage
 
+_SPECTRUM_LABEL = "SPECTRUM"
 
-class TestPuc21SpectrumOnOff:
-    """PUC_2.1 — Spectrum Analyzer bật/tắt manual test suite."""
+
+class TestPuc41SpectrumOnOff:
+    """
+    PUC_4.1 — Spectrum Analyzer ON/OFF manual test suite.
+
+    Setup flow (tự động, không cần TC trước chạy trước):
+        fixture _ensure_connected (autouse=True) chạy trước mỗi TC.
+        Nếu SPECTRUM chưa Connected → mở System → Connect và kết nối.
+        Mỗi TC đều độc lập và luôn bắt đầu ở trạng thái SPECTRUM đã Connected.
+    """
+
+    # ── Class-level setup: chạy trước MỖI test method ────────────────────────
 
     @pytest.fixture(autouse=True)
     def _ensure_connected(self, main_page: MainPage):
-        """Đảm bảo PC17 Connected trước mỗi TC."""
-        if not main_page.is_connected():
-            main_page.reconnect()
+        """Đảm bảo SPECTRUM đã Connected trước mỗi TC."""
+        if not main_page.is_device_connected(_SPECTRUM_LABEL):
+            main_page.open_connect_panel()
+            main_page.connect_device(_SPECTRUM_LABEL)
+            time.sleep(3)
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC1 · PUC_2.1 · Normal · Bật Spectrum Analyzer
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_1_tc01(self, main_page: MainPage):
+    def test_spectrum_puc_4_1_tc_0001(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_2_1_tc01
+        @test_id: test_spectrum_puc_4_1_tc_0001
         @brief: Bật Spectrum Analyzer từ UI PC17 và xác nhận trạng thái khởi động thành công
 
         @details: Verify rằng Spectrum Analyzer có thể được bật từ UI PC17:
@@ -48,18 +63,20 @@ class TestPuc21SpectrumOnOff:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        assert main_page.is_device_connected(_SPECTRUM_LABEL), \
+            f"'{_SPECTRUM_LABEL}' không đạt trạng thái 'Connected'"
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC2 · PUC_2.1 · Abnormal · Bật/tắt liên tục Spectrum Analyzer 5 lần
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
-    def test_puc_4_1_tc02(self, main_page: MainPage):
+    def test_spectrum_puc_4_1_tc_0002(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_2_1_tc02
+        @test_id: test_spectrum_puc_4_1_tc_0002
         @brief: Bật/tắt liên tục Spectrum Analyzer 5 chu kỳ — LED và UI phải khớp nhau
 
         @details: Tiếp tục từ TC1 (Spectrum Analyzer đang ON).
@@ -85,6 +102,27 @@ class TestPuc21SpectrumOnOff:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
+        CYCLES = 5
+
+        assert main_page.is_device_connected(_SPECTRUM_LABEL), \
+            "Điều kiện đầu vào TC2: SPECTRUM chưa Connected"
+
+        for cycle in range(1, CYCLES + 1):
+            # ── Disconnect ──────────────────────────────────────────────────────
+            main_page.disconnect_device(_SPECTRUM_LABEL)
+            time.sleep(3)
+
+            assert not main_page.is_device_connected(_SPECTRUM_LABEL), (
+                f"Chu kỳ {cycle}/{CYCLES}: SPECTRUM vẫn hiển thị 'Connected' sau Disconnect"
+            )
+
+            # ── Reconnect ───────────────────────────────────────────────────────
+            main_page.connect_device(_SPECTRUM_LABEL)
+            time.sleep(3)
+
+            assert main_page.is_device_connected(_SPECTRUM_LABEL), (
+                f"Chu kỳ {cycle}/{CYCLES}: SPECTRUM không đạt 'Connected' sau Reconnect"
+            )

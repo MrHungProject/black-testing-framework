@@ -47,14 +47,18 @@ class TestVnaPuc21:
 
     # ── Class-level setup: chạy trước MỖI test method ────────────────────────
 
+    _VNA_LABEL = "VNA Device"
+
     @pytest.fixture(autouse=True)
     def _ensure_connected(self, main_page: MainPage):
         """
-        Đảm bảo PC17 đã ở trạng thái Connected trước khi chạy bất kỳ TC nào.
-        Nếu chưa Connected (ví dụ TC trước vừa Disconnect) → tự động reconnect.
+        Đảm bảo VNA Device đã Connected trước mỗi TC.
+        Nếu chưa → mở System → Connect panel rồi kết nối VNA Device.
         """
-        if not main_page.is_connected():
-            main_page.reconnect()
+        if not main_page.is_device_connected(self._VNA_LABEL):
+            main_page.open_connect_panel()
+            main_page.connect_device(self._VNA_LABEL)
+            time.sleep(3)
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC1 · PUC_2.1 · Normal · Bật VNA — kết nối và kiểm tra Detail
@@ -94,7 +98,7 @@ class TestVnaPuc21:
         """
         # _ensure_connected đã đảm bảo Connected state.
         # TC1 chỉ verify kết quả: Connected + Disconnect button + Detail info.
-        assert main_page.is_connected(), "PC17 không đạt trạng thái 'Connected'"
+        assert main_page.is_device_connected("VNA Device"), "VNA Device không đạt trạng thái 'Connected'"
         assert main_page.has_text("Disconnect"), "Nút 'Disconnect' không xuất hiện trên UI"
 
         main_page.click_detail()
@@ -142,26 +146,27 @@ class TestVnaPuc21:
 
         @test_level: software
         @test_type: functional
-        @execution_type: manual
+        @execution_type: automatic
         @hw_depend: yes
         """
         CYCLES = 5
 
-        assert main_page.is_connected(), "Điều kiện đầu vào TC2: PC17 chưa Connected"
+        assert main_page.is_device_connected(self._VNA_LABEL), "Điều kiện đầu vào TC2: VNA Device chưa Connected"
 
         for cycle in range(1, CYCLES + 1):
             # ── Disconnect ──────────────────────────────────────────────────────
-            main_page.click_disconnect()
-            time.sleep(3)  # đợi UI cập nhật trạng thái
+            main_page.disconnect_device(self._VNA_LABEL)
+            time.sleep(3)
 
-            assert not main_page.is_connected(), (
+            assert not main_page.is_device_connected(self._VNA_LABEL), (
                 f"Chu kỳ {cycle}/{CYCLES}: VNA vẫn hiển thị 'Connected' sau Disconnect"
             )
 
             # ── Reconnect ───────────────────────────────────────────────────────
-            main_page.reconnect()
+            main_page.connect_device(self._VNA_LABEL)
+            time.sleep(3)
 
-            assert main_page.is_connected(), (
+            assert main_page.is_device_connected(self._VNA_LABEL), (
                 f"Chu kỳ {cycle}/{CYCLES}: VNA không đạt 'Connected' sau Reconnect"
             )
 
