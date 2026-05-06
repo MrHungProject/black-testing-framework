@@ -1,6 +1,7 @@
 """VnaPanel — toàn bộ tương tác với VNA panel trong FormMainEliteRF."""
 from __future__ import annotations
 
+import re
 import time
 
 from pages.base_page import BasePage
@@ -18,7 +19,8 @@ class VnaPanel(BasePage):
 
     def ensure_vna_open(self) -> None:
         """
-        @brief  Đảm bảo VNA panel đang mở (có ít nhất 1 trong các tab Stimulus/Measurement/Markers)
+        @brief  Đảm bảo VNA panel đang mở (có ít nhất 1 trong các tab Stimulus/Measurement/Markers).
+                Nếu click vô tình đóng panel (toggle), tự click lại để mở.
         @retval None
         """
         if self._ctrl._main_window is None:
@@ -26,18 +28,33 @@ class VnaPanel(BasePage):
         for ctrl in self._ctrl._main_window.descendants():
             try:
                 if ctrl.window_text().strip() in self._TAB_KEYWORDS:
-                    return
+                    return  # panel đã mở
             except Exception:
                 pass
-        try:
-            vna_panel = self._ctrl._main_window.child_window(
-                auto_id="CardCollapeVNA", control_type="Pane"
-            )
-            vna_panel.wait("exists ready", timeout=10)
-            vna_panel.click_input()
-            time.sleep(1)
-        except Exception:
-            pass
+        logger.info("VnaPanel: mở VNA card …")
+        self._click_vna_card()
+        if not self._ctrl.wait_for_text("Stimulus", timeout=5):
+            logger.warning("VnaPanel: click đã đóng panel, click lại để mở …")
+            self._click_vna_card()
+            self._ctrl.wait_for_text("Stimulus", timeout=5)
+
+    def _click_vna_card(self) -> None:
+        """Click nav card VNA — chọn control text=='VNA' nằm xa nhất bên phải (tránh 'VNA Device')."""
+        best = None
+        best_left = -1
+        for ctrl in self._ctrl._main_window.descendants():
+            try:
+                if ctrl.window_text().strip().upper() == "VNA" and ctrl.is_enabled():
+                    rect = ctrl.element_info.rectangle
+                    if rect.left > best_left:
+                        best_left = rect.left
+                        best = ctrl
+            except Exception:
+                pass
+        if best is None:
+            raise RuntimeError("VnaPanel: Không tìm thấy nút VNA panel")
+        best.click_input()
+        logger.info("VnaPanel: click VNA card (rightmost)")
 
     # ── Measurement tab ───────────────────────────────────────────────────────
 
@@ -71,6 +88,94 @@ class VnaPanel(BasePage):
             raise RuntimeError("VNA: Không click được 'Apply'")
         logger.info("VNA: Apply OK")
 
+    # ── Calibration tab ───────────────────────────────────────────────────────
+
+    def open_calibration(self) -> None:
+        """
+        @brief  Click tab Calibration trong VNA panel — mở popup "VNA - Calibration"
+        @retval None
+        """
+        logger.info("VNA: mở tab Calibration")
+        self.ensure_vna_open()
+        if not self._ctrl.click_by_text("Calibration", retries=5):
+            raise RuntimeError("VNA: Không click được 'Calibration'")
+
+    def click_calibrate(self) -> None:
+        """
+        @brief  Click nút Calibrate trong popup "VNA - Calibration" để mở danh sách kiểu calibration.
+                Dùng select_from_desktop_popup vì button nằm trong Desktop-level popup.
+        @retval None
+        """
+        try:
+            cal_form = self._ctrl._main_window.child_window(auto_id="FormDetailVNACalibration")
+            cal_form.wait("exists", timeout=5)
+            btn = cal_form.child_window(auto_id="selectCustomTypeButton1")
+            btn.click_input()
+            logger.info("VNA: Calibrate đã click — chờ menu xuất hiện")
+            time.sleep(0.5)
+        except Exception as ex:
+            raise RuntimeError(f"VNA: Không click được 'Calibrate' — {ex}")
+
+    def click_solt_cal(self) -> None:
+        """
+        @brief  Click "2-Port SOLT Cal" từ dropdown sau khi click Calibrate.
+        @retval None
+        """
+        # DEBUG: scan FormDetailVNACalibration sau khi click Calibrate
+        try:
+            cal_form = self._ctrl._main_window.child_window(auto_id="FormDetailVNACalibration")
+            logger.info("[DEBUG] ===== descendants sau click Calibrate =====")
+            for ctrl in cal_form.descendants():
+                try:
+                    t = ctrl.window_text().strip()
+                    info = ctrl.element_info
+                    logger.info(
+                        f"[DEBUG]  text={t!r:30s} | "
+                        f"type={str(info.control_type):20s} | "
+                        f"auto_id={str(info.automation_id):30s} | "
+                        f"enabled={ctrl.is_enabled()}"
+                    )
+                except Exception:
+                    pass
+        except Exception as ex:
+            logger.warning(f"[DEBUG] scan error: {ex}")
+
+        if not self._ctrl.select_from_desktop_popup("2-Port SOLT Cal", retries=5):
+            raise RuntimeError("VNA: Không click được '2-Port SOLT Cal'")
+        logger.info("VNA: 2-Port SOLT Cal đã chọn")
+        time.sleep(1)  # đợi wizard render
+
+    def click_all_calibration_steps(self) -> None:
+        """
+        @brief  Click tất cả 7 nút Calibration trong wizard 2-Port SOLT Cal
+        @retval None
+        """
+        _STEPS = [
+            ("btnOpen",   "Port 1 Open"),
+            ("btnShort",  "Port 1 Short"),
+            ("btnLoad",   "Port 1 Load"),
+            ("btnOpen2",  "Port 2 Open"),
+            ("btnShort2", "Port 2 Short"),
+            ("btnLoad2",  "Port 2 Load"),
+            ("btnThru",   "Thru"),
+        ]
+        cal2 = self._ctrl._main_window.child_window(auto_id="FormDetailVNACalibration2Port")
+        cal2.wait("exists", timeout=10)
+        for auto_id, label in _STEPS:
+            btn = cal2.child_window(auto_id=auto_id)
+            btn.click_input()
+            logger.info(f"VNA Calibration: {label} — clicked")
+            time.sleep(2)
+
+    def apply_calibration(self) -> None:
+        """
+        @brief  Click Apply (btnSave) để lưu kết quả calibration
+        @retval None
+        """
+        cal2 = self._ctrl._main_window.child_window(auto_id="FormDetailVNACalibration2Port")
+        cal2.child_window(auto_id="btnSave").click_input()
+        logger.info("VNA Calibration: Apply OK")
+
     # ── Stimulus tab ──────────────────────────────────────────────────────────
 
     def open_stimulus(self) -> None:
@@ -93,7 +198,7 @@ class VnaPanel(BasePage):
         points: str = "301",
         if_bw: str = "10kHz",
         power: str = "0",
-    ) -> None:
+    ) -> list:
         """
         @brief  Điền toàn bộ thông số Stimulus rồi click Apply
         @param  start: Start Frequency (default: "2GHz")
@@ -103,21 +208,31 @@ class VnaPanel(BasePage):
         @param  points: Number of Points (default: "301")
         @param  if_bw: IF Bandwidth (default: "10kHz")
         @param  power: Power dBm (default: "0")
-        @retval None
+        @retval list[str] — danh sách lỗi validation nếu có; rỗng nếu OK
         """
         logger.info(
             f"VNA Stimulus: start={start}, stop={stop}, center={center}, "
             f"span={span}, points={points}, IF_BW={if_bw}, power={power}"
         )
-        self._ctrl.set_field_by_label("Start Frequency", start)
-        self._ctrl.set_field_by_label("Stop Frequency", stop)
-        self._ctrl.set_field_by_label("Center Frequency", center)
-        self._ctrl.set_field_by_label("Span Frequency", span)
-        self._ctrl.set_field_by_label("Number of Points", points)
-        self._ctrl.set_field_by_label("IF Bandwidth", if_bw)
-        self._ctrl.set_field_by_label("Power", power)
+        self._ctrl.build_cache()
+        try:
+            self._ctrl.set_field_by_label("Start Frequency", start)
+            self._ctrl.set_field_by_label("Stop Frequency", stop)
+            self._ctrl.set_field_by_label("Center Frequency", center)
+            self._ctrl.set_field_by_label("Span Frequency", span)
+            self._ctrl.set_field_by_label("Number of Points", points)
+            self._ctrl.set_field_by_label("IF Bandwidth", if_bw)
+            self._ctrl.set_field_by_label("Power", power)
+        finally:
+            self._ctrl.invalidate_cache()
         self.click_apply()
-        logger.info("VNA Stimulus: tất cả thông số đã được set và Apply")
+        time.sleep(0.2)
+        errs = self.check_validation_errors()
+        if errs:
+            logger.warning(f"VNA Stimulus: validation errors — {errs}")
+        else:
+            logger.info("VNA Stimulus: Apply OK")
+        return errs
 
     # ── Markers tab ───────────────────────────────────────────────────────────
 
@@ -176,6 +291,41 @@ class VnaPanel(BasePage):
         self.select_trace("Trace 2")
         self.click_add_marker()
         logger.info("VNA: Marker 2 thêm vào Trace 2")
+
+    def extract_traces(self) -> list:
+        """
+        @brief  Đọc danh sách trace đang hiển thị trên VNA chart
+                (ví dụ: "Tr1 S11 Log Mag 10 dB/ 0 dB")
+        @retval list[dict] — danh sách {"trace", "s_param", "label"},
+                            rỗng nếu không tìm thấy
+        """
+        if self._ctrl._main_window is None:
+            return []
+        _PATTERN = re.compile(
+            r"(Tr\d+)\s+(S\d{2})\s+(.+)", re.IGNORECASE
+        )
+        traces = []
+        seen = set()
+        for ctrl in self._ctrl._main_window.descendants():
+            try:
+                t = ctrl.window_text().strip()
+                m = _PATTERN.match(t)
+                if m and t not in seen:
+                    seen.add(t)
+                    traces.append({
+                        "trace":   m.group(1),   # "Tr1"
+                        "s_param": m.group(2),   # "S11"
+                        "label":   t,            # full text
+                    })
+            except Exception:
+                pass
+        if traces:
+            logger.info(f"VnaPanel: extract_traces — {len(traces)} trace(s)")
+            for tr in traces:
+                logger.info(f"  {tr['trace']} | {tr['s_param']} | {tr['label']}")
+        else:
+            logger.warning("VnaPanel: extract_traces — không tìm thấy trace nào")
+        return traces
 
     def extract_markers(self) -> list:
         """

@@ -78,6 +78,21 @@ class MainPage(BasePage):
     def click_apply(self) -> None:
         self.vna.click_apply()
 
+    def open_calibration(self) -> None:
+        self.vna.open_calibration()
+
+    def click_calibrate(self) -> None:
+        self.vna.click_calibrate()
+
+    def click_solt_cal(self) -> None:
+        self.vna.click_solt_cal()
+
+    def click_all_calibration_steps(self) -> None:
+        self.vna.click_all_calibration_steps()
+
+    def apply_calibration(self) -> None:
+        self.vna.apply_calibration()
+
     def open_stimulus(self) -> None:
         self.vna.open_stimulus()
 
@@ -90,8 +105,8 @@ class MainPage(BasePage):
         points: str = "301",
         if_bw: str = "10kHz",
         power: str = "0",
-    ) -> None:
-        self.vna.set_stimulus_params(
+    ) -> list:
+        return self.vna.set_stimulus_params(
             start=start, stop=stop, center=center,
             span=span, points=points, if_bw=if_bw, power=power,
         )
@@ -110,6 +125,9 @@ class MainPage(BasePage):
 
     def setup_marker(self) -> None:
         self.vna.setup_marker()
+
+    def extract_traces(self) -> list:
+        return self.vna.extract_traces()
 
     def extract_markers(self) -> list:
         return self.vna.extract_markers()

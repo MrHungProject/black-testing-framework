@@ -53,10 +53,13 @@ class TestVnaPuc21:
     def _ensure_connected(self, main_page: MainPage):
         """
         Đảm bảo VNA Device đã Connected trước mỗi TC.
-        Nếu chưa → mở System → Connect panel rồi kết nối VNA Device.
+        Nếu đang ở Connect panel và device đã connected → skip navigation (chạy liên tục).
+        Chỉ mở Connect panel khi thực sự cần thiết.
         """
+        if main_page.is_device_connected(self._VNA_LABEL):
+            return  # đã connected, không cần navigate
+        main_page.open_connect_panel()
         if not main_page.is_device_connected(self._VNA_LABEL):
-            main_page.open_connect_panel()
             main_page.connect_device(self._VNA_LABEL)
             time.sleep(3)
 
@@ -189,22 +192,22 @@ class TestVnaPuc21:
         @test_procedure:
                         [code]
                             # Measurement
-                            - Mở tab Measurement trong VNA panel
-                            - Chọn S11, chọn S21
-                            - Click Apply
+                                - Mở tab Measurement trong VNA panel
+                                - Chọn S11, chọn S21
+                                - Click Apply
 
                             # Stimulus
-                            - Mở tab Stimulus
-                            - Set Start Frequency = 2GHz, Stop = 6GHz
-                            - Set Center = 9.05GHz, Span = 3GHz
-                            - Set Points = 301, IF BW = 10kHz, Power = 0
-                            - Click Apply
+                                - Mở tab Stimulus
+                                - Set Start Frequency = 2GHz, Stop = 6GHz
+                                - Set Center = 9.05GHz, Span = 3GHz
+                                - Set Points = 301, IF BW = 10kHz, Power = 0
+                                - Click Apply
 
                             # Marker
-                            - Mở tab Markers
-                            - Add Marker 1 (Trace 1 mặc định)
-                            - Đổi sang Trace 2, Add Marker 2
-                            - Đọc dữ liệu marker (GHz position + dB value)
+                                - Mở tab Markers
+                                - Add Marker 1 (Trace 1 mặc định)
+                                - Đổi sang Trace 2, Add Marker 2
+                                - Đọc dữ liệu marker (GHz position + dB value)`
                         [!code]
 
         @pass_criteria:- S11 và S21 được chọn thành công
@@ -229,7 +232,7 @@ class TestVnaPuc21:
         main_page.open_stimulus()
         main_page.set_stimulus_params(
             start=START_FREQ,
-            stop="6GHz",
+            stop="18GHz",
             center="9.05GHz",
             span="3GHz",
             points="301",
@@ -260,3 +263,199 @@ class TestVnaPuc21:
             f"Marker 1 position {marker1_pos!r} ({actual_ghz:.4f} GHz) "
             f"không khớp với Start Frequency {START_FREQ!r} ({expected_ghz:.4f} GHz)"
         )
+
+    @testcase
+    def test_vna_puc_2_1_0004(self, main_page: MainPage):
+        """
+        @test_id: test_vna_puc_2_1_0004
+        @brief: Thực hiện bài đo trong khoảng Frequency cho phép với parameters — Measurement (S11/S21)
+
+        @details: Verify toàn bộ luồng cấu hình VNA sau khi đã Connected:
+                  chọn S-parameter, thiết lập Stimulus
+
+        @pre:- PC17 đã Connected (được đảm bảo bởi _ensure_connected)
+             - VNA panel có thể mở được
+
+        @test_procedure:
+                        [code]
+                            # Stimulus
+                                - Mở tab Stimulus
+                                - Set Start Frequency = 100kHz, Stop = 18GHz
+                                - Set Center = 9.05GHz, Span = 3GHz
+                                - Set Points = 301, IF BW = 10kHz, Power = 0
+                                - Click Apply
+                            
+                            # Measurement
+                                - Mở tab Measurement trong VNA panel
+                                - Chọn S11, chọn S21
+                                - Click Apply
+                        [!code]
+
+        @pass_criteria:- S11 và S21 được chọn thành công
+                       - Tất cả thông số Stimulus được điền và Apply thành công
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        START_FREQ = "100kHz"
+
+        # ── Measurement ─────────────────────────────────────────────────────────
+        main_page.open_measurement()
+        main_page.select_s_parameter("S11")
+        main_page.select_s_parameter("S21")
+        main_page.click_apply()
+
+        # ── Verify traces S11 + S21 hiển thị trên chart ─────────────────────────
+        traces = main_page.extract_traces()
+        s_params = [t["s_param"] for t in traces]
+        assert "S11" in s_params, f"S11 không xuất hiện trong traces: {traces}"
+        assert "S21" in s_params, f"S21 không xuất hiện trong traces: {traces}"
+
+        # ── Stimulus ────────────────────────────────────────────────────────────
+        main_page.open_stimulus()
+        errs = main_page.set_stimulus_params(
+            start=START_FREQ,
+            stop="18GHz",
+            center="9.05GHz",
+            span="3GHz",
+            points="301",
+            if_bw="10kHz",
+            power="0",
+        )
+        assert not errs, f"VNA Stimulus validation errors: {errs}"
+
+    @testcase
+    def test_vna_puc_2_1_0005(self, main_page: MainPage):
+        """
+        @test_id: test_vna_puc_2_1_0005
+        @brief: Thực hiện bài đo trong khoảng Frequency cho phép với parameters — Measurement (S12/S22/S11/S21)
+
+        @details: Verify toàn bộ luồng cấu hình VNA sau khi đã Connected:
+                  chọn S-parameter, thiết lập Stimulus
+
+        @pre:- PC17 đã Connected (được đảm bảo bởi _ensure_connected)
+             - VNA panel có thể mở được
+
+        @test_procedure:
+                        [code]
+                            # Stimulus
+                                - Mở tab Stimulus
+                                - Set Start Frequency = 100kHz, Stop = 18GHz
+                                - Set Center = 9.05GHz, Span = 3GHz
+                                - Set Points = 301, IF BW = 10kHz, Power = 0
+                                - Click Apply
+                            
+                            # Measurement
+                                - Mở tab Measurement trong VNA panel
+                                - Chọn S12, chọn S22 , chọn S11 , chọn S21
+                                - Click Apply
+                        [!code]
+
+        @pass_criteria:- S11 và S21 được chọn thành công
+                       - Tất cả thông số Stimulus được điền và Apply thành công
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        START_FREQ = "100kHz"
+
+        # ── Measurement ─────────────────────────────────────────────────────────
+        main_page.open_measurement()
+        main_page.select_s_parameter("S12")
+        main_page.select_s_parameter("S22")
+        main_page.click_apply()
+
+        # ── Verify tất cả 4 traces hiển thị trên chart
+        traces = main_page.extract_traces()
+        s_params = [t["s_param"] for t in traces]
+        for expected in ("S11", "S21", "S12", "S22"):
+            assert expected in s_params, f"{expected} không xuất hiện trong traces: {traces}"
+
+        # ── Stimulus ────────────────────────────────────────────────────────────
+        main_page.open_stimulus()
+        main_page.set_stimulus_params(
+            start=START_FREQ,
+            stop="18GHz",
+            center="9.05GHz",
+            span="3GHz",
+            points="301",
+            if_bw="10kHz",
+            power="0",
+        )
+
+    @testcase
+    def test_vna_puc_2_1_0006(self, main_page: MainPage):
+        """
+        @test_id: test_vna_puc_2_1_0006
+        @brief: Thực hiện bài đo trong khoảng Frequency cho phép với parameters — Measurement (S11/S21)
+
+        @details: Verify toàn bộ luồng cấu hình VNA sau khi đã Connected:
+                  chọn S-parameter, thiết lập Stimulus
+
+        @pre:- PC17 đã Connected (được đảm bảo bởi _ensure_connected)
+             - VNA panel có thể mở được
+
+        @test_procedure:
+                        [code]
+                            # Stimulus
+                                - Mở tab Stimulus
+                                - Set Start Frequency = 10kHz, Stop = 19GHz
+                                - Set Center = 9.05GHz, Span = 3GHz
+                                - Set Points = 301, IF BW = 10kHz, Power = 0
+                                - Click Apply
+                        [!code]
+
+        @pass_criteria:- Tất cả thông số Stimulus được điền và sau khi apply nếu lỗi thì có hiện thông báo lỗi không
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        START_FREQ = "10kHz"
+        # ── Stimulus ────────────────────────────────────────────────────────────
+        main_page.open_stimulus()
+        main_page.set_stimulus_params(
+            start=START_FREQ,
+            stop="19GHz",
+            center="9.05GHz",
+            span="3GHz",
+            points="301",
+            if_bw="10kHz",
+            power="0",
+        )
+
+    @testcase
+    def test_vna_puc_2_1_0007(self, main_page: MainPage):
+        """
+        @test_id: test_vna_puc_2_1_0007
+        @brief: Thực hiện bài calibration
+
+        @details: Thực hiện bài test calibration trên port SOLT CAL
+
+        @pre:- PC17 đã Connected (được đảm bảo bởi _ensure_connected)
+             - VNA panel có thể mở được
+
+        @test_procedure:
+                        [code]
+                            # Stimulus
+                                - Mở tab Calibration -> Calibrate 
+                                - Chọn 2-Port SOLT Cal
+                                - Calibration toàn bộ port
+                        [!code]
+
+        @pass_criteria:- Khi hoàn thành, sẽ xuất hiện dấu tích (✓) ở phía trái softkey
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        # ── Calibration → Calibrate → 2-Port SOLT Cal → click tất cả steps → Apply
+        main_page.open_calibration()
+        main_page.click_calibrate()
+        main_page.click_solt_cal()
+        main_page.click_all_calibration_steps()
+        main_page.apply_calibration()

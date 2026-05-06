@@ -116,6 +116,6 @@ class TestPuc43SpectrumZeroSpan:
         self._run_zerospan_tc(
             main_page,
             center="1MHz",
-            rf1_out="1MHz",
+            rf1_out="100MHz",
             power_level="-18",
         )

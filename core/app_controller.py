@@ -613,6 +613,35 @@ class AppController:
         logger.warning(f"select_from_desktop_popup({value!r}) — not found after {retries} retries")
         return False
 
+    def click_in_any_window(self, value: str, retries: int = 5) -> bool:
+        """
+        @brief  Click control theo text trong BẤT KỲ cửa sổ nào ở Desktop level
+                (không yêu cầu is_enabled — dùng cho ListItem/MenuItem trong dialog riêng)
+        @param  value: Text chính xác của control cần click
+        @param  retries: Số lần thử lại, mỗi lần cách 0.5s (default: 5)
+        @retval bool — True nếu click thành công, False nếu không tìm thấy
+        """
+        if not PYWINAUTO_AVAILABLE:
+            return False
+        from pywinauto import Desktop
+        for _ in range(retries):
+            for win in Desktop(backend="uia").windows():
+                try:
+                    for ctrl in win.descendants():
+                        try:
+                            if ctrl.window_text().strip() == value:
+                                ctrl.click_input()
+                                time.sleep(self.action_delay)
+                                logger.info(f"click_in_any_window({value!r}) OK")
+                                return True
+                        except Exception:
+                            pass
+                except Exception:
+                    pass
+            time.sleep(0.5)
+        logger.warning(f"click_in_any_window({value!r}) — not found after {retries} retries")
+        return False
+
     def scroll_to_text(self, keyword: str, max_scroll: int = 20) -> bool:
         """
         @brief  Scroll window cho đến khi tìm thấy element có text chứa keyword
