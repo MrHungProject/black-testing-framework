@@ -54,6 +54,10 @@ def s2vna_page(s2vna_ctrl: AppController) -> S2VnaPage:
     return S2VnaPage(s2vna_ctrl)
 
 
-@pytest.fixture(scope="session", autouse=True)
-def _launch_s2vna_first(s2vna_ctrl: AppController) -> None:
-    """Đảm bảo S2VNA khởi động trước khi bất kỳ VNA test nào chạy."""
+@pytest.fixture(scope="session")
+def main_page(s2vna_ctrl: AppController, app_ctrl: AppController):
+    """Override root main_page: S2VNA phải lên trước PC17 (Elite)."""
+    from pages.main_page import MainPage
+    page = MainPage(app_ctrl)
+    page.setup_connection()
+    return page
