@@ -6,13 +6,13 @@ pipeline {
     parameters {
         choice(
             name: 'TEST_SUITE',
-            choices: ['all', 'vna', 'power', 'spectrumanalyzer', 'amplifier', 'attenuator'],
-            description: 'Module cần chạy: all | vna | power | spectrumanalyzer | amplifier | attenuator'
+            choices: ['all', 'signalgenerator', 'vna', 'power', 'spectrumanalyzer', 'amplifier', 'attenuator'],
+            description: 'Module cần chạy: all = chạy tuần tự từng module'
         )
         string(
             name: 'TEST_CASE',
             defaultValue: '',
-            description: 'Tên test case cụ thể (để trống = chạy cả module). VD: test_vna_puc_2_1_normal'
+            description: 'Tên test case cụ thể (để trống = chạy cả module). VD: test_vna_puc_2_1_0007'
         )
         string(
             name: 'GIT_COMMIT_ID',
@@ -40,7 +40,7 @@ pipeline {
     }
 
     options {
-        timeout(time: 30, unit: 'MINUTES')
+        timeout(time: 120, unit: 'MINUTES')
         buildDiscarder(logRotator(numToKeepStr: '20'))
         disableConcurrentBuilds()
         timestamps()
@@ -51,9 +51,6 @@ pipeline {
         stage('Health Check Apps') {
             steps {
                 script {
-                    // Mở từng app, xác nhận đang chạy, rồi đóng hết
-                    // Test case sẽ tự mở lại khi cần
-
                     echo 'Health check S2VNA...'
                     bat "start \"\" \"${env.S2VNA_EXE_PATH}\""
                     bat 'ping -n 11 127.0.0.1 > nul'
@@ -63,7 +60,6 @@ pipeline {
 
                     echo 'Health check PC17...'
                     bat "start \"\" \"${env.APP_EXE_PATH}\""
-                    // Retry mỗi 5s, tối đa 60s — PC17 khởi động chậm hơn S2VNA
                     def pc17Ok = false
                     for (int i = 0; i < 12; i++) {
                         bat 'ping -n 6 127.0.0.1 > nul'
@@ -74,8 +70,7 @@ pipeline {
                     if (!pc17Ok) error('PC17 không khởi động được sau 60s — dừng pipeline')
                     echo 'PC17 OK'
 
-                    // Đóng hết — test case tự mở lại
-                    echo 'Đóng tất cả app trước khi chạy test...'
+                    echo 'Đóng tất cả app sau health check...'
                     bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
                     bat(returnStatus: true, script: 'taskkill /f /im PC17.exe  2>nul')
                     bat 'ping -n 3 127.0.0.1 > nul'
@@ -120,54 +115,89 @@ pipeline {
             }
         }
 
-        stage('Launch S2VNA') {
-            when {
-                expression { params.TEST_SUITE in ['all', 'vna'] }
-            }
-            steps {
-                script {
-                    echo 'Khởi động S2VNA trước khi chạy test...'
-                    bat "start \"\" \"${env.S2VNA_EXE_PATH}\""
-                    // Chờ S2VNA ready (10s)
-                    bat 'ping -n 11 127.0.0.1 > nul'
-                    def rc = bat(returnStatus: true, script: 'tasklist /fi "imagename eq S2VNA.exe" | findstr /i S2VNA.exe > nul 2>&1')
-                    if (rc != 0) error('S2VNA không khởi động được — dừng pipeline')
-                    echo 'S2VNA đang chạy — giữ sống trong suốt session test'
-                }
-            }
-        }
-
         stage('Run Tests') {
             steps {
                 script {
-                    def testPath
-                    switch(params.TEST_SUITE) {
-                        case 'vna':              testPath = 'tests/vna/';             break
-                        case 'power':            testPath = 'tests/power/';           break
-                        case 'spectrumanalyzer': testPath = 'tests/spectrumanalyzer/'; break
-                        case 'amplifier':        testPath = 'tests/amplifier/';       break
-                        case 'attenuator':       testPath = 'tests/attenuator/';      break
-                        default:                 testPath = 'tests/'
-                    }
-
-                    // Nếu TEST_CASE được điền → chạy đúng test case đó (dùng -k)
-                    def filterArgs = params.TEST_CASE?.trim() ? "-k \"${params.TEST_CASE}\"" : ''
                     def markerArgs = params.SKIP_HW_TESTS ? '-m "not hw_depend"' : ''
+                    def filterArgs = params.TEST_CASE?.trim() ? "-k \"${params.TEST_CASE}\"" : ''
                     def extraArgs  = [filterArgs, markerArgs].findAll { it }.join(' ')
 
-                    echo "Running: pytest ${testPath} ${extraArgs}"
+                    if (params.TEST_SUITE == 'all') {
+                        // ── Chạy tuần tự từng module theo thứ tự rõ ràng ──────────────
+                        def modules = ['signalgenerator', 'power', 'amplifier', 'attenuator', 'spectrumanalyzer', 'vna']
+                        def maxExitCode = 0
 
-                    def exitCode = bat(returnStatus: true, script: """
-                        call ${env.VENV_DIR}\\Scripts\\activate.bat
-                        set SERIAL_PORT=${params.COM_PORT}
-                        set TEST_SUITE=${params.TEST_SUITE}
-                        python -m pytest ${testPath} ${extraArgs} -v
-                    """)
+                        for (int i = 0; i < modules.size(); i++) {
+                            def module = modules[i]
+                            echo "======================================================"
+                            echo "  Module ${i+1}/${modules.size()}: ${module.toUpperCase()}"
+                            echo "======================================================"
 
-                    env.PYTEST_EXIT_CODE = "${exitCode}"
+                            // S2VNA chỉ launch trước VNA module
+                            if (module == 'vna') {
+                                echo 'Khởi động S2VNA trước VNA module...'
+                                bat "start \"\" \"${env.S2VNA_EXE_PATH}\""
+                                bat 'ping -n 11 127.0.0.1 > nul'
+                                def s2rc = bat(returnStatus: true, script: 'tasklist /fi "imagename eq S2VNA.exe" | findstr /i S2VNA.exe > nul 2>&1')
+                                if (s2rc != 0) {
+                                    echo 'WARNING: S2VNA không khởi động — bỏ qua VNA module'
+                                    continue
+                                }
+                                echo 'S2VNA sẵn sàng'
+                            }
 
-                    if (exitCode >= 2) {
-                        error("pytest bị lỗi hệ thống (exit code ${exitCode})")
+                            def rc = bat(returnStatus: true, script: """
+                                call ${env.VENV_DIR}\\Scripts\\activate.bat
+                                set SERIAL_PORT=${params.COM_PORT}
+                                set TEST_SUITE=${module}
+                                python -m pytest tests/${module}/ ${extraArgs} -v
+                            """)
+
+                            if (rc > maxExitCode) maxExitCode = rc
+                            echo "Module ${module} xong — exit code: ${rc}"
+
+                            // Kill tất cả app sau mỗi module → môi trường sạch
+                            bat(returnStatus: true, script: 'taskkill /f /im PC17.exe  2>nul')
+                            bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
+                            bat(returnStatus: true, script: 'taskkill /f /im Spike.exe 2>nul')
+                            bat 'ping -n 4 127.0.0.1 > nul'
+                        }
+
+                        env.PYTEST_EXIT_CODE = "${maxExitCode}"
+                        if (maxExitCode >= 2) {
+                            error("Một hoặc nhiều module bị lỗi hệ thống (max exit code ${maxExitCode})")
+                        }
+
+                    } else {
+                        // ── Chạy 1 module cụ thể ──────────────────────────────────────
+                        echo "======================================================"
+                        echo "  Module: ${params.TEST_SUITE.toUpperCase()}"
+                        echo "======================================================"
+
+                        // S2VNA launch nếu chạy VNA module
+                        if (params.TEST_SUITE == 'vna') {
+                            echo 'Khởi động S2VNA trước VNA module...'
+                            bat "start \"\" \"${env.S2VNA_EXE_PATH}\""
+                            bat 'ping -n 11 127.0.0.1 > nul'
+                            def s2rc = bat(returnStatus: true, script: 'tasklist /fi "imagename eq S2VNA.exe" | findstr /i S2VNA.exe > nul 2>&1')
+                            if (s2rc != 0) error('S2VNA không khởi động được — dừng pipeline')
+                            echo 'S2VNA sẵn sàng'
+                        }
+
+                        def testPath = "tests/${params.TEST_SUITE}/"
+                        echo "Running: pytest ${testPath} ${extraArgs}"
+
+                        def exitCode = bat(returnStatus: true, script: """
+                            call ${env.VENV_DIR}\\Scripts\\activate.bat
+                            set SERIAL_PORT=${params.COM_PORT}
+                            set TEST_SUITE=${params.TEST_SUITE}
+                            python -m pytest ${testPath} ${extraArgs} -v
+                        """)
+
+                        env.PYTEST_EXIT_CODE = "${exitCode}"
+                        if (exitCode >= 2) {
+                            error("pytest bị lỗi hệ thống (exit code ${exitCode})")
+                        }
                     }
                 }
             }
@@ -207,9 +237,9 @@ pipeline {
         }
 
         cleanup {
-            // Tắt tất cả app sau mỗi build (pass hay fail)
             bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
             bat(returnStatus: true, script: 'taskkill /f /im PC17.exe  2>nul')
+            bat(returnStatus: true, script: 'taskkill /f /im Spike.exe 2>nul')
         }
     }
 }
