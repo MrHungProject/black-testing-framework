@@ -51,7 +51,7 @@ class TestSignalPuc19PowerResolution:
 
         @test_level: software
         @test_type: functional
-        @execution_type: semi_automatic
+        @execution_type: manual
         @hw_depend: yes
         """
 
@@ -80,7 +80,7 @@ class TestSignalPuc19PowerResolution:
 
         @test_level: software
         @test_type: functional
-        @execution_type: semi_automatic
+        @execution_type: manual
         @hw_depend: yes
         """
 
@@ -109,7 +109,7 @@ class TestSignalPuc19PowerResolution:
 
         @test_level: software
         @test_type: functional
-        @execution_type: semi_automatic
+        @execution_type: manual
         @hw_depend: yes
         """
 
@@ -138,7 +138,7 @@ class TestSignalPuc19PowerResolution:
 
         @test_level: software
         @test_type: functional
-        @execution_type: semi_automatic
+        @execution_type: manual
         @hw_depend: yes
         """
 
@@ -167,7 +167,7 @@ class TestSignalPuc19PowerResolution:
 
         @test_level: software
         @test_type: functional
-        @execution_type: semi_automatic
+        @execution_type: manual
         @hw_depend: yes
         """
 
