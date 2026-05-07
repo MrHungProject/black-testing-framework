@@ -29,16 +29,18 @@ class TestPuc41SpectrumSweep:
 
     @pytest.fixture(autouse=True)
     def _ensure_connected(self, main_page: MainPage):
-        """Connect nếu chưa connected. Sau mỗi TC nhấn Preset để reset UI."""
-        main_page.open_connect_panel()
+        """Giữ kết nối SPECTRUM + Signal Generator trong suốt session class."""
+        spectrum_ok = main_page.is_device_connected(_SPECTRUM_LABEL)
+        signal_ok   = main_page.is_device_connected(_SIGNAL_GEN_LABEL)
 
-        if not main_page.is_device_connected(_SPECTRUM_LABEL):
-            main_page.connect_device(_SPECTRUM_LABEL)
-            time.sleep(3)
-
-        if not main_page.is_device_connected(_SIGNAL_GEN_LABEL):
-            main_page.connect_device(_SIGNAL_GEN_LABEL)
-            time.sleep(3)
+        if not spectrum_ok or not signal_ok:
+            main_page.open_connect_panel()
+            if not spectrum_ok:
+                main_page.connect_device(_SPECTRUM_LABEL)
+                time.sleep(3)
+            if not signal_ok:
+                main_page.connect_device(_SIGNAL_GEN_LABEL)
+                time.sleep(3)
 
         yield
 
@@ -73,7 +75,7 @@ class TestPuc41SpectrumSweep:
         return main_page.extract_spectrum_markers()
 
     # ════════════════════════════════════════════════════════════════════════════
-    #  TC3 · PUC_4.1 · Normal · Sweep 100kHz–20GHz, SignalGen 1MHz -18dBm
+    #  TC3 · PUC_4.1 · Normal · Sweep 100kHz–20GHz, SignalGen 100MHz -18dBm
     # ════════════════════════════════════════════════════════════════════════════
 
     @testcase
@@ -112,7 +114,7 @@ class TestPuc41SpectrumSweep:
         @execution_type: automatic
         @hw_depend: yes
         """
-        markers = self._run_sweep_tc(main_page, rf1_out="80MHz", power_level="-18")
+        markers = self._run_sweep_tc(main_page, rf1_out="100MHz", power_level="-18")
 
     # ════════════════════════════════════════════════════════════════════════════
     #  TC4 · PUC_4.1 · Normal · Sweep 100kHz–20GHz, SignalGen 1GHz 0dBm
@@ -158,7 +160,7 @@ class TestPuc41SpectrumSweep:
     @testcase
     def test_spectrum_puc_4_1_tc_0005(self, main_page: MainPage):
         """
-        @test_id: test_spectrum_puc_4_1_tc_0004
+        @test_id: test_spectrum_puc_4_1_tc_0005
         @brief: Sweep mode — SignalGen 5GHz 3dBm → 1 cột phổ tại 5GHz, công suất 3dBm
 
         @details: Tương tự TC3 nhưng SignalGen phát 5GHz, 3dBm.
