@@ -78,7 +78,6 @@ pipeline {
                     echo 'Đóng tất cả app trước khi chạy test...'
                     bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
                     bat(returnStatus: true, script: 'taskkill /f /im PC17.exe  2>nul')
-                    bat(returnStatus: true, script: 'taskkill /f /im Spike.exe 2>nul')
                     bat 'ping -n 3 127.0.0.1 > nul'
                     echo 'Health check hoàn tất — sẵn sàng chạy test'
                 }
@@ -194,7 +193,6 @@ pipeline {
             // Tắt tất cả app sau mỗi build (pass hay fail)
             bat(returnStatus: true, script: 'taskkill /f /im S2VNA.exe 2>nul')
             bat(returnStatus: true, script: 'taskkill /f /im PC17.exe  2>nul')
-            bat(returnStatus: true, script: 'taskkill /f /im Spike.exe 2>nul')
         }
     }
 }
