@@ -120,6 +120,23 @@ pipeline {
             }
         }
 
+        stage('Launch S2VNA') {
+            when {
+                expression { params.TEST_SUITE in ['all', 'vna'] }
+            }
+            steps {
+                script {
+                    echo 'Khởi động S2VNA trước khi chạy test...'
+                    bat "start \"\" \"${env.S2VNA_EXE_PATH}\""
+                    // Chờ S2VNA ready (10s)
+                    bat 'ping -n 11 127.0.0.1 > nul'
+                    def rc = bat(returnStatus: true, script: 'tasklist /fi "imagename eq S2VNA.exe" | findstr /i S2VNA.exe > nul 2>&1')
+                    if (rc != 0) error('S2VNA không khởi động được — dừng pipeline')
+                    echo 'S2VNA đang chạy — giữ sống trong suốt session test'
+                }
+            }
+        }
+
         stage('Run Tests') {
             steps {
                 script {
