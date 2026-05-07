@@ -10,7 +10,7 @@ from __future__ import annotations
 import subprocess
 import time
 from pathlib import Path
-from typing import Dict, Iterator, List
+from typing import Iterator, List
 
 import pytest
 
@@ -84,35 +84,10 @@ for d in ("reports/html", "reports/excel", "reports/logs", "reports/screenshots"
 #  Session-scoped fixtures
 # ════════════════════════════════════════════════════════════════════════════
 
-@pytest.fixture(scope="session")
-def s2vna_ctrl() -> Iterator[AppController]:
-    """
-    Launch / connect S2VNA simulator — phải khởi động trước PC17.
-    Nếu exe_path chưa cấu hình trong settings.yaml thì skip launch,
-    giả sử S2VNA đang chạy sẵn hoặc không cần thiết.
-    """
-    cfg = get_settings().s2vna
-    ctrl = AppController(app_name=cfg.name, backend=cfg.backend, exe_path=cfg.exe_path)
-    try:
-        ctrl.connect()
-        logger.info("S2VNA already running — connected")
-    except Exception:
-        if cfg.exe_path:
-            logger.info("S2VNA not running — launching...")
-            ctrl.launch()
-            time.sleep(cfg.startup_wait)
-        else:
-            logger.warning("S2VNA exe_path not configured — assuming already running or not required")
-    yield ctrl
-    ctrl.disconnect()
-
 
 @pytest.fixture(scope="session")
-def app_ctrl(s2vna_ctrl) -> Iterator[AppController]:
-    """
-    Launch / connect to PC17.
-    Depends on s2vna_ctrl để đảm bảo S2VNA khởi động trước.
-    """
+def app_ctrl() -> Iterator[AppController]:
+    """Launch / connect to PC17."""
     ctrl = AppController()
     try:
         ctrl.connect()
