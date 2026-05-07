@@ -163,7 +163,9 @@ pipeline {
                                 call ${env.VENV_DIR}\\Scripts\\activate.bat
                                 set SERIAL_PORT=${params.COM_PORT}
                                 set TEST_SUITE=${module}
-                                python -m pytest tests/${module}/ ${extraArgs} -v
+                                python -m pytest tests/${module}/ ${extraArgs} -v ^
+                                    --html=reports/html/${module}_report.html ^
+                                    --junitxml=reports/junit_${module}.xml
                             """)
 
                             if (rc > maxExitCode) maxExitCode = rc
@@ -177,6 +179,14 @@ pipeline {
                         }
 
                         env.PYTEST_EXIT_CODE = "${maxExitCode}"
+
+                        // Gộp tất cả module Excel → all_report.xlsx
+                        echo 'Generating all_report.xlsx...'
+                        bat """
+                            call ${env.VENV_DIR}\\Scripts\\activate.bat
+                            python scripts/merge_excel_reports.py
+                        """
+
                         if (maxExitCode >= 2) {
                             error("Một hoặc nhiều module bị lỗi hệ thống (max exit code ${maxExitCode})")
                         }
@@ -228,7 +238,8 @@ pipeline {
 
     post {
         always {
-            junit allowEmptyResults: true, testResults: 'reports/junit.xml'
+            // Thu thập JUnit: module riêng (all) hoặc file chung (single module)
+            junit allowEmptyResults: true, testResults: 'reports/junit*.xml'
 
             archiveArtifacts artifacts: 'reports/**/*',
                              allowEmptyArchive: true
@@ -238,7 +249,7 @@ pipeline {
                 alwaysLinkToLastBuild: true,
                 keepAll              : true,
                 reportDir            : 'reports/html',
-                reportFiles          : 'report.html',
+                reportFiles          : 'report.html,*_report.html',
                 reportName           : 'Test Report'
             ])
         }
