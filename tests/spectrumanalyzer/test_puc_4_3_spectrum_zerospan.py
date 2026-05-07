@@ -28,16 +28,18 @@ class TestPuc43SpectrumZeroSpan:
 
     @pytest.fixture(autouse=True)
     def _ensure_connected(self, main_page: MainPage):
-        """Connect nếu chưa connected. Sau mỗi TC nhấn Preset để reset UI."""
-        main_page.open_connect_panel()
+        """Giữ kết nối SPECTRUM + Signal Generator trong suốt session class."""
+        spectrum_ok = main_page.is_device_connected(_SPECTRUM_LABEL)
+        signal_ok   = main_page.is_device_connected(_SIGNAL_GEN_LABEL)
 
-        if not main_page.is_device_connected(_SPECTRUM_LABEL):
-            main_page.connect_device(_SPECTRUM_LABEL)
-            time.sleep(3)
-
-        if not main_page.is_device_connected(_SIGNAL_GEN_LABEL):
-            main_page.connect_device(_SIGNAL_GEN_LABEL)
-            time.sleep(3)
+        if not spectrum_ok or not signal_ok:
+            main_page.open_connect_panel()
+            if not spectrum_ok:
+                main_page.connect_device(_SPECTRUM_LABEL)
+                time.sleep(3)
+            if not signal_ok:
+                main_page.connect_device(_SIGNAL_GEN_LABEL)
+                time.sleep(3)
 
         yield
 
