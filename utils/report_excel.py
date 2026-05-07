@@ -109,11 +109,11 @@ class ExcelReporter:
     ]
 
     _SCREENSHOT_COL  = 10    # cột J (1-based)
-    _IMG_W_PX        = 180   # thumbnail width  (pixels)
-    _IMG_H_PX        = 100   # thumbnail height (pixels)
+    _IMG_W_PX        = 320   # display width in Excel (pixels) — ảnh gốc full-res
+    _IMG_H_PX        = 180   # display height in Excel (pixels)
     # Excel row height = points (1px = 0.75pt), column width = char units (~7px/unit)
-    _ROW_HEIGHT_PT   = 75    # 100px * 0.75 = 75pt
-    _COL_WIDTH_UNITS = 26    # 180px / 7px ≈ 26 char units
+    _ROW_HEIGHT_PT   = 135   # 180px * 0.75 = 135pt
+    _COL_WIDTH_UNITS = 46    # 320px / 7px ≈ 46 char units
 
     def __init__(self, output_path: Optional[str] = None):
         """
@@ -144,8 +144,7 @@ class ExcelReporter:
         self._build_summary_sheet(wb, results)
         self._build_details_sheet(wb, results, sheet_name="Test Results")
 
-        wb.save(self.output_path)
-        logger.info(f"Excel report saved: {self.output_path}")
+        self._safe_save(wb, self.output_path)
         return self.output_path
 
     def generate_multi_sheet(self, modules: dict) -> Path:
@@ -174,9 +173,26 @@ class ExcelReporter:
                 continue
             self._build_details_sheet(wb, results, sheet_name=module_name)
 
-        wb.save(self.output_path)
-        logger.info(f"Excel multi-sheet report saved: {self.output_path}")
+        self._safe_save(wb, self.output_path)
         return self.output_path
+
+    # ── Save helper ───────────────────────────────────────────────────────────
+
+    def _safe_save(self, wb: "Workbook", path: Path) -> None:
+        """
+        @brief  Lưu workbook; nếu file đang bị khóa (mở trong Excel) thì lưu sang tên mới có timestamp
+        @retval None
+        """
+        try:
+            wb.save(path)
+            logger.info(f"Excel report saved: {path}")
+        except PermissionError:
+            ts = datetime.now().strftime("%H%M%S")
+            fallback = path.with_stem(f"{path.stem}_{ts}")
+            wb.save(fallback)
+            logger.warning(
+                f"Excel report: '{path.name}' đang mở — đã lưu sang '{fallback.name}'"
+            )
 
     # ── Summary sheet ─────────────────────────────────────────────────────────
 
@@ -290,24 +306,17 @@ class ExcelReporter:
                     cell.font = _bold()
                     cell.alignment = _center()
 
-            # Nhúng ảnh thumbnail vào cột Screenshot
+            # Nhúng ảnh gốc full-resolution vào cột Screenshot
             screenshot = getattr(result, "screenshot_path", "")
             if screenshot and Path(screenshot).exists():
                 try:
                     from openpyxl.drawing.image import Image as XLImage
-                    from PIL import Image as PILImage
 
-                    thumb_path = str(Path(screenshot).with_suffix(".thumb.png"))
-                    with PILImage.open(screenshot) as im:
-                        im.thumbnail((self._IMG_W_PX, self._IMG_H_PX))
-                        im.save(thumb_path)
-
-                    xl_img = XLImage(thumb_path)
+                    xl_img = XLImage(screenshot)
                     xl_img.width  = self._IMG_W_PX
                     xl_img.height = self._IMG_H_PX
                     col_letter = ws.cell(r_idx, self._SCREENSHOT_COL).column_letter
                     ws.add_image(xl_img, f"{col_letter}{r_idx}")
-                    # height tính bằng points (1px = 0.75pt)
                     ws.row_dimensions[r_idx].height = self._ROW_HEIGHT_PT
                 except Exception as e:
                     ws.cell(r_idx, self._SCREENSHOT_COL, f"[img error: {e}]")

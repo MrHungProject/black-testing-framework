@@ -458,4 +458,6 @@ class TestVnaPuc21:
         main_page.click_calibrate()
         main_page.click_solt_cal()
         main_page.click_all_calibration_steps()
-        main_page.apply_calibration()
+
+        completed = main_page.wait_for_calibration_complete(timeout=60)
+        assert completed, "VNA Calibration: không đủ 7/7 bước 'Completed' sau 60s"

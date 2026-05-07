@@ -90,6 +90,9 @@ class MainPage(BasePage):
     def click_all_calibration_steps(self) -> None:
         self.vna.click_all_calibration_steps()
 
+    def wait_for_calibration_complete(self, timeout: int = 60) -> bool:
+        return self.vna.wait_for_calibration_complete(timeout=timeout)
+
     def apply_calibration(self) -> None:
         self.vna.apply_calibration()
 

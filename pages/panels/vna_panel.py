@@ -167,6 +167,36 @@ class VnaPanel(BasePage):
             logger.info(f"VNA Calibration: {label} — clicked")
             time.sleep(2)
 
+    def wait_for_calibration_complete(self, timeout: int = 60) -> bool:
+        """
+        @brief  Đợi tất cả 7 bước calibration chuyển sang "Completed"
+        @param  timeout: Số giây tối đa chờ (default: 60)
+        @retval bool — True nếu đủ 7 "Completed", False nếu timeout
+        """
+        logger.info("VNA Calibration: đợi tất cả bước Completed …")
+        import time as _time
+        deadline = _time.time() + timeout
+        while _time.time() < deadline:
+            count = 0
+            try:
+                cal2 = self._ctrl._main_window.child_window(
+                    auto_id="FormDetailVNACalibration2Port"
+                )
+                for ctrl in cal2.descendants():
+                    try:
+                        if ctrl.window_text().strip() == "Completed":
+                            count += 1
+                    except Exception:
+                        pass
+            except Exception:
+                pass
+            if count >= 7:
+                logger.info(f"VNA Calibration: {count}/7 Completed ✓")
+                return True
+            _time.sleep(0.5)
+        logger.warning(f"VNA Calibration: chỉ {count}/7 Completed sau {timeout}s")
+        return False
+
     def apply_calibration(self) -> None:
         """
         @brief  Click Apply (btnSave) để lưu kết quả calibration
