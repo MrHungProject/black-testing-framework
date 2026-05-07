@@ -453,7 +453,7 @@ class TestVnaPuc21:
         @execution_type: automatic
         @hw_depend: yes
         """
-        # ── Calibration → Calibrate → 2-Port SOLT Cal → click tất cả steps → Apply
+        # ── Calibration → Calibrate → 2-Port SOLT Cal → click tất cả steps
         main_page.open_calibration()
         main_page.click_calibrate()
         main_page.click_solt_cal()

@@ -37,6 +37,7 @@ pipeline {
         VENV_DIR                = '.venv'
         APP_EXE_PATH            = 'C:\\EliteRF\\PC17.exe'
         S2VNA_EXE_PATH          = 'C:\\VNA\\S2VNA\\S2VNA.exe'
+        SPIKE_EXE_PATH          = 'C:\\Program Files\\Signal Hound\\Spike\\Spike.exe'
     }
 
     options {
@@ -133,7 +134,19 @@ pipeline {
                             echo "  Module ${i+1}/${modules.size()}: ${module.toUpperCase()}"
                             echo "======================================================"
 
-                            // S2VNA chỉ launch trước VNA module
+                            // Launch app cần thiết trước module tương ứng
+                            if (module == 'spectrumanalyzer') {
+                                echo 'Khởi động Spike trước Spectrum module...'
+                                bat "start \"\" \"${env.SPIKE_EXE_PATH}\""
+                                bat 'ping -n 11 127.0.0.1 > nul'
+                                def spRc = bat(returnStatus: true, script: 'tasklist /fi "imagename eq Spike.exe" | findstr /i Spike.exe > nul 2>&1')
+                                if (spRc != 0) {
+                                    echo 'WARNING: Spike không khởi động — bỏ qua Spectrum module'
+                                    continue
+                                }
+                                echo 'Spike sẵn sàng'
+                            }
+
                             if (module == 'vna') {
                                 echo 'Khởi động S2VNA trước VNA module...'
                                 bat "start \"\" \"${env.S2VNA_EXE_PATH}\""
@@ -174,7 +187,16 @@ pipeline {
                         echo "  Module: ${params.TEST_SUITE.toUpperCase()}"
                         echo "======================================================"
 
-                        // S2VNA launch nếu chạy VNA module
+                        // Launch app cần thiết trước module tương ứng
+                        if (params.TEST_SUITE == 'spectrumanalyzer') {
+                            echo 'Khởi động Spike trước Spectrum module...'
+                            bat "start \"\" \"${env.SPIKE_EXE_PATH}\""
+                            bat 'ping -n 11 127.0.0.1 > nul'
+                            def spRc = bat(returnStatus: true, script: 'tasklist /fi "imagename eq Spike.exe" | findstr /i Spike.exe > nul 2>&1')
+                            if (spRc != 0) error('Spike không khởi động được — dừng pipeline')
+                            echo 'Spike sẵn sàng'
+                        }
+
                         if (params.TEST_SUITE == 'vna') {
                             echo 'Khởi động S2VNA trước VNA module...'
                             bat "start \"\" \"${env.S2VNA_EXE_PATH}\""

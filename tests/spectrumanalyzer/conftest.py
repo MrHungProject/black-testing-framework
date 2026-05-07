@@ -32,6 +32,10 @@ def spike_ctrl() -> Iterator[AppController]:
     except Exception:
         logger.info("Spike not running — launching...")
         ctrl.launch()
+        time.sleep(2)
+        import pyautogui
+        pyautogui.press("enter")
+        logger.info("Spike: pressed Enter to skip demo screen")
 
     time.sleep(cfg.startup_wait)
     yield ctrl
@@ -41,10 +45,7 @@ def spike_ctrl() -> Iterator[AppController]:
 @pytest.fixture(scope="session")
 def spike_page(spike_ctrl: AppController) -> SpikePage:
     """Page Object cho Spike — dùng trong mọi Spectrum test."""
-    page = SpikePage(spike_ctrl)
-    page.dismiss_demo()           # nhấn Enter skip màn hình demo khi khởi động
-    page.handle_popup("No Device")  # dismiss 'No Device' popup tiếp theo
-    return page
+    return SpikePage(spike_ctrl)
 
 
 @pytest.fixture(scope="session")
