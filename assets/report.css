@@ -1,0 +1,184 @@
+/* ── Custom pytest-html theme ────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary:    #1e40af;
+  --primary-lt: #3b82f6;
+  --pass:       #16a34a;
+  --pass-bg:    #dcfce7;
+  --fail:       #dc2626;
+  --fail-bg:    #fee2e2;
+  --skip:       #d97706;
+  --skip-bg:    #fef3c7;
+  --manual:     #7c3aed;
+  --manual-bg:  #ede9fe;
+  --border:     #e2e8f0;
+  --bg:         #f8fafc;
+  --card:       #ffffff;
+  --text:       #1e293b;
+  --muted:      #64748b;
+  --radius:     8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Header bar ── */
+body::before {
+  content: '';
+  display: block;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-lt) 100%);
+}
+
+h1 {
+  background: var(--primary);
+  color: #fff;
+  padding: 20px 32px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin: 0;
+}
+
+/* ── Main layout ── */
+body > * { padding: 0 32px; }
+p { margin: 8px 0; }
+
+/* ── Environment block ── */
+#environment {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 20px 32px 0;
+  padding: 16px 20px;
+}
+
+#environment h2 {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+#environment table { width: 100%; border-collapse: collapse; }
+#environment td { padding: 4px 8px; font-size: 13px; }
+#environment td:first-child { color: var(--muted); width: 180px; }
+
+/* ── Summary cards ── */
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 32px;
+  padding: 0;
+}
+
+.summary p {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  font-size: 13px;
+  color: var(--muted);
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+}
+
+/* ── Filter bar ── */
+.filter {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 0 32px 16px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.filter input[type=checkbox] { accent-color: var(--primary); }
+
+/* ── Results table ── */
+#results-table {
+  width: calc(100% - 64px);
+  margin: 0 32px 32px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+#results-table thead th {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 12px 14px;
+  text-align: left;
+  border: none;
+}
+
+#results-table tbody tr { transition: background 0.15s; }
+#results-table tbody tr:hover { filter: brightness(0.97); }
+
+#results-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+#results-table tbody tr:last-child td { border-bottom: none; }
+
+/* ── Outcome badges ── */
+.passed  { background: var(--pass-bg); }
+.failed  { background: var(--fail-bg); }
+.skipped { background: var(--skip-bg); }
+.xfailed, .xpassed { background: var(--manual-bg); }
+
+.passed  td:first-child { border-left: 3px solid var(--pass); }
+.failed  td:first-child { border-left: 3px solid var(--fail); }
+.skipped td:first-child { border-left: 3px solid var(--skip); }
+
+/* Result text colour */
+.passed  .col-result { color: var(--pass);   font-weight: 600; }
+.failed  .col-result { color: var(--fail);   font-weight: 600; }
+.skipped .col-result { color: var(--skip);   font-weight: 600; }
+
+/* ── Log / extras collapsible ── */
+.extra { background: #f1f5f9; border-radius: 4px; padding: 8px 12px; font-size: 12px; margin-top: 6px; }
+.extra pre { white-space: pre-wrap; word-break: break-all; }
+.collapsible { cursor: pointer; user-select: none; }
+.collapsible::before { content: '▶ '; font-size: 10px; }
+.collapsible.active::before { content: '▼ '; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+/* ── Links ── */
+a { color: var(--primary-lt); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Duration ── */
+.col-duration { color: var(--muted); font-size: 12px; }

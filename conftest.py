@@ -24,6 +24,11 @@ def _kill_all_apps() -> None:
         subprocess.run(["taskkill", "/f", "/im", exe], capture_output=True)
 
 
+def pytest_html_report_title(report) -> None:
+    """Đặt tiêu đề đẹp cho HTML report."""
+    report.title = "PC17 — RF Test Set Automation Report"
+
+
 def pytest_runtest_setup(item) -> None:
     """Detect module transition → kill all apps trước khi module mới bắt đầu."""
     global _last_test_module
