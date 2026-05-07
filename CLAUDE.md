@@ -1,412 +1,156 @@
-# Black Testing Framework — CLAUDE.md
+# CLAUDE.md
 
-Framework pytest cho automation testing Windows app (pywinauto) + USB Serial device trên Windows.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
----
+## Project Overview
 
-## Cấu trúc dự án
+Windows GUI automation testing framework for PC17 (RF Test Set) + S2VNA (Vector Network Analyzer). Uses **pytest + pywinauto** with a Page Object Model (POM) pattern. Tests interact with real Windows applications (PC17, S2VNA, Spike) via UIA accessibility tree.
 
-```
-black-testing-framework/
-├── config/
-│   ├── __init__.py          → export get_settings, Settings
-│   ├── loader.py            → Pydantic models + get_settings() với lru_cache
-│   └── settings.yaml        → config chính (app, serial, relay, report, testrail)
-├── core/
-│   ├── __init__.py          → export testcase, TestCaseMetadata
-│   ├── app_controller.py    → pywinauto wrapper (click, type, screenshot...)
-│   ├── relay_controller.py  → USB relay board control (CH340 protocol)
-│   ├── serial_device.py     → pyserial wrapper (send/recv/query/auto-detect)
-│   └── testcase_decorator.py → @testcase decorator + docstring @tag parser
-├── pages/
-│   ├── __init__.py          → export BasePage
-│   ├── base_page.py         → Page Object base (delegate to AppController)
-│   └── main_page.py         → PC17 main window POM (locators + actions)
-├── tests/
-│   ├── attenuator/
-│   │   └── test_tc_0001_turn_on_attenuator.py  → TC-0001 + TC-0002 (real HW)
-│   ├── demo/
-│   │   ├── conftest.py      → Mock fixtures (không cần HW thật)
-│   │   └── test_demo_attenuator.py  → TC-0001~0005 dùng mock
-│   └── vna/
-│       └── test_puc_2_1_vna_power.py  → VNA power test (TC1 normal + TC2 abnormal)
-├── utils/
-│   ├── __init__.py          → export get_logger
-│   ├── logger.py            → logging factory (console + file handler)
-│   └── report_excel.py      → ExcelReporter + TestResult dataclass
-├── conftest.py              → Root fixtures (session-scoped) + pytest hooks
-├── pytest.ini               → test discovery, markers, logging, addopts
-├── requirements.txt         → dependencies
-├── Jenkinsfile              → CI/CD pipeline (Windows agent, label: windows-dut)
-├── CICD_SETUP.md            → hướng dẫn cài Jenkins
-└── README.md                → quick start + cách viết test mới
+## Common Commands
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run a single module
+pytest tests/vna/ -v
+pytest tests/spectrumanalyzer/ -v
+
+# Run a single test case
+pytest tests/vna/test_puc_2_1_vna_power.py -k "0007" -v --tb=short -s
+
+# Run by marker
+pytest -m "automatic and hw_depend" -v
+pytest -m "not hw_depend" -v
+
+# Override COM port
+set SERIAL_PORT=COM5 && pytest tests/
 ```
 
----
+## Architecture
 
-## Config (`config/`)
+### Layer Stack
+```
+Test files (tests/)
+    └── MainPage facade (pages/main_page.py)
+           └── Panel objects (pages/panels/*.py)
+                  └── BasePage (pages/base_page.py)
+                         └── AppController (core/app_controller.py)
+                                └── pywinauto (UIA backend)
+```
 
-### `config/loader.py`
+### AppController (`core/app_controller.py`)
+Central pywinauto wrapper. Key interaction methods:
+- `click_by_text(text)` — scan `_main_window.descendants()`, click matching control
+- `select_from_desktop_popup(text)` — scan ALL desktop windows (for dropdown popups that open at Desktop level, e.g. Trace selector, Calibrate menu)
+- `click_in_any_window(text)` — same as above but skips `is_enabled()` check (for list items/menu items)
+- `set_field_by_label(label, value)` — find label → find nearest Edit → Ctrl+A → set_edit_text → Enter
+- `build_cache()` / `invalidate_cache()` — batch multiple `descendants()` scans into one (critical for performance; `descendants()` costs ~3.5s per call)
+- `wait_for_text(text, timeout)` — polls `_main_window.descendants()` until text appears
+
+### Panel Objects (`pages/panels/`)
+Each panel manages one UI section. All inherit `BasePage` and take an `AppController`.
+
+| Panel | Key feature |
+|---|---|
+| `SystemPanel` | Per-device connect/disconnect (must be on Connect panel for `is_device_connected()` to work) |
+| `VnaPanel` | Measurement/Stimulus/Markers/Calibration tabs; floating `FormDetailVNACalibration` uses `auto_id` navigation |
+| `SpectrumPanel` | Analysis Mode radio buttons (click right of label by offset px); toggle-safe `open_sweep_settings()` |
+| `SignalPanel` | RF1 output + Trigger output; `check_validation_errors()` after Apply |
+| `DetailPanel` | Read-only Temperature + Serial Number |
+
+### MainPage (`pages/main_page.py`)
+Thin facade — every method delegates to a panel. Add a delegation here whenever a new panel method is created.
+
+## Test Structure & Conventions
+
+### Naming
+- File: `test_puc_{module}_{sequence}_{feature}.py` → e.g. `test_puc_2_1_vna_power.py`
+- Class: `TestVnaPuc21`, `TestSpectrumPuc43ZeroSpan`
+- Method: `test_vna_puc_2_1_0001` (zero-padded 4-digit sequence)
+- `@test_id` in docstring must match method name exactly
+
+### `@testcase` Decorator
+Every test method must use this decorator. It parses the structured docstring and applies pytest marks automatically (`@test_level`, `@test_type`, `@execution_type`, `hw_depend`). Tests with `@execution_type: manual` are auto-skipped unless `-m manual` is passed.
 
 ```python
-from config import get_settings
-
-settings = get_settings()  # lru_cache, đọc settings.yaml 1 lần
-settings.app.exe_path      # AppConfig
-settings.serial.default_port
-settings.relay.enabled
-settings.report.output_dir
-settings.testrail.enabled
-```
-
-**Pydantic models:**
-- `AppConfig` — name, exe_path, backend ("uia"|"win32"), connect_timeout=15, action_delay=0.3
-- `S2VnaConfig` — name, exe_path, backend, connect_timeout, startup_wait=3
-- `SerialConfig` — default_port="COM3", baudrate=115200, timeout=2.0, auto_detect=True
-- `RelayConfig` — enabled=False, port="COM10", baudrate=9600, channels=4, power_cycle_delay=3.0
-- `ReportConfig` — output_dir, html_dir, excel_dir, log_dir, excel_filename, screenshot_on_fail=True
-- `TestRailConfig` — enabled=False, url, username, api_key, project_id, suite_id
-
-**Env var overrides (CI/CD):**
-- `SERIAL_PORT` → `serial.default_port`
-- `APP_EXE_PATH` → `app.exe_path`
-- `RELAY_PORT` → `relay.port`
-- `S2VNA_EXE_PATH` → `s2vna.exe_path`
-
----
-
-## Core (`core/`)
-
-### `core/app_controller.py` — `AppController`
-
-Wrapper pywinauto. Nếu pywinauto không install → chạy STUB mode (warning log, không crash).
-
-```python
-ctrl = AppController(app_name="PC17", backend="uia")
-ctrl.connect()     # connect to running app (title_re matching)
-ctrl.launch()      # start exe_path then connect
-ctrl.disconnect()
-
-# Actions
-ctrl.click(identifier)          # identifier: str hoặc dict {"auto_id": ..., "control_type": ...}
-ctrl.double_click(identifier)
-ctrl.type_text(identifier, text)
-ctrl.set_value(identifier, value)  # Ctrl+A then type
-ctrl.get_text(identifier) -> str
-ctrl.wait_for_element(identifier, timeout=10) -> bool
-ctrl.is_element_enabled(identifier) -> bool
-ctrl.select_combobox(identifier, item)
-ctrl.check_checkbox(identifier, state=True)
-ctrl.take_screenshot(filename)  # saved to reports/screenshots/
-ctrl.print_ui_tree(depth=5)     # debug: tìm element identifiers
-```
-
-`_get_element(identifier)` — thử tuần tự: auto_id → title → class_name.
-
-### `core/relay_controller.py` — `RelayController`
-
-Protocol CH340 relay boards: `bytes([0xA0, channel, cmd_byte, checksum])`.
-
-```python
-relay = RelayController()
-relay.connect()
-relay.on(channel=1)        # 1-based
-relay.off(channel=1)
-relay.all_on()
-relay.all_off()
-relay.power_cycle(channel=1)  # OFF → sleep(cycle_delay) → ON
-relay.disconnect()
-
-# Context manager
-with RelayController() as relay:
-    relay.power_cycle(1)
-```
-
-Nếu `relay.enabled=False` → log info, không kết nối thật.
-
-### `core/serial_device.py` — `SerialDevice`
-
-```python
-dev = SerialDevice(port="COM3", baudrate=115200)
-dev.open()
-dev.send("VOLT?\r\n")       # encode utf-8, returns bytes written
-dev.readline() -> str       # strip whitespace
-dev.read_all() -> str
-dev.query("CMD\r\n", delay=0.1) -> str   # flush + send + sleep + readline
-dev.flush()                 # reset_input_buffer + reset_output_buffer
-dev.read_voltage("VOLT?\r\n") -> float   # parse float từ response
-dev.is_connected(ping="PING\r\n", expected="OK") -> bool
-dev.wait_for_response(expected, timeout=5.0, poll=0.2) -> bool
-dev.close()
-
-# Static helpers
-SerialDevice.list_ports() -> List[str]
-SerialDevice.find_port_by_description(keyword) -> Optional[str]
-SerialDevice.find_port_by_vid_pid(vid, pid) -> Optional[str]
-```
-
-Override `_detect_port()` để auto-detect thiết bị cụ thể.
-
-### `core/testcase_decorator.py` — `@testcase` decorator
-
-Parse docstring `@tag:` format → `TestCaseMetadata` → apply pytest marks.
-
-```python
-from core import testcase
-
 @testcase
-def test_feature_tc_0001(main_page, device):
+def test_vna_puc_2_1_0001(self, main_page: MainPage):
     """
-    @test_id: test_feature_tc_0001
-    @brief: Mô tả ngắn (1 dòng)
-    @details: Chi tiết test case
-
-    @pre:- Điều kiện tiên quyết 1
-         - Điều kiện tiên quyết 2
-
-    @test_procedure:
-        [code]
-            - Bước 1: làm gì đó
-            - Bước 2: kiểm tra gì đó
-        [!code]
-
-    @pass_criteria:- Kết quả mong đợi 1
-                   - Kết quả mong đợi 2
-
-    @test_level: system          # system | integration | unit
-    @test_type: functional       # functional | regression | smoke
-    @execution_type: semi_automatic  # automatic | semi_automatic | manual
-    @hw_depend: yes              # yes/true/1 hoặc no/false/0
+    @test_id: test_vna_puc_2_1_0001
+    @brief: One-line summary
+    @execution_type: automatic
+    @hw_depend: yes
     """
 ```
 
-**Marks tự động được apply:**
-- `pytest.mark.test_id(meta.test_id)`
-- `pytest.mark.<test_level>` (system, integration, unit)
-- `pytest.mark.<test_type>` (functional, regression, smoke)
-- `pytest.mark.<execution_type>` (automatic, semi_automatic, manual)
-- `pytest.mark.hw_depend` (nếu hw_depend=True)
-
-**`TestCaseMetadata` fields:**
-`test_id`, `brief`, `details`, `pre: List[str]`, `procedure_steps: List[str]`,
-`procedure_raw: str`, `pass_criteria: List[str]`, `test_level`, `test_type`,
-`execution_type`, `hw_depend: bool`
-
----
-
-## Pages (`pages/`)
-
-### `pages/base_page.py` — `BasePage`
-
-Abstract base. Constructor nhận `AppController`. Delegate tất cả action xuống controller.
+### Class-level `_ensure_connected` Fixture (standard pattern)
+Every test class uses an `autouse=True` fixture to guarantee device connection before each TC. Check `is_device_connected()` first — only navigate to Connect panel if needed (avoids unnecessary panel switching):
 
 ```python
-class BasePage:
-    def __init__(self, controller: AppController): ...
-    def click(identifier), double_click, type_text, set_value
-    def get_text(identifier) -> str
-    def is_enabled(identifier) -> bool
-    def wait_for(identifier, timeout=10) -> bool
-    def select(identifier, item)
-    def screenshot(name)
+@pytest.fixture(autouse=True)
+def _ensure_connected(self, main_page: MainPage):
+    if main_page.is_device_connected(self._DEVICE_LABEL):
+        return  # already connected, skip navigation
+    main_page.open_connect_panel()
+    if not main_page.is_device_connected(self._DEVICE_LABEL):
+        main_page.connect_device(self._DEVICE_LABEL)
+        time.sleep(3)
 ```
 
-### `pages/main_page.py` — `MainPage(BasePage)`
+### Fixture Scopes
+- **Session**: `s2vna_ctrl`, `app_ctrl`, `main_page` — launched once, shared across all tests
+- **Function**: `_ensure_connected` (autouse per-class) — runs before each test method
+- S2VNA must launch **before** PC17 (dependency declared via fixture parameter)
 
-Page Object cho main window PC17. **Locators là placeholder** — cần thay bằng auto_id thật.
+## Critical Patterns
 
-**Locators (dict):**
+### UI Element Identification (priority order)
+1. `auto_id` (most reliable) — use `child_window(auto_id="...")` for known forms
+2. `click_by_text()` for controls in `_main_window.descendants()`
+3. `select_from_desktop_popup()` for dropdowns that open outside the main window
+4. `click_in_any_window()` when `is_enabled()` returns False for valid targets (e.g. list items)
+
+### Toggle-Safe Navigation
+Several nav items (SPECTRUM panel, Sweep Settings, VNA card) toggle open/closed. Pattern:
 ```python
-BTN_ATTENUATOR_ON   = {"auto_id": "btnAttenuatorOn",  "control_type": "Button"}
-BTN_ATTENUATOR_OFF  = {"auto_id": "btnAttenuatorOff", "control_type": "Button"}
-LBL_ATTENUATOR_STATUS = {"auto_id": "lblAttenuatorStatus"}
-CMB_PORT            = {"auto_id": "cmbPort"}
-BTN_CONNECT         = {"auto_id": "btnConnect"}
-BTN_DISCONNECT      = {"auto_id": "btnDisconnect"}
-LBL_CONN_STATUS     = {"auto_id": "lblConnectionStatus"}
-LBL_APP_STATUS      = {"auto_id": "lblAppStatus"}
-BTN_APPLY           = {"auto_id": "btnApply"}
-BTN_RESET           = {"auto_id": "btnReset"}
+if not self._ctrl.wait_for_text("ExpectedChild", timeout=5):
+    # click again to re-open (toggle closed by first click)
+    self._ctrl.click_by_text("NavItem", retries=5)
+    self._ctrl.wait_for_text("ExpectedChild", timeout=5)
 ```
 
-**Actions:**
-```python
-page.turn_on_attenuator()        page.turn_off_attenuator()
-page.get_attenuator_status() -> str
-page.is_attenuator_on() -> bool  # "on"|"ready"|"active" in status.lower()
-page.select_port(port)
-page.click_connect()             page.click_disconnect()
-page.get_connection_status() -> str
-page.is_connected() -> bool      # "connected" in status.lower()
-page.get_app_status() -> str
-page.click_apply()               page.click_reset()
-```
+### VNA Calibration Flow
+`FormDetailVNACalibration` is a child window of FormMainEliteRF (not a Desktop popup):
+- Click "Calibrate" via `auto_id="selectCustomTypeButton1"` on `FormDetailVNACalibration`
+- After selecting "2-Port SOLT Cal", wizard `FormDetailVNACalibration2Port` appears
+- 7 calibration buttons: `btnOpen`, `btnShort`, `btnLoad`, `btnOpen2`, `btnShort2`, `btnLoad2`, `btnThru`
+- Apply = `btnSave`, Cancel = `btnCancel`
 
-**Tìm locators thật:**
-```python
-from pywinauto import Application
-app = Application(backend="uia").connect(title_re=".*PC17.*")
-app.top_window().print_control_identifiers(depth=5)
-```
+### Performance
+- `descendants()` costs ~3.5s — always use `build_cache()` before multiple `set_field_by_label()` calls, then `invalidate_cache()` after
+- Replace `time.sleep(N)` with `wait_for_text(text, timeout=N)` wherever possible
+- `click_by_text()` retry sleep is 0.3s; `wait_for_text()` polls every 0.2s
 
----
+### Validation Errors
+After clicking Apply on any form, check `check_validation_errors()` (defined in `BasePage`). Returns `list[str]` of error messages. Log warning if non-empty, assert empty if test requires clean input.
 
-## Root `conftest.py` — Fixtures & Hooks
+## Configuration
 
-### Session-scoped fixtures
+`config/settings.yaml` is the primary config. Override via env vars:
+- `SERIAL_PORT` — COM port for serial device
+- `APP_EXE_PATH` — PC17 exe path
+- `S2VNA_EXE_PATH` — S2VNA exe path
 
-| Fixture | Type | Mô tả |
-|---------|------|--------|
-| `s2vna_ctrl` | `AppController` | Launch/connect S2VNA simulator (trước PC17) |
-| `app_ctrl` | `AppController` | Launch/connect PC17 (depends on s2vna_ctrl) |
-| `main_page` | `MainPage` | Page Object, dùng chung cả session |
-| `device` | `SerialDevice` | Mở serial port DUT |
-| `relay` | `RelayController` | Relay board (disabled by default) |
+Key settings: `app.action_delay` (global click delay, currently 0.1s), `app.connect_timeout`.
 
-### Per-test fixtures
+## Reports
 
-`_log_test_boundaries` (autouse): log START/END + duration cho mỗi test, dùng `meta.test_id` từ `@testcase`.
+Auto-generated on session end:
+- `reports/excel/[suite]_report.xlsx` — color-coded pass/fail with metadata
+- `reports/html/report.html` — pytest-html
+- `reports/junit.xml` — for Jenkins
+- `reports/logs/framework.log` — full framework log
+- `reports/screenshots/` — auto-captured per test
 
-### Pytest hooks
-
-- `pytest_runtest_makereport` — attach `item` vào report object
-- `pytest_runtest_logreport` (call phase only):
-  - Screenshot on fail (nếu `screenshot_on_fail=True`) → `reports/screenshots/FAIL_<id>_<ts>.png`
-  - Append `TestResult` vào `_session_results`
-- `pytest_sessionfinish` → `ExcelReporter().generate(_session_results)`
-
----
-
-## `utils/`
-
-### `utils/logger.py` — `get_logger(name)`
-
-```python
-from utils.logger import get_logger
-logger = get_logger(__name__)
-```
-
-Tạo logger với 2 handlers: console (stdout) + file (`reports/logs/framework.log`).
-`lru_cache` không dùng nhưng kiểm tra `logger.handlers` để tránh duplicate.
-
-### `utils/report_excel.py` — `ExcelReporter`
-
-```python
-from utils.report_excel import ExcelReporter, TestResult
-
-result = TestResult(
-    test_id="tc_001", brief="...", test_level="system",
-    test_type="functional", execution_type="automatic",
-    hw_depend=True, outcome="passed", duration="1.23",
-    error_message="", nodeid="tests/..."
-)
-
-reporter = ExcelReporter(output_path=None)  # dùng config.report
-reporter.generate([result])  # tạo 2 sheets: Summary + Test Results
-```
-
-**Sheet "Summary":** Total, PASSED (green), FAILED (red), SKIPPED (yellow), pass rate.
-**Sheet "Test Results":** Header màu xanh, mỗi row tô màu theo outcome.
-
----
-
-## Tests
-
-### `tests/demo/` — Chạy không cần hardware
-
-```bash
-pytest tests/demo/ -v
-```
-
-**Mock classes trong `tests/demo/conftest.py`:**
-- `MockAppController` — state dict: `{"attenuator": "OFF", "connection": "Disconnected"}`
-- `MockSerialDevice` — `read_voltage()` trả 3.3V khi `_powered=True`, 0.0 khi False
-- `MockMainPage` — `turn_on/off_attenuator()` sync cả ctrl._state và device._powered
-
-**Test cases demo:**
-- TC-0001: Turn on Attenuator → PASS
-- TC-0002: Turn off Attenuator → PASS
-- TC-0003: Connection status → PASS
-- TC-0004: Intentional FAIL (demo report đỏ) — assert voltage > 5.0
-- TC-0005: Skip (relay chưa có HW)
-
-### `tests/attenuator/` — Real hardware
-
-Dùng fixtures từ root conftest. TC-0001 (ON) + TC-0002 (OFF).
-
-### `tests/vna/` — VNA tests
-
-- `test_vna_puc_2_1_normal` — bật VNA, verify voltage + UI (thân rỗng, cần implement)
-- `test_vna_puc_2_1_0001` — bật/tắt 5 lần (thân rỗng, cần implement)
-
----
-
-## `pytest.ini`
-
-```ini
-testpaths = tests
-addopts = -v --tb=short --strict-markers
-          --html=reports/html/report.html --self-contained-html
-          --junitxml=reports/junit.xml
-log_cli = true | log_cli_level = INFO
-log_file = reports/logs/pytest.log | log_file_level = DEBUG
-```
-
-**Markers đã đăng ký:** system, integration, unit, functional, regression, smoke,
-semi_automatic, automatic, manual, hw_depend, test_id
-
----
-
-## Chạy tests
-
-```bash
-# Demo (mock, không cần HW)
-pytest tests/demo/ -v
-
-# Chạy theo marker
-pytest -m "functional and hw_depend"
-pytest -m "not hw_depend"
-pytest -m smoke
-
-# Specific module
-pytest tests/attenuator/
-pytest tests/vna/
-
-# Override serial port
-SERIAL_PORT=COM5 pytest tests/
-```
-
----
-
-## CI/CD (`Jenkinsfile`)
-
-- Agent label: `windows-dut`
-- Parameters: `TEST_SUITE` (demo/vna/all), `COM_PORT` (default COM3), `SKIP_HW_TESTS`
-- Trigger: `githubPush()` webhook
-- Stages: Checkout → Setup venv (`call .venv\Scripts\activate.bat`) → Prepare dirs → Run Tests
-- exitCode < 2 → build SUCCESS (1 = test failures, chỉ fail khi pytest crash ≥ 2)
-- Post: `junit`, `archiveArtifacts`, `publishHTML` (HTML Publisher plugin cần cài)
-
----
-
-## Thêm test case mới
-
-1. Tạo file `tests/<module>/test_<name>.py`
-2. Dùng `@testcase` decorator + đầy đủ `@tag` docstring
-3. Dùng fixtures: `main_page`, `device`, `relay` (từ root conftest)
-4. Thêm locator mới vào `MainPage` nếu cần, hoặc tạo page class mới kế thừa `BasePage`
-
----
-
-## Dependencies chính
-
-| Package | Mục đích |
-|---------|---------|
-| pytest>=8.0.0 | test runner |
-| pywinauto>=0.6.8 | Windows UI automation |
-| pyserial>=3.5 | USB Serial |
-| pydantic>=2.6.0 | config validation |
-| openpyxl>=3.1.2 | Excel report |
-| pytest-html>=4.1.0 | HTML report |
-| allure-pytest>=2.13.5 | Allure report |
-| PyYAML>=6.0.1 | settings.yaml |
+`TEST_SUITE` env var controls Excel report naming/grouping.
