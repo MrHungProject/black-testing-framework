@@ -19,6 +19,22 @@ class SpikePage(BasePage):
 
     # ── Popup / startup ───────────────────────────────────────────────────────
 
+    def dismiss_demo(self, wait: float = 2.0) -> None:
+        """
+        @brief  Nhấn ENTER để skip qua màn hình demo/license khi Spike khởi động
+        @param  wait: Giây chờ trước khi nhấn (default: 2.0)
+        @retval None
+        """
+        import time as _time
+        _time.sleep(wait)
+        try:
+            import pyautogui
+            pyautogui.press("enter")
+            logger.info("dismiss_demo: pressed ENTER to skip demo screen")
+        except Exception as e:
+            logger.warning(f"dismiss_demo: pyautogui failed — {e}")
+        _time.sleep(1.0)
+
     def handle_popup(self, keyword: str = "No Device") -> bool:
         """
         @brief  Dismiss popup khởi động của Spike (ví dụ: 'No Device') bằng phím ENTER
