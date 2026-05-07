@@ -52,3 +52,8 @@ def s2vna_ctrl() -> Iterator[AppController]:
 def s2vna_page(s2vna_ctrl: AppController) -> S2VnaPage:
     """Page Object cho S2VNA — dùng trong mọi test VNA."""
     return S2VnaPage(s2vna_ctrl)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _launch_s2vna_first(s2vna_ctrl: AppController) -> None:
+    """Đảm bảo S2VNA khởi động trước khi bất kỳ VNA test nào chạy."""
