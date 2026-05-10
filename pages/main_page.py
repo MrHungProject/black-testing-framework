@@ -3,12 +3,14 @@ MainPage — Page Object cho cửa sổ FormMainEliteRF của PC17.
 
 Đây là facade mỏng: mỗi method delegate xuống panel tương ứng.
 Logic thực tế nằm trong pages/panels/:
-    - SystemPanel   — kết nối / ngắt kết nối
-    - DetailPanel   — Temperature, Serial Number
-    - VnaPanel        — Measurement, Stimulus, Markers
-    - SpectrumPanel   — connect/disconnect, Analysis Mode, Sweep Settings, Zero-span Setting
-    - AttenuatorPanel — (chưa implement)
-    - SignalPanel     — RF1 output, Trigger Output
+    - SystemPanel       — kết nối / ngắt kết nối
+    - DetailPanel       — Temperature, Serial Number
+    - VnaPanel          — Measurement, Stimulus, Markers
+    - SpectrumPanel     — Analysis Mode, Sweep Settings, Zero-span Setting
+    - AttenuatorPanel   — (chưa implement)
+    - SignalPanel       — RF1 output, Trigger Output
+    - PowerPanel        — Sensor Setting, Chart Setting, Control Measurement
+    - OscilloscopePanel — DSO Setting, DDS Setting
 """
 from __future__ import annotations
 
@@ -17,6 +19,8 @@ from pages.base_page import BasePage
 from pages.panels import (
     AttenuatorPanel,
     DetailPanel,
+    OscilloscopePanel,
+    PowerPanel,
     SignalPanel,
     SpectrumPanel,
     SystemPanel,
@@ -29,12 +33,14 @@ class MainPage(BasePage):
 
     def __init__(self, controller: AppController):
         super().__init__(controller)
-        self.system     = SystemPanel(controller)
-        self.detail     = DetailPanel(controller)
-        self.vna        = VnaPanel(controller)
-        self.spectrum   = SpectrumPanel(controller)
-        self.attenuator = AttenuatorPanel(controller)
-        self.signal     = SignalPanel(controller)
+        self.system       = SystemPanel(controller)
+        self.detail       = DetailPanel(controller)
+        self.vna          = VnaPanel(controller)
+        self.spectrum     = SpectrumPanel(controller)
+        self.attenuator   = AttenuatorPanel(controller)
+        self.signal       = SignalPanel(controller)
+        self.power        = PowerPanel(controller)
+        self.oscilloscope = OscilloscopePanel(controller)
 
     # ── System / Connection ───────────────────────────────────────────────────
 
@@ -262,3 +268,172 @@ class MainPage(BasePage):
 
     def extract_spectrum_markers(self) -> list:
         return self.spectrum.extract_markers()
+
+    # ── Power panel ───────────────────────────────────────────────────────────
+
+    def ensure_power_panel_open(self) -> None:
+        self.power.ensure_power_panel_open()
+
+    def open_sensor_setting(self) -> None:
+        self.power.open_sensor_setting()
+
+    def set_sensor_setting_params(
+        self,
+        averages: str = "",
+        correction_db: str = "",
+        disp_res: str = "",
+        duty_cycle_pct: str = "",
+        frequency_hz: str = "",
+        frequency_unit: str = "",
+        interval_ms: str = "",
+        pulse_top_power: str = "",
+        pulse_width: str = "",
+        signal_peak_noise: str = "",
+        signal_power: str = "",
+        trace_delay: str = "",
+        trace_size: str = "",
+        trace_time: str = "",
+        units: str = "",
+    ) -> list:
+        return self.power.set_sensor_setting_params(
+            averages=averages,
+            correction_db=correction_db,
+            disp_res=disp_res,
+            duty_cycle_pct=duty_cycle_pct,
+            frequency_hz=frequency_hz,
+            frequency_unit=frequency_unit,
+            interval_ms=interval_ms,
+            pulse_top_power=pulse_top_power,
+            pulse_width=pulse_width,
+            signal_peak_noise=signal_peak_noise,
+            signal_power=signal_power,
+            trace_delay=trace_delay,
+            trace_size=trace_size,
+            trace_time=trace_time,
+            units=units,
+        )
+
+    def toggle_power_correction(self) -> None:
+        self.power.toggle_correction()
+
+    def toggle_power_duty_cycle(self) -> None:
+        self.power.toggle_duty_cycle()
+
+    def set_power_frequency(self, value: str, unit: str = "") -> None:
+        self.power.set_frequency(value, unit)
+
+    def set_power_averages(self, value: str) -> None:
+        self.power.set_averages(value)
+
+    def set_power_units(self, unit: str) -> None:
+        self.power.set_units(unit)
+
+    def read_signal_power(self) -> str:
+        return self.power.read_signal_power()
+
+    def open_chart_setting(self) -> None:
+        self.power.open_chart_setting()
+
+    def set_chart_setting_params(
+        self,
+        time_span: str = "",
+        max_dbm: str = "",
+        dbm_per_div: str = "",
+    ) -> list:
+        return self.power.set_chart_setting_params(
+            time_span=time_span,
+            max_dbm=max_dbm,
+            dbm_per_div=dbm_per_div,
+        )
+
+    def click_pause_scrolling(self) -> None:
+        self.power.click_pause_scrolling()
+
+    def click_auto_scroll(self) -> None:
+        self.power.click_auto_scroll()
+
+    def open_control_measurement(self) -> None:
+        self.power.open_control_measurement()
+
+    def click_start_measurement(self) -> None:
+        self.power.click_start_measurement()
+
+    def click_stop_measurement(self) -> None:
+        self.power.click_stop_measurement()
+
+    # ── Oscilloscope panel ────────────────────────────────────────────────────
+
+    def ensure_oscilloscope_panel_open(self) -> None:
+        self.oscilloscope.ensure_oscilloscope_panel_open()
+
+    def open_dso_setting(self) -> None:
+        self.oscilloscope.open_dso_setting()
+
+    def set_dso_params(
+        self,
+        time_div: str = "",
+        channel: str = "",
+        channel_on: bool | None = None,
+        probe: str = "",
+        voltage_div: str = "",
+        coupling: str = "",
+        trigger_mode: str = "",
+        trigger_sweep: str = "",
+    ) -> list:
+        return self.oscilloscope.set_dso_params(
+            time_div=time_div,
+            channel=channel,
+            channel_on=channel_on,
+            probe=probe,
+            voltage_div=voltage_div,
+            coupling=coupling,
+            trigger_mode=trigger_mode,
+            trigger_sweep=trigger_sweep,
+        )
+
+    def select_oscilloscope_channel(self, channel: str) -> None:
+        self.oscilloscope.select_channel(channel)
+
+    def set_oscilloscope_channel_enabled(self, enabled: bool) -> None:
+        self.oscilloscope.set_channel_enabled(enabled)
+
+    def set_time_div(self, value: str) -> None:
+        self.oscilloscope.set_time_div(value)
+
+    def set_voltage_div(self, value: str) -> None:
+        self.oscilloscope.set_voltage_div(value)
+
+    def set_oscilloscope_coupling(self, value: str) -> None:
+        self.oscilloscope.set_coupling(value)
+
+    def set_trigger_mode(self, mode: str) -> None:
+        self.oscilloscope.set_trigger_mode(mode)
+
+    def set_trigger_sweep(self, sweep: str) -> None:
+        self.oscilloscope.set_trigger_sweep(sweep)
+
+    def oscilloscope_cancel(self) -> None:
+        self.oscilloscope.click_cancel()
+
+    def open_dds_setting(self) -> None:
+        self.oscilloscope.open_dds_setting()
+
+    def set_dds_params(
+        self,
+        signal_type: str = "",
+        frequency_hz: str = "",
+        amplitude_v: str = "",
+        offset_v: str = "",
+    ) -> list:
+        return self.oscilloscope.set_dds_params(
+            signal_type=signal_type,
+            frequency_hz=frequency_hz,
+            amplitude_v=amplitude_v,
+            offset_v=offset_v,
+        )
+
+    def toggle_dds_signal_on(self) -> None:
+        self.oscilloscope.toggle_signal_on()
+
+    def click_dds_sync(self) -> None:
+        self.oscilloscope.click_sync()
