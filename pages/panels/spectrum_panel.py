@@ -3,8 +3,6 @@ from __future__ import annotations
 
 import time
 
-import pyautogui
-
 from pages.base_page import BasePage
 from utils.logger import get_logger
 
@@ -13,8 +11,6 @@ logger = get_logger(__name__)
 
 class SpectrumPanel(BasePage):
     """Spectrum Analyzer controls."""
-
-    _RADIO_OFFSET_X = 148   # px lệch phải text label để trúng ô tròn radio
 
     # ── Panel open ────────────────────────────────────────────────────────────
 
@@ -48,14 +44,30 @@ class SpectrumPanel(BasePage):
             raise RuntimeError("SpectrumPanel: Không click được 'Analysis Mode'")
         self._ctrl.wait_for_text("Sweep", timeout=5)
 
+    # auto_id của radio button Analysis Mode (ổn định hơn click theo offset px)
+    _ANALYSIS_MODE_AUTO_ID = {
+        "Sweep":     "rdoSweep",
+        "Real-Time": "rdoRealTime",
+        "Zero-span": "rdoZeroSpan",
+    }
+
     def select_analysis_mode(self, mode: str) -> bool:
         """
-        @brief  Chọn radio button Analysis Mode: "Sweep", "Real-Time" hoặc "Zero-span"
+        @brief  Chọn radio button Analysis Mode qua auto_id
+                (rdoSweep / rdoRealtime / rdoZerospan). Quét cả main window lẫn
+                popup/flyout tách riêng ("SPECTRUM - AnalysisMode").
         @param  mode: Tên chế độ cần chọn ("Sweep" | "Real-Time" | "Zero-span")
-        @retval bool — True nếu click được, False nếu không tìm thấy
+        @retval bool — True nếu click thành công
         """
         logger.info(f"SpectrumPanel: select analysis mode = {mode}")
-        return self._click_radio_by_text(mode)
+        auto_id = self._ANALYSIS_MODE_AUTO_ID.get(mode)
+        if not auto_id:
+            raise ValueError(f"SpectrumPanel: mode không hợp lệ '{mode}' "
+                             f"(chọn 1 trong {list(self._ANALYSIS_MODE_AUTO_ID)})")
+        if not self._ctrl.click_by_auto_id(auto_id):
+            raise RuntimeError(f"SpectrumPanel: không click được radio '{mode}' (auto_id={auto_id})")
+        logger.info(f"SpectrumPanel: click radio '{mode}' qua auto_id={auto_id}")
+        return True
 
     # ── Sweep Settings ────────────────────────────────────────────────────────
 
@@ -393,27 +405,3 @@ class SpectrumPanel(BasePage):
             raise RuntimeError("SpectrumPanel: Không tìm thấy nút SPECTRUM panel")
         best.click_input()
         logger.info("SpectrumPanel: click SPECTRUM panel (rightmost)")
-
-    def _click_radio_by_text(self, text: str) -> bool:
-        """
-        @brief  Tìm [Text] label theo text, click lệch phải _RADIO_OFFSET_X px để trúng ô tròn radio
-        @param  text: Nội dung label của radio button cần click
-        @retval bool — True nếu click được, False nếu không tìm thấy
-        """
-        if self._ctrl._main_window is None:
-            return False
-        for _ in range(5):
-            for ctrl in self._ctrl._main_window.descendants():
-                try:
-                    if ctrl.window_text().strip().lower() == text.lower() and ctrl.is_enabled():
-                        rect = ctrl.element_info.rectangle
-                        x = rect.right + self._RADIO_OFFSET_X
-                        y = (rect.top + rect.bottom) // 2
-                        logger.info(f"SpectrumPanel: click radio '{text}' tại ({x}, {y})")
-                        pyautogui.click(x, y)
-                        return True
-                except Exception:
-                    pass
-            time.sleep(0.5)
-        logger.warning(f"SpectrumPanel: không tìm thấy radio '{text}'")
-        return False

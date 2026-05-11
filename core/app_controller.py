@@ -585,6 +585,52 @@ class AppController:
         logger.warning(f"set_checkbox_by_label({label!r}) — not found")
         return False
 
+    def click_by_auto_id(self, auto_id: str, retries: int = 5) -> bool:
+        """
+        @brief  Click control theo automation_id. Quét descendants của main window trước,
+                nếu không thấy thì quét toàn bộ cửa sổ ở Desktop level (cho popup/flyout
+                tách riêng như panel "SPECTRUM - AnalysisMode").
+        @param  auto_id: Giá trị automation_id của control cần click
+        @param  retries: Số lần thử lại, mỗi lần cách 0.5s (default: 5)
+        @retval bool — True nếu click thành công, False nếu không tìm thấy
+        """
+        if not PYWINAUTO_AVAILABLE:
+            return False
+
+        def _match(ctrl) -> bool:
+            try:
+                return ctrl.element_info.automation_id == auto_id
+            except Exception:
+                return False
+
+        from pywinauto import Desktop
+        for _ in range(retries):
+            # 1) main window
+            if self._main_window is not None:
+                try:
+                    for ctrl in self._main_window.descendants():
+                        if _match(ctrl):
+                            ctrl.click_input()
+                            time.sleep(self.action_delay)
+                            logger.info(f"click_by_auto_id({auto_id!r}) OK (main window)")
+                            return True
+                except Exception:
+                    pass
+            # 2) bất kỳ cửa sổ nào ở Desktop level
+            for win in Desktop(backend="uia").windows():
+                try:
+                    for ctrl in win.descendants():
+                        if _match(ctrl):
+                            ctrl.click_input()
+                            time.sleep(self.action_delay)
+                            logger.info(f"click_by_auto_id({auto_id!r}) OK (desktop popup)")
+                            return True
+                except Exception:
+                    pass
+            time.sleep(0.5)
+        logger.warning(f"click_by_auto_id({auto_id!r}) — not found after {retries} retries")
+        return False
+
     def select_from_desktop_popup(self, value: str, retries: int = 5) -> bool:
         """
         @brief  Chọn item từ popup window ở Desktop level (ví dụ: dropdown Trace selector)
