@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Oscilloscope DSO/DDS Setting functional test suite -- PUC_2.3
+Mỗi test case kiểm tra đúng 1 chức năng / 1 điều kiện cụ thể.
 """
 import time
 
@@ -11,9 +12,13 @@ from pages.main_page import MainPage
 
 _DEVICE_LABEL = "Oscilloscope"
 
+# Flag tránh reconnect tốn thời gian trước mỗi test.
+# Được set True sau lần connect đầu tiên trong session.
+_oscilloscope_connected: bool = False
+
 
 # ============================================================================
-#  Connection tests
+#  Connection tests  (TC0001 – TC0002)
 # ============================================================================
 
 class TestOscilloscopePuc23Connection:
@@ -30,8 +35,8 @@ class TestOscilloscopePuc23Connection:
 
         @test_procedure:
             [code]
-                Bước 1: Mở Connect panel
-                Bước 2: Nếu chưa Connected -> click Connect Oscilloscope
+                Bước 1: Đảm bảo Oscilloscope đang Disconnected
+                Bước 2: Mở Connect panel -> click Connect Oscilloscope
                 Bước 3: Đợi 3 giây
                 Bước 4: Verify trạng thái là Connected
             [!code]
@@ -43,17 +48,18 @@ class TestOscilloscopePuc23Connection:
         @execution_type: automatic
         @hw_depend: yes
         """
+        global _oscilloscope_connected
+        main_page.open_connect_panel()
         if main_page.is_device_connected(_DEVICE_LABEL):
-            main_page.open_connect_panel()
             main_page.disconnect_device(_DEVICE_LABEL)
             time.sleep(2)
 
-        main_page.open_connect_panel()
         main_page.connect_device(_DEVICE_LABEL)
         time.sleep(3)
 
         assert main_page.is_device_connected(_DEVICE_LABEL), \
             "Oscilloscope chưa Connected sau 3 giây"
+        _oscilloscope_connected = True
 
     @testcase
     def test_oscilloscope_puc_2_3_0002(self, main_page: MainPage):
@@ -67,8 +73,8 @@ class TestOscilloscopePuc23Connection:
         @test_procedure:
             [code]
                 Bước 1: Đảm bảo Oscilloscope đang Connected
-                Bước 2: Mở Connect panel
-                Bước 3: Click Disconnect Oscilloscope
+                Bước 2: Mở Connect panel -> click Disconnect Oscilloscope
+                Bước 3: Đợi 2 giây
                 Bước 4: Verify trạng thái là Disconnected
             [!code]
 
@@ -79,53 +85,56 @@ class TestOscilloscopePuc23Connection:
         @execution_type: automatic
         @hw_depend: yes
         """
+        global _oscilloscope_connected
+        main_page.open_connect_panel()
         if not main_page.is_device_connected(_DEVICE_LABEL):
-            main_page.open_connect_panel()
             main_page.connect_device(_DEVICE_LABEL)
             time.sleep(3)
 
-        main_page.open_connect_panel()
         main_page.disconnect_device(_DEVICE_LABEL)
         time.sleep(2)
 
         assert not main_page.is_device_connected(_DEVICE_LABEL), \
-            "Oscilloscope vẫn còn Connected sau khi Disconnect"
+            "Oscilloscope vẫn Connected sau khi Disconnect"
+        _oscilloscope_connected = False
 
 
 # ============================================================================
-#  DSO Setting tests
+#  DSO Setting tests  (TC0003 – TC0029)
 # ============================================================================
 
 class TestOscilloscopePuc23DsoSetting:
-    """PUC_2.3 -- DSO Setting functional test cases."""
+    """PUC_2.3 -- DSO Setting: mỗi TC kiểm tra đúng 1 thông số / 1 hành vi."""
 
     @pytest.fixture(autouse=True)
     def _ensure_connected(self, main_page: MainPage):
+        """Kết nối thiết bị nếu chưa kết nối. Dùng flag để tránh reconnect mỗi test."""
+        global _oscilloscope_connected
+        if _oscilloscope_connected:
+            return
+        main_page.open_connect_panel()
         if not main_page.is_device_connected(_DEVICE_LABEL):
-            main_page.open_connect_panel()
             main_page.connect_device(_DEVICE_LABEL)
             time.sleep(3)
+        _oscilloscope_connected = True
+
+    # ── Time/Div ──────────────────────────────────────────────────────────────
 
     @testcase
     def test_oscilloscope_puc_2_3_0003(self, main_page: MainPage):
         """
         @test_id: test_oscilloscope_puc_2_3_0003
-        @brief: [TC-001/002/030/031] Time/Div -- các giá trị hợp lệ, mặc định, min/max
+        @brief: [DSO-030] Time/Div -- giá trị mặc định đọc được khi mở DSO Setting
 
         @pre:- Oscilloscope đã Connected
-             - DSO Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DSO Setting, quan sát giá trị mặc định của Time/Div
-                Bước 2: Chọn lần lượt: 1 ms, 2 ms, 5 ms, 10 ms, 100 us, 500 us -> Apply mỗi lần
-                Bước 3: Chọn giá trị nhỏ nhất có trong dropdown -> Apply
-                Bước 4: Chọn giá trị lớn nhất có trong dropdown -> Apply
+                Bước 1: Mở DSO Setting
+                Bước 2: Đọc giá trị hiển thị của dropdown Time/Div
             [!code]
 
-        @pass_criteria:- Giá trị mặc định = '2.00 ns'
-                       - Mỗi giá trị được chọn hiển thị chính xác sau Apply
-                       - Giá trị min/max không crash, hiển thị đúng
+        @pass_criteria:- Dropdown Time/Div có giá trị mặc định (không rỗng)
 
         @test_level: software
         @test_type: functional
@@ -133,42 +142,26 @@ class TestOscilloscopePuc23DsoSetting:
         @hw_depend: yes
         """
         main_page.open_dso_setting()
-
-        default_val = main_page.get_dso_dropdown_value("Time/Div")
-        assert default_val, "Không đọc được giá trị mặc định Time/Div"
-
-        for value in ["500 us", "1.0 ms", "2.0 ms", "5.0 ms", "10.0 ms", "100 ms"]:
-            errors = main_page.set_dso_params(time_div=value)
-            assert not errors, f"Time/Div='{value}': lỗi validation {errors}"
-
-        errors = main_page.set_dso_params(time_div="200 ns")
-        assert not errors, f"Time/Div min='200 ns': lỗi validation {errors}"
-
-        errors = main_page.set_dso_params(time_div="1.0 s")
-        assert not errors, f"Time/Div max='1.0 s': lỗi validation {errors}"
+        val = main_page.get_dso_dropdown_value("Time/Div")
+        assert val, "Không đọc được giá trị mặc định Time/Div"
 
     @testcase
     def test_oscilloscope_puc_2_3_0004(self, main_page: MainPage):
         """
         @test_id: test_oscilloscope_puc_2_3_0004
-        @brief: [TC-003/004/005/034] Channel -- chọn CH1/CH2/CH3/CH4, toggle ON/OFF, đổi channel khi đang ON,
-                các Chanel khi đổi đều phải ở trạng thái OFF khi chưa click
+        @brief: [DSO-001] Time/Div -- chọn các giá trị hợp lệ (500 us → 100 ms)
 
         @pre:- Oscilloscope đã Connected
              - DSO Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DSO Setting, chọn CH(1-4) -> Apply, kiểm tra icon màu vàng
-                Bước 2: Chuyển sang CH(1-4) -> Apply, kiểm tra icon màu thay đổi
-                Bước 3: Click checkbox ON/OFF để bật kênh ON -> Apply
-                Bước 4: Click lại checkbox ON/OFF để tắt kênh OFF -> Apply
-                Bước 5: Bật kênh ON, đổi sang channel khác -> Apply, kiểm tra trạng thái ON/OFF của kênh mới
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn lần lượt 500 us, 1.0 ms, 2.0 ms, 5.0 ms, 10.0 ms, 100 ms -> Apply mỗi lần
+                Bước 3: Verify không có lỗi validation sau mỗi lần Apply
             [!code]
 
-        @pass_criteria:- CH1/CH2/CH3/CH4 được chọn chính xác, icon màu hiển thị đúng
-                       - Toggle ON/OFF phản hồi chính xác
-                       - Đổi channel khi đang ON thành công, trạng thái giữ nguyên hoặc reset theo thiết kế
+        @pass_criteria:- Tất cả giá trị được chấp nhận, không có lỗi validation
 
         @test_level: software
         @test_type: functional
@@ -176,48 +169,27 @@ class TestOscilloscopePuc23DsoSetting:
         @hw_depend: yes
         """
         main_page.open_dso_setting()
-
-        errors = main_page.set_dso_params(channel="CH1", channel_on=False)
-        assert not errors, f"Chọn CH1 OFF: {errors}"
-        assert not main_page.get_oscilloscope_channel_enabled(), "CH1 phải OFF"
-
-        errors = main_page.set_dso_params(channel_on=True)
-        assert not errors, f"Bật CH1 ON: {errors}"
-        assert main_page.get_oscilloscope_channel_enabled(), "CH1 phải ON sau khi bật"
-
-        errors = main_page.set_dso_params(channel_on=False)
-        assert not errors, f"Tắt CH1 OFF: {errors}"
-        assert not main_page.get_oscilloscope_channel_enabled(), "CH1 phải OFF sau khi tắt"
-
-        for ch in ["CH2", "CH3", "CH4"]:
-            errors = main_page.set_dso_params(channel=ch, channel_on=False)
-            assert not errors, f"Chọn {ch}: {errors}"
-            assert not main_page.get_oscilloscope_channel_enabled(), \
-                f"{ch} phải OFF theo mặc định khi chưa bật"
-
-        errors = main_page.set_dso_params(channel="CH1", channel_on=True)
-        assert not errors, f"Bật CH1 ON trước khi đổi: {errors}"
-
-        errors = main_page.set_dso_params(channel="CH2")
-        assert not errors, f"Đổi sang CH2 khi CH1 đang ON: {errors}"
+        for value in ["500 us", "1.00 ms", "2.00 ms", "5.00 ms", "10.0 ms", "100 ms"]:
+            errors = main_page.set_dso_params(time_div=value)
+            assert not errors, f"Time/Div='{value}': lỗi validation {errors}"
 
     @testcase
     def test_oscilloscope_puc_2_3_0005(self, main_page: MainPage):
         """
         @test_id: test_oscilloscope_puc_2_3_0005
-        @brief: [TC-006/007] Probe -- chọn X1 và X10
+        @brief: [DSO-031] Time/Div -- giá trị nhỏ nhất (200 ns)
 
         @pre:- Oscilloscope đã Connected
              - DSO Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DSO Setting, chọn X1 trong dropdown Probe -> Apply
-                Bước 2: Chuyển sang X10 -> Apply
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Time/Div = '200 ns' -> Apply
+                Bước 3: Verify không có lỗi validation
             [!code]
 
-        @pass_criteria:- Probe X1: hệ số nhân = 1
-                       - Probe X10: điện áp đo được nhân 10
+        @pass_criteria:- Time/Div '200 ns' được chấp nhận, không có lỗi
 
         @test_level: software
         @test_type: functional
@@ -225,33 +197,26 @@ class TestOscilloscopePuc23DsoSetting:
         @hw_depend: yes
         """
         main_page.open_dso_setting()
-
-        errors = main_page.set_dso_params(probe="X1")
-        assert not errors, f"Probe X1: {errors}"
-
-        errors = main_page.set_dso_params(probe="X10")
-        assert not errors, f"Probe X10: {errors}"
+        errors = main_page.set_dso_params(time_div="200 ns")
+        assert not errors, f"Time/Div min '200 ns': lỗi {errors}"
 
     @testcase
     def test_oscilloscope_puc_2_3_0006(self, main_page: MainPage):
         """
         @test_id: test_oscilloscope_puc_2_3_0006
-        @brief: [TC-008/009/032/033] Voltage/Div -- giá trị hợp lệ, mặc định, min/max
+        @brief: [DSO-032] Time/Div -- giá trị lớn nhất (1.0 s)
 
         @pre:- Oscilloscope đã Connected
              - DSO Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DSO Setting, quan sát giá trị mặc định của Voltage/Div
-                Bước 2: Chọn lần lượt: 1 V, 2 V, 500 mV, 100 mV -> Apply mỗi lần
-                Bước 3: Chọn giá trị nhỏ nhất có trong dropdown -> Apply
-                Bước 4: Chọn giá trị lớn nhất có trong dropdown -> Apply
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Time/Div = '1.00 s' -> Apply
+                Bước 3: Verify không có lỗi validation
             [!code]
 
-        @pass_criteria:- Giá trị mặc định = '1 V'
-                       - Mỗi giá trị được cập nhật đúng sau Apply
-                       - Giá trị min/max không bị lỗi hiển thị, được lưu đúng
+        @pass_criteria:- Time/Div '1.0 s' được chấp nhận, không có lỗi
 
         @test_level: software
         @test_type: functional
@@ -259,37 +224,28 @@ class TestOscilloscopePuc23DsoSetting:
         @hw_depend: yes
         """
         main_page.open_dso_setting()
+        errors = main_page.set_dso_params(time_div="1.00 s")
+        assert not errors, f"Time/Div max '1.00 s': lỗi {errors}"
 
-        default_val = main_page.get_dso_dropdown_value("Voltage/Div")
-        assert default_val, "Không đọc được giá trị mặc định Voltage/Div"
-
-        for value in ["1.00V", "2.00V", "500mV", "100mV"]:
-            errors = main_page.set_dso_params(voltage_div=value)
-            assert not errors, f"Voltage/Div='{value}': {errors}"
-
-        errors = main_page.set_dso_params(voltage_div="1.00mV")
-        assert not errors, f"Voltage/Div min='1.00mV': {errors}"
-
-        errors = main_page.set_dso_params(voltage_div="10.0V")
-        assert not errors, f"Voltage/Div max='10.0V': {errors}"
+    # ── Channel ───────────────────────────────────────────────────────────────
 
     @testcase
     def test_oscilloscope_puc_2_3_0007(self, main_page: MainPage):
         """
         @test_id: test_oscilloscope_puc_2_3_0007
-        @brief: [TC-010/011/012] Coupling -- GND, AC, DC
+        @brief: [DSO-003] Channel -- chọn CH1 và verify mặc định OFF
 
         @pre:- Oscilloscope đã Connected
              - DSO Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DSO Setting, chọn GND trong dropdown Coupling -> Apply
-                Bước 2: Chuyển sang AC -> Apply
-                Bước 3: Chuyển sang DC -> Apply
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Channel = CH1 -> Apply
+                Bước 3: Verify channel CH1 ở trạng thái OFF (chưa bật)
             [!code]
 
-        @pass_criteria:- Coupling cập nhật chính xác sau mỗi lần Apply (GND / AC / DC)
+        @pass_criteria:- CH1 được chọn, trạng thái mặc định là OFF
 
         @test_level: software
         @test_type: functional
@@ -297,30 +253,27 @@ class TestOscilloscopePuc23DsoSetting:
         @hw_depend: yes
         """
         main_page.open_dso_setting()
-
-        for coupling in ["GND", "AC", "DC"]:
-            errors = main_page.set_dso_params(coupling=coupling)
-            assert not errors, f"Coupling='{coupling}': {errors}"
-            actual = main_page.get_dso_dropdown_value("Coupling")
-            assert coupling.lower() in actual.lower(), \
-                f"Coupling hiển thị '{actual}', mong đợi '{coupling}'"
+        errors = main_page.set_dso_params(channel="CH1", channel_on=False)
+        assert not errors, f"Chọn CH1: {errors}"
+        assert not main_page.get_oscilloscope_channel_enabled(), "CH1 phải OFF theo mặc định"
 
     @testcase
     def test_oscilloscope_puc_2_3_0008(self, main_page: MainPage):
         """
         @test_id: test_oscilloscope_puc_2_3_0008
-        @brief: [TC-013/014] Trigger Mode -- Edge và Pulse
+        @brief: [DSO-003] Channel -- chọn CH2 và verify mặc định OFF
 
         @pre:- Oscilloscope đã Connected
              - DSO Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DSO Setting, chọn Edge trong dropdown Trigger Mode -> Apply
-                Bước 2: Chuyển sang Pulse -> Apply
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Channel = CH2 -> Apply
+                Bước 3: Verify channel CH2 ở trạng thái OFF
             [!code]
 
-        @pass_criteria:- Trigger Mode cập nhật đúng (Edge / Pulse) sau mỗi lần Apply
+        @pass_criteria:- CH2 được chọn, trạng thái mặc định là OFF
 
         @test_level: software
         @test_type: functional
@@ -328,31 +281,27 @@ class TestOscilloscopePuc23DsoSetting:
         @hw_depend: yes
         """
         main_page.open_dso_setting()
-
-        for mode in ["Edge", "Pulse"]:
-            errors = main_page.set_dso_params(trigger_mode=mode)
-            assert not errors, f"Trigger Mode='{mode}': {errors}"
-            actual = main_page.get_dso_dropdown_value("Trigger Mode")
-            assert mode.lower() in actual.lower(), \
-                f"Trigger Mode hiển thị '{actual}', mong đợi '{mode}'"
+        errors = main_page.set_dso_params(channel="CH2", channel_on=False)
+        assert not errors, f"Chọn CH2: {errors}"
+        assert not main_page.get_oscilloscope_channel_enabled(), "CH2 phải OFF theo mặc định"
 
     @testcase
     def test_oscilloscope_puc_2_3_0009(self, main_page: MainPage):
         """
         @test_id: test_oscilloscope_puc_2_3_0009
-        @brief: [TC-015/016/017] Trigger Sweep -- AUTO, NORMAL, SINGLE
+        @brief: [DSO-003] Channel -- chọn CH3 và verify mặc định OFF
 
         @pre:- Oscilloscope đã Connected
              - DSO Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DSO Setting, chọn AUTO trong dropdown Trigger Sweep -> Apply
-                Bước 2: Chuyển sang NORMAL -> Apply
-                Bước 3: Chuyển sang SINGLE -> Apply
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Channel = CH3 -> Apply
+                Bước 3: Verify channel CH3 ở trạng thái OFF
             [!code]
 
-        @pass_criteria:- Trigger Sweep cập nhật đúng (AUTO / NORMAL / SINGLE) sau mỗi lần Apply
+        @pass_criteria:- CH3 được chọn, trạng thái mặc định là OFF
 
         @test_level: software
         @test_type: functional
@@ -360,32 +309,27 @@ class TestOscilloscopePuc23DsoSetting:
         @hw_depend: yes
         """
         main_page.open_dso_setting()
-
-        for sweep in ["Auto", "Normal", "Single"]:
-            errors = main_page.set_dso_params(trigger_sweep=sweep)
-            assert not errors, f"Trigger Sweep='{sweep}': {errors}"
-            actual = main_page.get_dso_dropdown_value("Trigger Sweep")
-            assert sweep.lower() in actual.lower(), \
-                f"Trigger Sweep hiển thị '{actual}', mong đợi '{sweep}'"
+        errors = main_page.set_dso_params(channel="CH3", channel_on=False)
+        assert not errors, f"Chọn CH3: {errors}"
+        assert not main_page.get_oscilloscope_channel_enabled(), "CH3 phải OFF theo mặc định"
 
     @testcase
     def test_oscilloscope_puc_2_3_0010(self, main_page: MainPage):
         """
         @test_id: test_oscilloscope_puc_2_3_0010
-        @brief: [TC-029/035] Actions -- đóng panel và thay đổi nhiều tham số liên tiếp nhanh
+        @brief: [DSO-003] Channel -- chọn CH4 và verify mặc định OFF
 
         @pre:- Oscilloscope đã Connected
-             - Panel 'Oscilloscope - illoscopeDso' đang mở
+             - DSO Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DSO Setting, click nút X trên tiêu đề panel -> kiểm tra panel đóng lại
-                Bước 2: Mở lại DSO Setting, thay đổi Time/Div -> Voltage/Div -> Coupling liên tiếp nhanh
-                Bước 3: Click Apply, lặp lại 3-5 lần với các tổ hợp giá trị khác nhau
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Channel = CH4 -> Apply
+                Bước 3: Verify channel CH4 ở trạng thái OFF
             [!code]
 
-        @pass_criteria:- Panel đóng lại khi click X
-                       - Thay đổi nhiều tham số nhanh không bị lag, tất cả được lưu đúng
+        @pass_criteria:- CH4 được chọn, trạng thái mặc định là OFF
 
         @test_level: software
         @test_type: functional
@@ -393,15 +337,554 @@ class TestOscilloscopePuc23DsoSetting:
         @hw_depend: yes
         """
         main_page.open_dso_setting()
+        errors = main_page.set_dso_params(channel="CH4", channel_on=False)
+        assert not errors, f"Chọn CH4: {errors}"
+        assert not main_page.get_oscilloscope_channel_enabled(), "CH4 phải OFF theo mặc định"
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0011(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0011
+        @brief: [DSO-004] Channel -- bật kênh ON bằng checkbox ON/OFF
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở, CH1 đang OFF
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting, chọn CH1 OFF
+                Bước 2: Click checkbox ON/OFF để bật ON -> Apply
+                Bước 3: Verify trạng thái kênh là ON
+            [!code]
+
+        @pass_criteria:- Sau khi click ON/OFF, kênh CH1 chuyển sang trạng thái ON
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        main_page.set_dso_params(channel="CH1", channel_on=False)
+        errors = main_page.set_dso_params(channel_on=True)
+        assert not errors, f"Bật CH1 ON: {errors}"
+        assert main_page.get_oscilloscope_channel_enabled(), "CH1 phải ON sau khi bật"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0012(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0012
+        @brief: [DSO-004] Channel -- tắt kênh OFF bằng checkbox ON/OFF
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở, kênh đang ON
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting, bật CH1 ON
+                Bước 2: Click checkbox ON/OFF để tắt OFF -> Apply
+                Bước 3: Verify trạng thái kênh là OFF
+            [!code]
+
+        @pass_criteria:- Sau khi click ON/OFF, kênh CH1 chuyển sang trạng thái OFF
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        main_page.set_dso_params(channel="CH1", channel_on=True)
+        errors = main_page.set_dso_params(channel_on=False)
+        assert not errors, f"Tắt CH1 OFF: {errors}"
+        assert not main_page.get_oscilloscope_channel_enabled(), "CH1 phải OFF sau khi tắt"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0013(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0013
+        @brief: [DSO-005] Channel -- đổi sang channel khác khi kênh hiện tại đang ON
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở, CH1 đang ON
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting, bật CH1 ON -> Apply
+                Bước 2: Đổi Channel sang CH2 -> Apply
+                Bước 3: Verify không có lỗi, CH2 được chọn thành công
+            [!code]
+
+        @pass_criteria:- Đổi channel khi đang ON không bị lỗi, CH2 được chọn
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        main_page.set_dso_params(channel="CH1", channel_on=True)
+        errors = main_page.set_dso_params(channel="CH2")
+        assert not errors, f"Đổi sang CH2 khi CH1 đang ON: {errors}"
+
+    # ── Probe ─────────────────────────────────────────────────────────────────
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0014(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0014
+        @brief: [DSO-006] Probe -- chọn X1
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Probe = X1 -> Apply
+                Bước 3: Verify không có lỗi validation
+            [!code]
+
+        @pass_criteria:- Probe X1 được chọn thành công, không có lỗi
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(probe="X1")
+        assert not errors, f"Probe X1: {errors}"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0015(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0015
+        @brief: [DSO-007] Probe -- chọn X10
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Probe = X10 -> Apply
+                Bước 3: Verify không có lỗi validation
+            [!code]
+
+        @pass_criteria:- Probe X10 được chọn thành công, không có lỗi
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(probe="X10")
+        assert not errors, f"Probe X10: {errors}"
+
+    # ── Voltage/Div ───────────────────────────────────────────────────────────
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0016(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0016
+        @brief: [DSO-033] Voltage/Div -- giá trị mặc định đọc được khi mở DSO Setting
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Đọc giá trị hiển thị của dropdown Voltage/Div
+            [!code]
+
+        @pass_criteria:- Dropdown Voltage/Div có giá trị mặc định (không rỗng)
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        val = main_page.get_dso_dropdown_value("Voltage/Div")
+        assert val, "Không đọc được giá trị mặc định Voltage/Div"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0017(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0017
+        @brief: [DSO-008] Voltage/Div -- chọn các giá trị hợp lệ (1 V → 100 mV)
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn lần lượt 1.00V, 2.00V, 500mV, 100mV -> Apply mỗi lần
+                Bước 3: Verify không có lỗi validation sau mỗi lần Apply
+            [!code]
+
+        @pass_criteria:- Tất cả giá trị được chấp nhận, không có lỗi validation
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        for value in ["1.00 V", "2.00 V", "500 mV", "100 mV"]:
+            errors = main_page.set_dso_params(voltage_div=value)
+            assert not errors, f"Voltage/Div='{value}': {errors}"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0018(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0018
+        @brief: [DSO-032] Voltage/Div -- giá trị nhỏ nhất (1.00mV)
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Voltage/Div = '1.00 mV' -> Apply
+                Bước 3: Verify không có lỗi validation
+            [!code]
+
+        @pass_criteria:- Voltage/Div '1.00mV' được chấp nhận, không có lỗi
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(voltage_div="1.00 mV")
+        assert not errors, f"Voltage/Div min '1.00 mV': {errors}"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0019(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0019
+        @brief: [DSO-033] Voltage/Div -- giá trị lớn nhất (10.0V)
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Voltage/Div = '10.0V' -> Apply
+                Bước 3: Verify không có lỗi validation
+            [!code]
+
+        @pass_criteria:- Voltage/Div '10.0V' được chấp nhận, không có lỗi
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(voltage_div="10.0 V")
+        assert not errors, f"Voltage/Div max '10.0 V': {errors}"
+
+    # ── Coupling ──────────────────────────────────────────────────────────────
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0020(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0020
+        @brief: [DSO-010] Coupling -- chọn GND
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Coupling = GND -> Apply
+                Bước 3: Verify dropdown Coupling hiển thị GND
+            [!code]
+
+        @pass_criteria:- Coupling GND được lưu và hiển thị đúng sau Apply
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(coupling="GND")
+        assert not errors, f"Coupling GND: {errors}"
+        actual = main_page.get_dso_dropdown_value("Coupling")
+        assert "gnd" in actual.lower(), f"Coupling hiển thị '{actual}', mong đợi 'GND'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0021(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0021
+        @brief: [DSO-011] Coupling -- chọn AC
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Coupling = AC -> Apply
+                Bước 3: Verify dropdown Coupling hiển thị AC
+            [!code]
+
+        @pass_criteria:- Coupling AC được lưu và hiển thị đúng sau Apply
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(coupling="AC")
+        assert not errors, f"Coupling AC: {errors}"
+        actual = main_page.get_dso_dropdown_value("Coupling")
+        assert "ac" in actual.lower(), f"Coupling hiển thị '{actual}', mong đợi 'AC'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0022(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0022
+        @brief: [DSO-012] Coupling -- chọn DC
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Coupling = DC -> Apply
+                Bước 3: Verify dropdown Coupling hiển thị DC
+            [!code]
+
+        @pass_criteria:- Coupling DC được lưu và hiển thị đúng sau Apply
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(coupling="DC")
+        assert not errors, f"Coupling DC: {errors}"
+        actual = main_page.get_dso_dropdown_value("Coupling")
+        assert "dc" in actual.lower(), f"Coupling hiển thị '{actual}', mong đợi 'DC'"
+
+    # ── Trigger Mode ──────────────────────────────────────────────────────────
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0023(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0023
+        @brief: [DSO-013] Trigger Mode -- chọn Edge
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Trigger Mode = Edge -> Apply
+                Bước 3: Verify dropdown Trigger Mode hiển thị Edge
+            [!code]
+
+        @pass_criteria:- Trigger Mode Edge được lưu và hiển thị đúng sau Apply
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(trigger_mode="Edge")
+        assert not errors, f"Trigger Mode Edge: {errors}"
+        actual = main_page.get_dso_dropdown_value("Trigger Mode")
+        assert "edge" in actual.lower(), f"Trigger Mode hiển thị '{actual}', mong đợi 'Edge'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0024(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0024
+        @brief: [DSO-014] Trigger Mode -- chọn Pulse
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Trigger Mode = Pulse -> Apply
+                Bước 3: Verify dropdown Trigger Mode hiển thị Pulse
+            [!code]
+
+        @pass_criteria:- Trigger Mode Pulse được lưu và hiển thị đúng sau Apply
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(trigger_mode="Pulse")
+        assert not errors, f"Trigger Mode Pulse: {errors}"
+        actual = main_page.get_dso_dropdown_value("Trigger Mode")
+        assert "pulse" in actual.lower(), f"Trigger Mode hiển thị '{actual}', mong đợi 'Pulse'"
+
+    # ── Trigger Sweep ─────────────────────────────────────────────────────────
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0025(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0025
+        @brief: [DSO-015] Trigger Sweep -- chọn Auto
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Trigger Sweep = Auto -> Apply
+                Bước 3: Verify dropdown Trigger Sweep hiển thị Auto
+            [!code]
+
+        @pass_criteria:- Trigger Sweep Auto được lưu và hiển thị đúng sau Apply
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(trigger_sweep="Auto")
+        assert not errors, f"Trigger Sweep Auto: {errors}"
+        actual = main_page.get_dso_dropdown_value("Trigger Sweep")
+        assert "auto" in actual.lower(), f"Trigger Sweep hiển thị '{actual}', mong đợi 'Auto'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0026(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0026
+        @brief: [DSO-016] Trigger Sweep -- chọn Normal
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Trigger Sweep = Normal -> Apply
+                Bước 3: Verify dropdown Trigger Sweep hiển thị Normal
+            [!code]
+
+        @pass_criteria:- Trigger Sweep Normal được lưu và hiển thị đúng sau Apply
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(trigger_sweep="Normal")
+        assert not errors, f"Trigger Sweep Normal: {errors}"
+        actual = main_page.get_dso_dropdown_value("Trigger Sweep")
+        assert "normal" in actual.lower(), f"Trigger Sweep hiển thị '{actual}', mong đợi 'Normal'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0027(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0027
+        @brief: [DSO-017] Trigger Sweep -- chọn Single
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Chọn Trigger Sweep = Single -> Apply
+                Bước 3: Verify dropdown Trigger Sweep hiển thị Single
+            [!code]
+
+        @pass_criteria:- Trigger Sweep Single được lưu và hiển thị đúng sau Apply
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
+        errors = main_page.set_dso_params(trigger_sweep="Single")
+        assert not errors, f"Trigger Sweep Single: {errors}"
+        actual = main_page.get_dso_dropdown_value("Trigger Sweep")
+        assert "single" in actual.lower(), f"Trigger Sweep hiển thị '{actual}', mong đợi 'Single'"
+
+    # ── DSO Actions ───────────────────────────────────────────────────────────
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0028(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0028
+        @brief: [DSO-029] DSO Actions -- đóng panel bằng nút X trên tiêu đề
+
+        @pre:- Oscilloscope đã Connected
+             - DSO Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Click nút X để đóng panel
+                Bước 3: Verify panel DSO Setting đã đóng
+            [!code]
+
+        @pass_criteria:- DSO Setting panel đóng lại sau khi click X
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
         main_page.close_dso_setting()
         time.sleep(0.5)
         assert not main_page.is_dso_setting_open(), \
             "DSO Setting vẫn còn mở sau khi đóng bằng X"
 
-        main_page.open_dso_setting()
-        assert main_page.is_dso_setting_open(), "DSO Setting không mở lại được"
+    @testcase
+    def test_oscilloscope_puc_2_3_0029(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0029
+        @brief: [DSO-035] DSO Actions -- thay đổi nhiều tham số nhanh liên tiếp
 
+        @pre:- Oscilloscope đã Connected
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DSO Setting
+                Bước 2: Thay đổi Time/Div, Voltage/Div, Coupling liên tiếp 4 lần -> Apply mỗi lần
+                Bước 3: Verify không có lỗi sau mỗi lần Apply
+            [!code]
+
+        @pass_criteria:- Tất cả thay đổi nhanh được Apply thành công, không có lỗi
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dso_setting()
         param_sets = [
             {"time_div": "1.0 ms",  "voltage_div": "500mV", "coupling": "AC"},
             {"time_div": "5.0 ms",  "voltage_div": "1.00V", "coupling": "DC"},
@@ -410,42 +893,47 @@ class TestOscilloscopePuc23DsoSetting:
         ]
         for params in param_sets:
             errors = main_page.set_dso_params(**params)
-            assert not errors, f"Thay đổi nhanh {params}: lỗi {errors}"
+            assert not errors, f"Rapid change {params}: {errors}"
 
 
 # ============================================================================
-#  DDS Setting tests
+#  DDS Setting tests  (TC0030 – TC0069)
 # ============================================================================
 
 class TestOscilloscopePuc23DdsSetting:
-    """PUC_2.3 -- DDS Setting functional test cases."""
+    """PUC_2.3 -- DDS Setting: mỗi TC kiểm tra đúng 1 thông số / 1 hành vi."""
 
     @pytest.fixture(autouse=True)
     def _ensure_connected(self, main_page: MainPage):
+        """Kết nối thiết bị nếu chưa kết nối. Dùng flag để tránh reconnect mỗi test."""
+        global _oscilloscope_connected
+        if _oscilloscope_connected:
+            return
+        main_page.open_connect_panel()
         if not main_page.is_device_connected(_DEVICE_LABEL):
-            main_page.open_connect_panel()
             main_page.connect_device(_DEVICE_LABEL)
             time.sleep(3)
+        _oscilloscope_connected = True
+
+    # ── Signal On ─────────────────────────────────────────────────────────────
 
     @testcase
-    def test_oscilloscope_puc_2_3_0011(self, main_page: MainPage):
+    def test_oscilloscope_puc_2_3_0030(self, main_page: MainPage):
         """
-        @test_id: test_oscilloscope_puc_2_3_0011
-        @brief: [DDS-001/002/003] Signal On -- bật, tắt và giá trị mặc định
+        @test_id: test_oscilloscope_puc_2_3_0030
+        @brief: [DDS-003] Signal On -- trạng thái mặc định là OFF (unchecked)
 
         @pre:- Oscilloscope đã Connected
              - DDS Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DDS Setting lần đầu, quan sát trạng thái mặc định của checkbox Signal On
-                Bước 2: Tick vào checkbox Signal On -> Apply
-                Bước 3: Bỏ tick checkbox Signal On -> Apply
+                Bước 1: Mở DDS Setting
+                Bước 2: Đảm bảo Signal On đang OFF (bỏ tick nếu cần)
+                Bước 3: Verify checkbox Signal On ở trạng thái unchecked
             [!code]
 
-        @pass_criteria:- Mặc định: Signal On = unchecked (tắt)
-                       - Sau khi tick: checkbox được chọn, tín hiệu DDS bắt đầu phát
-                       - Sau khi bỏ tick: checkbox bỏ chọn, tín hiệu dừng
+        @pass_criteria:- Mặc định Signal On = OFF (unchecked)
 
         @test_level: software
         @test_type: functional
@@ -453,44 +941,95 @@ class TestOscilloscopePuc23DdsSetting:
         @hw_depend: yes
         """
         main_page.open_dds_setting()
-
         if main_page.is_dds_signal_on_checked():
             main_page.toggle_dds_signal_on()
             main_page.oscilloscope_apply()
-            time.sleep(0.2)
-
         assert not main_page.is_dds_signal_on_checked(), \
             "Signal On phải là OFF theo mặc định"
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0031(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0031
+        @brief: [DDS-001] Signal On -- bật ON thành công
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở, Signal On đang OFF
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting, đảm bảo Signal On đang OFF
+                Bước 2: Tick checkbox Signal On -> Apply
+                Bước 3: Verify checkbox Signal On ở trạng thái checked (ON)
+            [!code]
+
+        @pass_criteria:- Signal On chuyển sang trạng thái ON sau khi tick
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        if main_page.is_dds_signal_on_checked():
+            main_page.toggle_dds_signal_on()
+            main_page.oscilloscope_apply()
         main_page.toggle_dds_signal_on()
         main_page.oscilloscope_apply()
         assert main_page.is_dds_signal_on_checked(), \
             "Signal On phải ON sau khi tick"
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0032(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0032
+        @brief: [DDS-002] Signal On -- tắt OFF thành công
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở, Signal On đang ON
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting, bật Signal On ON
+                Bước 2: Bỏ tick checkbox Signal On -> Apply
+                Bước 3: Verify checkbox Signal On ở trạng thái unchecked (OFF)
+            [!code]
+
+        @pass_criteria:- Signal On chuyển sang trạng thái OFF sau khi bỏ tick
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        if not main_page.is_dds_signal_on_checked():
+            main_page.toggle_dds_signal_on()
+            main_page.oscilloscope_apply()
         main_page.toggle_dds_signal_on()
         main_page.oscilloscope_apply()
         assert not main_page.is_dds_signal_on_checked(), \
             "Signal On phải OFF sau khi bỏ tick"
 
+    # ── Sync ──────────────────────────────────────────────────────────────────
+
     @testcase
-    def test_oscilloscope_puc_2_3_0012(self, main_page: MainPage):
+    def test_oscilloscope_puc_2_3_0033(self, main_page: MainPage):
         """
-        @test_id: test_oscilloscope_puc_2_3_0012
-        @brief: [DDS-004/005/032] Sync -- bật, tắt và Sync khi Signal On đang tắt
+        @test_id: test_oscilloscope_puc_2_3_0033
+        @brief: [DDS-032] Sync -- tick Sync khi Signal On đang tắt (không crash)
 
         @pre:- Oscilloscope đã Connected
-             - DDS Setting đang mở
+             - DDS Setting đang mở, Signal On = OFF
 
         @test_procedure:
             [code]
-                Bước 1: Mở DDS Setting, để Signal On = off, tick Sync -> Apply
-                Bước 2: Kiểm tra phản hồi (cảnh báo hoặc ghi nhận trạng thái)
-                Bước 3: Bật Signal On trước, sau đó tick Sync -> Apply
-                Bước 4: Bỏ tick Sync -> Apply
+                Bước 1: Mở DDS Setting, đảm bảo Signal On OFF và Sync OFF
+                Bước 2: Tick Sync -> Apply
+                Bước 3: Verify không crash, ghi nhận phản hồi của hệ thống
             [!code]
 
-        @pass_criteria:- Sync bật/tắt phản hồi chính xác
-                       - Sync khi Signal On tắt: không crash, có cảnh báo hoặc ghi nhận đúng
+        @pass_criteria:- Hệ thống không crash khi Sync khi Signal On tắt
 
         @test_level: software
         @test_type: functional
@@ -498,57 +1037,71 @@ class TestOscilloscopePuc23DdsSetting:
         @hw_depend: yes
         """
         main_page.open_dds_setting()
-
         if main_page.is_dds_signal_on_checked():
             main_page.toggle_dds_signal_on()
             main_page.oscilloscope_apply()
-
         if main_page.is_dds_sync_checked():
             main_page.click_dds_sync()
             main_page.oscilloscope_apply()
-
         main_page.click_dds_sync()
         main_page.oscilloscope_apply()
-
+        # Không crash là pass — sync khi signal off có thể được chấp nhận hoặc từ chối
         if main_page.is_dds_sync_checked():
             main_page.click_dds_sync()
             main_page.oscilloscope_apply()
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0034(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0034
+        @brief: [DDS-004] Sync -- bật Sync khi Signal On đang bật
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở, Signal On = ON
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting, bật Signal On ON
+                Bước 2: Tick checkbox Sync -> Apply
+                Bước 3: Verify Sync ở trạng thái checked (ON)
+            [!code]
+
+        @pass_criteria:- Sync bật thành công khi Signal On đang bật
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         if not main_page.is_dds_signal_on_checked():
             main_page.toggle_dds_signal_on()
             main_page.oscilloscope_apply()
-
+        if main_page.is_dds_sync_checked():
+            main_page.click_dds_sync()
+            main_page.oscilloscope_apply()
         main_page.click_dds_sync()
         main_page.oscilloscope_apply()
-        assert main_page.is_dds_sync_checked(), "Sync phải ON sau khi tick (Signal On đang bật)"
-
-        main_page.click_dds_sync()
-        main_page.oscilloscope_apply()
-        assert not main_page.is_dds_sync_checked(), "Sync phải OFF sau khi bỏ tick"
-
-        main_page.toggle_dds_signal_on()
-        main_page.oscilloscope_apply()
+        assert main_page.is_dds_sync_checked(), \
+            "Sync phải ON sau khi tick (Signal On đang bật)"
 
     @testcase
-    def test_oscilloscope_puc_2_3_0013(self, main_page: MainPage):
+    def test_oscilloscope_puc_2_3_0035(self, main_page: MainPage):
         """
-        @test_id: test_oscilloscope_puc_2_3_0013
-        @brief: [DDS-006/007/008/009/010/030] Signal Type -- tất cả loại sóng, mặc định, đổi khi đang phát
+        @test_id: test_oscilloscope_puc_2_3_0035
+        @brief: [DDS-005] Sync -- tắt Sync
 
         @pre:- Oscilloscope đã Connected
-             - DDS Setting đang mở
+             - DDS Setting đang mở, Sync đang ON
 
         @test_procedure:
             [code]
-                Bước 1: Mở DDS Setting, quan sát Signal Type mặc định
-                Bước 2: Chọn lần lượt Sine, Square, Triangle, Sawtooth (nếu có) -> Apply mỗi lần
-                Bước 3: Bật Signal On -> Apply
-                Bước 4: Đổi Signal Type từ Sine sang Square trong khi Signal On đang bật -> Apply
+                Bước 1: Mở DDS Setting, bật Signal On và Sync ON
+                Bước 2: Bỏ tick Sync -> Apply
+                Bước 3: Verify Sync ở trạng thái unchecked (OFF)
             [!code]
 
-        @pass_criteria:- Mặc định: Signal Type = Sine
-                       - Mỗi loại sóng được cập nhật chính xác sau Apply
-                       - Đổi loại sóng khi đang phát: sóng chuyển loại thành công, không gián đoạn bất thường
+        @pass_criteria:- Sync tắt thành công sau khi bỏ tick
 
         @test_level: software
         @test_type: functional
@@ -556,52 +1109,184 @@ class TestOscilloscopePuc23DdsSetting:
         @hw_depend: yes
         """
         main_page.open_dds_setting()
+        if not main_page.is_dds_signal_on_checked():
+            main_page.toggle_dds_signal_on()
+            main_page.oscilloscope_apply()
+        if not main_page.is_dds_sync_checked():
+            main_page.click_dds_sync()
+            main_page.oscilloscope_apply()
+        main_page.click_dds_sync()
+        main_page.oscilloscope_apply()
+        assert not main_page.is_dds_sync_checked(), \
+            "Sync phải OFF sau khi bỏ tick"
+        main_page.toggle_dds_signal_on()
+        main_page.oscilloscope_apply()
 
+    # ── Signal Type ───────────────────────────────────────────────────────────
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0036(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0036
+        @brief: [DDS-030] Signal Type -- mặc định là Sine và chọn Sine thành công
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Chọn Signal Type = Sine -> Apply
+                Bước 3: Verify không có lỗi
+            [!code]
+
+        @pass_criteria:- Signal Type Sine được chọn thành công
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         if main_page.is_dds_signal_on_checked():
             main_page.toggle_dds_signal_on()
             main_page.oscilloscope_apply()
-
         errors = main_page.set_dds_params(signal_type="Sine")
-        assert not errors, f"Signal Type mặc định Sine: {errors}"
+        assert not errors, f"Signal Type Sine: {errors}"
 
-        for signal_type in ["Square", "AM/FM", "Ramp"]:
-            errors = main_page.set_dds_params(signal_type=signal_type)
-            assert not errors, f"Signal Type='{signal_type}': {errors}"
+    @testcase
+    def test_oscilloscope_puc_2_3_0037(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0037
+        @brief: [DDS-007] Signal Type -- chọn Square
 
-        errors = main_page.set_dds_params(signal_type="Sine")
-        assert not errors
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
 
-        main_page.toggle_dds_signal_on()
-        main_page.oscilloscope_apply()
-        assert main_page.is_dds_signal_on_checked()
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Chọn Signal Type = Square -> Apply
+                Bước 3: Verify không có lỗi
+            [!code]
 
+        @pass_criteria:- Signal Type Square được chọn thành công
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(signal_type="Square")
+        assert not errors, f"Signal Type Square: {errors}"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0038(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0038
+        @brief: [DDS-008] Signal Type -- chọn AM/FM
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Chọn Signal Type = AM/FM -> Apply
+                Bước 3: Verify không có lỗi
+            [!code]
+
+        @pass_criteria:- Signal Type AM/FM được chọn thành công
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(signal_type="AM/FM")
+        assert not errors, f"Signal Type AM/FM: {errors}"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0039(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0039
+        @brief: [DDS-009] Signal Type -- chọn Ramp
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Chọn Signal Type = Ramp -> Apply
+                Bước 3: Verify không có lỗi
+            [!code]
+
+        @pass_criteria:- Signal Type Ramp được chọn thành công
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(signal_type="Ramp")
+        assert not errors, f"Signal Type Ramp: {errors}"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0040(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0040
+        @brief: [DDS-010] Signal Type -- đổi loại sóng khi Signal On đang bật
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở, Signal On = ON, Signal Type = Sine
+
+        @test_procedure:
+            [code]
+                Bước 1: Bật Signal On, chọn Signal Type = Sine -> Apply
+                Bước 2: Đổi Signal Type = Square khi Signal On đang bật -> Apply
+                Bước 3: Verify không có lỗi
+            [!code]
+
+        @pass_criteria:- Đổi loại sóng khi đang phát thành công, không crash
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        main_page.set_dds_params(signal_type="Sine")
+        if not main_page.is_dds_signal_on_checked():
+            main_page.toggle_dds_signal_on()
+            main_page.oscilloscope_apply()
         errors = main_page.set_dds_params(signal_type="Square")
         assert not errors, f"Đổi Signal Type khi Signal On đang bật: {errors}"
-
         main_page.toggle_dds_signal_on()
         main_page.oscilloscope_apply()
 
+    # ── Frequency ─────────────────────────────────────────────────────────────
+
     @testcase
-    def test_oscilloscope_puc_2_3_0014(self, main_page: MainPage):
+    def test_oscilloscope_puc_2_3_0041(self, main_page: MainPage):
         """
-        @test_id: test_oscilloscope_puc_2_3_0014
-        @brief: [DDS-011/012/013/014/025/026] Frequency -- giá trị hợp lệ, mặc định, edge cases
+        @test_id: test_oscilloscope_puc_2_3_0041
+        @brief: [DDS-025] Frequency -- giá trị mặc định đọc được (10000)
 
         @pre:- Oscilloscope đã Connected
              - DDS Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DDS Setting, quan sát giá trị mặc định của Frequency
-                Bước 2: Nhập các giá trị hợp lệ: 1, 10000, 1000000 -> Apply mỗi lần
-                Bước 3: Nhập 0 -> Apply, quan sát phản hồi
-                Bước 4: Nhập giá trị tần số tối đa phần cứng hỗ trợ -> Apply
+                Bước 1: Mở DDS Setting
+                Bước 2: Đọc giá trị field Frequency
+                Bước 3: Verify giá trị không rỗng
             [!code]
 
-        @pass_criteria:- Mặc định: Frequency = 10000
-                       - Giá trị 1 Hz, 10000 Hz, 1000000 Hz được chấp nhận
-                       - Frequency = 0: cảnh báo hoặc xử lý đúng theo thiết kế
-                       - Frequency cực đại: chấp nhận hoặc giới hạn đúng, không crash
+        @pass_criteria:- Field Frequency có giá trị mặc định (không rỗng)
 
         @test_level: software
         @test_type: functional
@@ -609,45 +1294,169 @@ class TestOscilloscopePuc23DdsSetting:
         @hw_depend: yes
         """
         main_page.open_dds_setting()
+        val = main_page.get_dds_field_value("txtFreq")
+        assert val, f"Không đọc được giá trị mặc định Frequency (thực tế: '{val}')"
 
-        default_val = main_page.get_dds_field_value("txtFreq")
-        assert default_val == "10000" or default_val, \
-            f"Frequency mặc định không đọc được (thực tế: '{default_val}')"
+    @testcase
+    def test_oscilloscope_puc_2_3_0042(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0042
+        @brief: [DDS-011] Frequency -- nhập 1 Hz (giá trị min hợp lệ)
 
-        for freq in ["1", "10000", "1000000"]:
-            errors = main_page.set_dds_params(frequency_hz=freq)
-            assert not errors, f"Frequency='{freq}': lỗi validation {errors}"
-            actual = main_page.get_dds_field_value("txtFreq")
-            assert actual == freq, f"Frequency sau Apply: mong đợi '{freq}', thực tế '{actual}'"
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
 
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Frequency = 1 -> Apply
+                Bước 3: Verify không có lỗi validation, giá trị lưu đúng
+            [!code]
+
+        @pass_criteria:- Frequency 1 Hz được chấp nhận và lưu đúng
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(frequency_hz="1")
+        assert not errors, f"Frequency 1 Hz: lỗi {errors}"
+        assert main_page.get_dds_field_value("txtFreq") == "1", \
+            "Frequency sau Apply phải là '1'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0043(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0043
+        @brief: [DDS-012] Frequency -- nhập 10000 Hz
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Frequency = 10000 -> Apply
+                Bước 3: Verify không có lỗi, giá trị lưu đúng
+            [!code]
+
+        @pass_criteria:- Frequency 10000 Hz được chấp nhận và lưu đúng
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(frequency_hz="10000")
+        assert not errors, f"Frequency 10000 Hz: lỗi {errors}"
+        assert main_page.get_dds_field_value("txtFreq") == "10000", \
+            "Frequency sau Apply phải là '10000'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0044(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0044
+        @brief: [DDS-013] Frequency -- nhập 1000000 Hz (1 MHz)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Frequency = 1000000 -> Apply
+                Bước 3: Verify không có lỗi, giá trị lưu đúng
+            [!code]
+
+        @pass_criteria:- Frequency 1000000 Hz được chấp nhận và lưu đúng
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(frequency_hz="1000000")
+        assert not errors, f"Frequency 1000000 Hz: lỗi {errors}"
+        assert main_page.get_dds_field_value("txtFreq") == "1000000", \
+            "Frequency sau Apply phải là '1000000'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0045(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0045
+        @brief: [DDS-026] Frequency -- nhập 0 (edge case)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Frequency = 0 -> Apply
+                Bước 3: Ghi nhận phản hồi (chấp nhận hoặc báo lỗi)
+            [!code]
+
+        @pass_criteria:- Hệ thống xử lý Frequency = 0 đúng theo thiết kế, không crash
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         main_page.set_dds_params(frequency_hz="0")
-        time.sleep(0.2)
+        # 0 có thể được chấp nhận hoặc từ chối — không crash là pass
+        main_page.set_dds_params(frequency_hz="10000")
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0046(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0046
+        @brief: [DDS-014] Frequency -- nhập giá trị cực đại (12000000 Hz)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Frequency = 12000000 -> Apply
+                Bước 3: Verify không crash, ghi nhận phản hồi
+            [!code]
+
+        @pass_criteria:- Hệ thống không crash với Frequency cực đại
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         errors = main_page.set_dds_params(frequency_hz="12000000")
-        assert not errors, f"Frequency cực đại: crash hoặc lỗi không mong đợi {errors}"
-
+        assert not errors, f"Frequency cực đại 12000000: crash hoặc lỗi không mong đợi {errors}"
         main_page.set_dds_params(frequency_hz="10000")
 
     @testcase
-    def test_oscilloscope_puc_2_3_0015(self, main_page: MainPage):
+    def test_oscilloscope_puc_2_3_0047(self, main_page: MainPage):
         """
-        @test_id: test_oscilloscope_puc_2_3_0015
-        @brief: [DDS-033/034/035/042] Frequency -- invalid inputs (chữ, ký tự đặc biệt, âm, quá giới hạn)
+        @test_id: test_oscilloscope_puc_2_3_0047
+        @brief: [DDS-033] Frequency -- nhập ký tự chữ 'abc' (invalid)
 
         @pre:- Oscilloscope đã Connected
              - DDS Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DDS Setting, nhập 'abc' vào Frequency -> Apply
-                Bước 2: Nhập '!@#$' vào Frequency -> Apply
-                Bước 3: Nhập -100 vào Frequency -> Apply
-                Bước 4: Nhập 99999999999 (quá giới hạn) vào Frequency -> Apply
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Frequency = 'abc' -> Apply
+                Bước 3: Verify có lỗi validation hoặc field không lưu giá trị sai
             [!code]
 
-        @pass_criteria:- Ký tự chữ/đặc biệt: Báo lỗi Frequency: Invalid number format
-                       - Giá trị âm: Frequency cannot be less than 1 Hz
-                       - Quá giới hạn: hiển thị lỗi hoặc tự giới hạn về max cho phép
+        @pass_criteria:- Field từ chối 'abc' hoặc báo lỗi Invalid number format
 
         @test_level: software
         @test_type: functional
@@ -655,47 +1464,89 @@ class TestOscilloscopePuc23DdsSetting:
         @hw_depend: yes
         """
         main_page.open_dds_setting()
+        errors = main_page.set_dds_params(frequency_hz="abc")
+        if not errors:
+            actual = main_page.get_dds_field_value("txtFreq")
+            assert actual != "abc", \
+                "Field chấp nhận 'abc' — giá trị không hợp lệ"
+        main_page.set_dds_params(frequency_hz="10000")
 
-        main_page.set_dds_params(frequency_hz="10000", amplitude_v="1", offset_v="0")
+    @testcase
+    def test_oscilloscope_puc_2_3_0048(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0048
+        @brief: [DDS-034] Frequency -- nhập ký tự đặc biệt '!@#$' (invalid)
 
-        for invalid in ["abc", "!@#$"]:
-            errors = main_page.set_dds_params(frequency_hz=invalid)
-            if not errors:
-                actual = main_page.get_dds_field_value("txtFreq")
-                assert actual != invalid, \
-                    f"Field chấp nhận giá trị không hợp lệ '{invalid}' (thực tế: '{actual}')"
-            main_page.set_dds_params(frequency_hz="10000")
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
 
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Frequency = '!@#$' -> Apply
+                Bước 3: Verify có lỗi validation hoặc field không lưu giá trị sai
+            [!code]
+
+        @pass_criteria:- Field từ chối '!@#$' hoặc báo lỗi Invalid number format
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(frequency_hz="!@#$")
+        if not errors:
+            actual = main_page.get_dds_field_value("txtFreq")
+            assert actual != "!@#$", \
+                "Field chấp nhận '!@#$' — giá trị không hợp lệ"
+        main_page.set_dds_params(frequency_hz="10000")
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0049(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0049
+        @brief: [DDS-035] Frequency -- nhập giá trị âm -100 (invalid)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Frequency = -100 -> Apply
+                Bước 3: Verify có lỗi validation
+            [!code]
+
+        @pass_criteria:- Báo lỗi 'Frequency cannot be less than 1 Hz'
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         errors = main_page.set_dds_params(frequency_hz="-100")
-        assert errors, f"Frequency âm '-100' phải báo lỗi validation, nhưng không có lỗi"
-        main_page.set_dds_params(frequency_hz="10000")
-
-        main_page.set_dds_params(frequency_hz="99999999999")
-        time.sleep(0.2)
+        assert errors, "Frequency âm '-100' phải báo lỗi validation"
         main_page.set_dds_params(frequency_hz="10000")
 
     @testcase
-    def test_oscilloscope_puc_2_3_0016(self, main_page: MainPage):
+    def test_oscilloscope_puc_2_3_0050(self, main_page: MainPage):
         """
-        @test_id: test_oscilloscope_puc_2_3_0016
-        @brief: [DDS-015/016/017/027/028] Amplitude -- giá trị hợp lệ, số thực, mặc định, edge cases
+        @test_id: test_oscilloscope_puc_2_3_0050
+        @brief: [DDS-042] Frequency -- nhập giá trị overflow 99999999999 (quá giới hạn)
 
         @pre:- Oscilloscope đã Connected
              - DDS Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DDS Setting, quan sát giá trị mặc định của Amplitude
-                Bước 2: Nhập 1 vào Amplitude -> Apply
-                Bước 3: Nhập 0.5 vào Amplitude -> Apply
-                Bước 4: Nhập 0 vào Amplitude -> Apply, quan sát phản hồi
-                Bước 5: Nhập giá trị Amplitude lớn nhất thiết bị cho phép -> Apply
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Frequency = 99999999999 -> Apply
+                Bước 3: Verify hệ thống xử lý đúng (giới hạn về max hoặc báo lỗi)
             [!code]
 
-        @pass_criteria:- Mặc định: Amplitude = 1
-                       - 1 V và 0.5 V được chấp nhận
-                       - Amplitude = 0: chấp nhận hoặc cảnh báo theo thiết kế
-                       - Amplitude cực đại: chấp nhận hoặc báo vượt ngưỡng, không crash
+        @pass_criteria:- Hệ thống không crash, xử lý overflow đúng theo thiết kế
 
         @test_level: software
         @test_type: functional
@@ -703,48 +1554,141 @@ class TestOscilloscopePuc23DdsSetting:
         @hw_depend: yes
         """
         main_page.open_dds_setting()
+        main_page.set_dds_params(frequency_hz="99999999999")
+        # Không crash là pass
+        main_page.set_dds_params(frequency_hz="10000")
 
-        default_val = main_page.get_dds_field_value("txtAmplitude")
-        assert default_val, f"Không đọc được giá trị mặc định Amplitude (thực tế: '{default_val}')"
+    # ── Amplitude ─────────────────────────────────────────────────────────────
 
-        for amp in ["1", "0.5"]:
-            errors = main_page.set_dds_params(amplitude_v=amp)
-            assert not errors, f"Amplitude='{amp}': lỗi {errors}"
-            actual = main_page.get_dds_field_value("txtAmplitude")
-            assert actual == amp, f"Amplitude sau Apply: mong đợi '{amp}', thực tế '{actual}'"
+    @testcase
+    def test_oscilloscope_puc_2_3_0051(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0051
+        @brief: [DDS-027] Amplitude -- giá trị mặc định đọc được
 
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Đọc giá trị field Amplitude
+                Bước 3: Verify giá trị không rỗng
+            [!code]
+
+        @pass_criteria:- Field Amplitude có giá trị mặc định (không rỗng)
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        val = main_page.get_dds_field_value("txtAmplitude")
+        assert val, f"Không đọc được giá trị mặc định Amplitude (thực tế: '{val}')"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0052(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0052
+        @brief: [DDS-015] Amplitude -- nhập 1 V
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Amplitude = 1 -> Apply
+                Bước 3: Verify không có lỗi, giá trị lưu đúng
+            [!code]
+
+        @pass_criteria:- Amplitude 1 V được chấp nhận và lưu đúng
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(amplitude_v="1")
+        assert not errors, f"Amplitude 1 V: lỗi {errors}"
+        assert main_page.get_dds_field_value("txtAmplitude") == "1", \
+            "Amplitude sau Apply phải là '1'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0053(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0053
+        @brief: [DDS-016] Amplitude -- nhập 0.5 V (số thực)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Amplitude = 0.5 -> Apply
+                Bước 3: Verify không có lỗi, giá trị lưu đúng
+            [!code]
+
+        @pass_criteria:- Amplitude 0.5 V được chấp nhận và lưu đúng
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(amplitude_v="0.5")
+        assert not errors, f"Amplitude 0.5 V: lỗi {errors}"
+        assert main_page.get_dds_field_value("txtAmplitude") == "0.5", \
+            "Amplitude sau Apply phải là '0.5'"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0054(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0054
+        @brief: [DDS-028] Amplitude -- nhập 0 (edge case)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Amplitude = 0 -> Apply
+                Bước 3: Ghi nhận phản hồi (chấp nhận hoặc báo lỗi)
+            [!code]
+
+        @pass_criteria:- Hệ thống xử lý Amplitude = 0 đúng theo thiết kế, không crash
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         main_page.set_dds_params(amplitude_v="0")
-        time.sleep(0.2)
-
-        main_page.set_dds_params(amplitude_v="5")
-        time.sleep(0.2)
-
         main_page.set_dds_params(amplitude_v="1")
 
     @testcase
-    def test_oscilloscope_puc_2_3_0017(self, main_page: MainPage):
+    def test_oscilloscope_puc_2_3_0055(self, main_page: MainPage):
         """
-        @test_id: test_oscilloscope_puc_2_3_0017
-        @brief: [DDS-018/019/020/029/036/037/038] Offset -- giá trị hợp lệ, edge case, invalid inputs
+        @test_id: test_oscilloscope_puc_2_3_0055
+        @brief: [DDS-017] Amplitude -- nhập giá trị lớn nhất (5 V)
 
         @pre:- Oscilloscope đã Connected
              - DDS Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DDS Setting, nhập Offset = 1 -> Apply
-                Bước 2: Nhập Offset = 0 -> Apply
-                Bước 3: Nhập Offset = -1 -> Apply
-                Bước 4: Đặt Amplitude = 1, Offset = 5 (Offset > Amplitude) -> Apply, quan sát phản hồi
-                Bước 5: Nhập 'xyz' vào Offset -> Apply
-                Bước 6: Nhập 'abc' vào Amplitude -> Apply
-                Bước 7: Nhập -1 vào Amplitude -> Apply
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Amplitude = 5 -> Apply
+                Bước 3: Verify không crash, ghi nhận phản hồi
             [!code]
 
-        @pass_criteria:- Offset 1 V / 0 / -1 V: được chấp nhận
-                       - Offset > Amplitude: cảnh báo hoặc xử lý clipping theo thiết kế
-                       - Offset 'xyz', Amplitude 'abc': từ chối, hiển thị lỗi
-                       - Amplitude âm: không chấp nhận hoặc cảnh báo
+        @pass_criteria:- Hệ thống không crash với Amplitude cực đại
 
         @test_level: software
         @test_type: functional
@@ -752,57 +1696,232 @@ class TestOscilloscopePuc23DdsSetting:
         @hw_depend: yes
         """
         main_page.open_dds_setting()
+        errors = main_page.set_dds_params(amplitude_v="5")
+        assert not errors, f"Amplitude max 5 V: {errors}"
+        main_page.set_dds_params(amplitude_v="1")
 
+    # ── Offset ────────────────────────────────────────────────────────────────
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0056(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0056
+        @brief: [DDS-018] Offset -- nhập 1 V (dương)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting, đặt Amplitude = 1
+                Bước 2: Nhập Offset = 1 -> Apply
+                Bước 3: Verify không có lỗi
+            [!code]
+
+        @pass_criteria:- Offset 1 V được chấp nhận, không có lỗi
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         main_page.set_dds_params(amplitude_v="1", offset_v="0")
+        errors = main_page.set_dds_params(offset_v="1")
+        assert not errors, f"Offset 1 V: lỗi {errors}"
 
-        for offset in ["1", "0", "-1"]:
-            errors = main_page.set_dds_params(offset_v=offset)
-            assert not errors, f"Offset='{offset}': lỗi không mong đợi {errors}"
+    @testcase
+    def test_oscilloscope_puc_2_3_0057(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0057
+        @brief: [DDS-019] Offset -- nhập 0 V
 
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Offset = 0 -> Apply
+                Bước 3: Verify không có lỗi
+            [!code]
+
+        @pass_criteria:- Offset 0 V được chấp nhận, không có lỗi
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(offset_v="0")
+        assert not errors, f"Offset 0 V: lỗi {errors}"
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0058(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0058
+        @brief: [DDS-020] Offset -- nhập -1 V (âm)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Offset = -1 -> Apply
+                Bước 3: Verify không có lỗi (Offset âm hợp lệ)
+            [!code]
+
+        @pass_criteria:- Offset -1 V được chấp nhận, không có lỗi
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        errors = main_page.set_dds_params(offset_v="-1")
+        assert not errors, f"Offset -1 V: lỗi {errors}"
+        main_page.set_dds_params(offset_v="0")
+
+    @testcase
+    def test_oscilloscope_puc_2_3_0059(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0059
+        @brief: [DDS-029] Offset -- Offset > Amplitude (edge case)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting, đặt Amplitude = 1
+                Bước 2: Nhập Offset = 5 (lớn hơn Amplitude) -> Apply
+                Bước 3: Ghi nhận phản hồi (cảnh báo hoặc clipping)
+            [!code]
+
+        @pass_criteria:- Hệ thống xử lý Offset > Amplitude đúng theo thiết kế, không crash
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        main_page.set_dds_params(amplitude_v="1", offset_v="0")
         main_page.set_dds_params(amplitude_v="1", offset_v="5")
-        time.sleep(0.2)
-
         main_page.set_dds_params(amplitude_v="1", offset_v="0")
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0060(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0060
+        @brief: [DDS-036] Offset -- nhập ký tự không hợp lệ 'xyz'
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Offset = 'xyz' -> Apply
+                Bước 3: Verify có lỗi hoặc field không lưu giá trị sai
+            [!code]
+
+        @pass_criteria:- Field từ chối 'xyz' hoặc báo lỗi Invalid number format
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         errors = main_page.set_dds_params(offset_v="xyz")
         if not errors:
             actual = main_page.get_dds_field_value("txtOffset")
-            assert actual != "xyz", f"Offset chấp nhận giá trị không hợp lệ 'xyz'"
+            assert actual != "xyz", \
+                "Field chấp nhận 'xyz' — giá trị không hợp lệ"
         main_page.set_dds_params(amplitude_v="1", offset_v="0")
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0061(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0061
+        @brief: [DDS-037] Amplitude -- nhập ký tự không hợp lệ 'abc'
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Amplitude = 'abc' -> Apply
+                Bước 3: Verify có lỗi hoặc field không lưu giá trị sai
+            [!code]
+
+        @pass_criteria:- Field từ chối 'abc' hoặc báo lỗi Invalid number format
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         errors = main_page.set_dds_params(amplitude_v="abc")
         if not errors:
             actual = main_page.get_dds_field_value("txtAmplitude")
-            assert actual != "abc", f"Amplitude chấp nhận giá trị không hợp lệ 'abc'"
+            assert actual != "abc", \
+                "Field chấp nhận 'abc' — giá trị không hợp lệ"
         main_page.set_dds_params(amplitude_v="1", offset_v="0")
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0062(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0062
+        @brief: [DDS-038] Amplitude -- nhập giá trị âm -1 (invalid)
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Nhập Amplitude = -1 -> Apply
+                Bước 3: Verify có lỗi validation
+            [!code]
+
+        @pass_criteria:- Báo lỗi validation vì Amplitude không thể âm
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         errors = main_page.set_dds_params(amplitude_v="-1")
         assert errors, "Amplitude âm '-1' phải báo lỗi validation"
         main_page.set_dds_params(amplitude_v="1", offset_v="0")
 
+    # ── DDS Actions ───────────────────────────────────────────────────────────
+
     @testcase
-    def test_oscilloscope_puc_2_3_0018(self, main_page: MainPage):
+    def test_oscilloscope_puc_2_3_0063(self, main_page: MainPage):
         """
-        @test_id: test_oscilloscope_puc_2_3_0018
-        @brief: [DDS-021/022/023/024/031] Actions -- Apply, Cancel, đóng panel, apply khi Signal On bật, apply nhiều lần
+        @test_id: test_oscilloscope_puc_2_3_0063
+        @brief: [DDS-021] DDS Actions -- Apply đầy đủ tham số hợp lệ
 
         @pre:- Oscilloscope đã Connected
              - DDS Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DDS Setting, điền đầy đủ (Signal Type=Sine, Frequency=10000, Amplitude=1, Offset=1) -> Apply
-                Bước 2: Thay đổi một số giá trị -> Cancel, kiểm tra giá trị không bị lưu
-                Bước 3: Bật Signal On, thay đổi Frequency -> Apply, kiểm tra tín hiệu cập nhật
-                Bước 4: Click nút X trên tiêu đề panel -> kiểm tra panel đóng
-                Bước 5: Mở lại, click Apply nhiều lần liên tiếp (5-10 lần)
+                Bước 1: Mở DDS Setting
+                Bước 2: Đặt Signal Type=Sine, Frequency=10000, Amplitude=1, Offset=0 -> Apply
+                Bước 3: Verify không có lỗi validation
             [!code]
 
-        @pass_criteria:- Apply đầy đủ: lưu/áp dụng thành công
-                       - Cancel: giá trị không được lưu
-                       - Apply khi Signal On: tín hiệu cập nhật ngay
-                       - Đóng bằng X: panel đóng
-                       - Apply nhiều lần: không treo, không gửi lệnh trùng lặp
+        @pass_criteria:- Apply đầy đủ tham số thành công, không có lỗi
 
         @test_level: software
         @test_type: functional
@@ -810,63 +1929,127 @@ class TestOscilloscopePuc23DdsSetting:
         @hw_depend: yes
         """
         main_page.open_dds_setting()
-
         errors = main_page.set_dds_params(
             signal_type="Sine", frequency_hz="10000",
-            amplitude_v="1", offset_v="1",
+            amplitude_v="1", offset_v="0",
         )
         assert not errors, f"Apply đầy đủ tham số: {errors}"
 
-        main_page.set_dds_params_no_apply(frequency_hz="99999", amplitude_v="2")
+    @testcase
+    def test_oscilloscope_puc_2_3_0064(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0064
+        @brief: [DDS-022] DDS Actions -- Cancel không lưu thay đổi
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở, Frequency = 10000
+
+        @test_procedure:
+            [code]
+                Bước 1: Apply Frequency = 10000 để tạo giá trị baseline
+                Bước 2: Thay đổi Frequency = 99999 (KHÔNG Apply)
+                Bước 3: Click Cancel
+                Bước 4: Mở lại DDS Setting, đọc Frequency
+                Bước 5: Verify Frequency vẫn là 10000 (chưa lưu)
+            [!code]
+
+        @pass_criteria:- Sau Cancel, giá trị Frequency không thay đổi (vẫn là 10000)
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        main_page.set_dds_params(frequency_hz="10000", amplitude_v="1", offset_v="0")
+        main_page.set_dds_params_no_apply(frequency_hz="99999")
         main_page.oscilloscope_cancel()
         time.sleep(0.3)
 
         main_page.open_dds_setting()
-        freq_after_cancel = main_page.get_dds_field_value("txtFreq")
-        assert freq_after_cancel == "10000", \
-            f"Frequency phải là '10000' sau Cancel, thực tế '{freq_after_cancel}'"
+        freq = main_page.get_dds_field_value("txtFreq")
+        assert freq == "10000", \
+            f"Frequency phải là '10000' sau Cancel, thực tế '{freq}'"
 
-        if main_page.is_dds_signal_on_checked():
+    @testcase
+    def test_oscilloscope_puc_2_3_0065(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0065
+        @brief: [DDS-023] DDS Actions -- Apply khi Signal On đang bật
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở, Signal On = ON
+
+        @test_procedure:
+            [code]
+                Bước 1: Bật Signal On -> Apply
+                Bước 2: Thay đổi Frequency = 20000 -> Apply
+                Bước 3: Verify không có lỗi
+            [!code]
+
+        @pass_criteria:- Apply khi Signal On đang bật thành công, tín hiệu cập nhật ngay
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
+        if not main_page.is_dds_signal_on_checked():
             main_page.toggle_dds_signal_on()
             main_page.oscilloscope_apply()
-        main_page.toggle_dds_signal_on()
-        main_page.oscilloscope_apply()
-        assert main_page.is_dds_signal_on_checked()
-
         errors = main_page.set_dds_params(frequency_hz="20000")
         assert not errors, f"Apply khi Signal On đang bật: {errors}"
-
         main_page.toggle_dds_signal_on()
         main_page.oscilloscope_apply()
+        main_page.set_dds_params(frequency_hz="10000", amplitude_v="1", offset_v="0")
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0066(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0066
+        @brief: [DDS-024] DDS Actions -- đóng panel bằng nút X trên tiêu đề
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Click nút X để đóng panel
+                Bước 3: Verify panel DDS Setting đã đóng
+            [!code]
+
+        @pass_criteria:- DDS Setting panel đóng lại sau khi click X
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         main_page.close_dds_setting()
         time.sleep(0.5)
         assert not main_page.is_dds_setting_open(), \
             "DDS Setting vẫn còn mở sau khi đóng bằng X"
 
-        main_page.open_dds_setting()
-        for i in range(5):
-            errors = main_page.set_dds_params(frequency_hz="10000", amplitude_v="1", offset_v="0")
-            assert not errors, f"Apply lần {i + 1}: {errors}"
-
     @testcase
-    def test_oscilloscope_puc_2_3_0019(self, main_page: MainPage):
+    def test_oscilloscope_puc_2_3_0067(self, main_page: MainPage):
         """
-        @test_id: test_oscilloscope_puc_2_3_0019
-        @brief: [DDS-039/040/041] Actions negative -- Apply khi trường trống, mất kết nối khi Apply
+        @test_id: test_oscilloscope_puc_2_3_0067
+        @brief: [DDS-031] DDS Actions -- Apply nhiều lần liên tiếp (5 lần)
 
         @pre:- Oscilloscope đã Connected
              - DDS Setting đang mở
 
         @test_procedure:
             [code]
-                Bước 1: Mở DDS Setting, xóa toàn bộ giá trị trường Frequency -> Apply
-                Bước 2: Xóa toàn bộ giá trị trường Amplitude -> Apply
-                Bước 3: Điền đầy đủ tham số hợp lệ, rút kết nối thiết bị, click Apply
+                Bước 1: Mở DDS Setting
+                Bước 2: Click Apply 5 lần liên tiếp với cùng tham số hợp lệ
+                Bước 3: Verify không treo, không lỗi sau mỗi lần Apply
             [!code]
 
-        @pass_criteria:- Frequency/Amplitude để trống: hiển thị lỗi validation, không gửi lệnh
-                       - Mất kết nối: hiển thị thông báo lỗi, không crash
+        @pass_criteria:- 5 lần Apply liên tiếp đều thành công, không treo UI
 
         @test_level: software
         @test_type: functional
@@ -874,16 +2057,64 @@ class TestOscilloscopePuc23DdsSetting:
         @hw_depend: yes
         """
         main_page.open_dds_setting()
+        for i in range(5):
+            errors = main_page.set_dds_params(
+                frequency_hz="10000", amplitude_v="1", offset_v="0"
+            )
+            assert not errors, f"Apply lần {i + 1}: {errors}"
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0068(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0068
+        @brief: [DDS-039] DDS Actions -- Apply khi Frequency để trống
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Xóa toàn bộ nội dung field Frequency (nhập khoảng trắng) -> Apply
+                Bước 3: Verify có lỗi validation
+            [!code]
+
+        @pass_criteria:- Báo lỗi validation khi Frequency để trống
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         errors = main_page.set_dds_params(frequency_hz=" ")
         assert errors, "Frequency để trống phải báo lỗi validation"
         main_page.set_dds_params(frequency_hz="10000", amplitude_v="1", offset_v="0")
 
+    @testcase
+    def test_oscilloscope_puc_2_3_0069(self, main_page: MainPage):
+        """
+        @test_id: test_oscilloscope_puc_2_3_0069
+        @brief: [DDS-040] DDS Actions -- Apply khi Amplitude để trống
+
+        @pre:- Oscilloscope đã Connected
+             - DDS Setting đang mở
+
+        @test_procedure:
+            [code]
+                Bước 1: Mở DDS Setting
+                Bước 2: Xóa toàn bộ nội dung field Amplitude (nhập khoảng trắng) -> Apply
+                Bước 3: Verify có lỗi validation
+            [!code]
+
+        @pass_criteria:- Báo lỗi validation khi Amplitude để trống
+
+        @test_level: software
+        @test_type: functional
+        @execution_type: automatic
+        @hw_depend: yes
+        """
+        main_page.open_dds_setting()
         errors = main_page.set_dds_params(amplitude_v=" ")
         assert errors, "Amplitude để trống phải báo lỗi validation"
         main_page.set_dds_params(frequency_hz="10000", amplitude_v="1", offset_v="0")
-
-        pytest.skip(
-            "DDS-041: Không thể giả lập mất kết nối phần cứng trong automation — "
-            "cần test thủ công."
-        )

@@ -18,6 +18,13 @@ class OscilloscopePanel(BasePage):
                      → DDS Setting
     """
 
+    def __init__(self, controller):
+        super().__init__(controller)
+        # Local flags track form state so is_dso/dds_setting_open() never needs
+        # a UIA call — UIA queries block for 50+ seconds when the device is busy.
+        self._dso_form_open: bool = False
+        self._dds_form_open: bool = False
+
     # ── Panel open ────────────────────────────────────────────────────────────
 
     def ensure_oscilloscope_panel_open(self) -> None:
@@ -64,7 +71,7 @@ class OscilloscopePanel(BasePage):
                 Bỏ qua nếu form đã mở để tránh toggle đóng panel.
         @retval None
         """
-        if self.is_dso_setting_open():
+        if self._dso_form_open:
             logger.info("OscilloscopePanel: DSO Setting đã mở, bỏ qua")
             return
         logger.info("OscilloscopePanel: mở DSO Setting")
@@ -74,11 +81,17 @@ class OscilloscopePanel(BasePage):
         except Exception:
             if not self._ctrl.click_by_text("DSO Setting", retries=5):
                 raise RuntimeError("OscilloscopePanel: Không click được 'DSO Setting'")
-        # Đợi form xuất hiện bằng auto_id thay vì quét descendants
+        # UIA wait — chỉ chạy 1 lần khi thực sự cần mở form
         deadline = time.time() + 5
         while time.time() < deadline:
-            if self.is_dso_setting_open():
-                return
+            try:
+                form = self._ctrl._main_window.child_window(auto_id=self._DSO_FORM)
+                if form.exists() and form.is_visible():
+                    self._dso_form_open = True
+                    self._dds_form_open = False  # DSO và DDS không cùng mở
+                    return
+            except Exception:
+                pass
             time.sleep(0.15)
         raise RuntimeError("OscilloscopePanel: DSO Setting không mở trong 5 giây")
 
@@ -267,7 +280,7 @@ class OscilloscopePanel(BasePage):
                 Bỏ qua nếu form đã mở để tránh toggle đóng panel.
         @retval None
         """
-        if self.is_dds_setting_open():
+        if self._dds_form_open:
             logger.info("OscilloscopePanel: DDS Setting đã mở, bỏ qua")
             return
         logger.info("OscilloscopePanel: mở DDS Setting")
@@ -279,8 +292,14 @@ class OscilloscopePanel(BasePage):
                 raise RuntimeError("OscilloscopePanel: Không click được 'DDS Setting'")
         deadline = time.time() + 5
         while time.time() < deadline:
-            if self.is_dds_setting_open():
-                return
+            try:
+                form = self._ctrl._main_window.child_window(auto_id=self._DDS_FORM)
+                if form.exists() and form.is_visible():
+                    self._dds_form_open = True
+                    self._dso_form_open = False
+                    return
+            except Exception:
+                pass
             time.sleep(0.15)
         raise RuntimeError("OscilloscopePanel: DDS Setting không mở trong 5 giây")
 
@@ -355,7 +374,7 @@ class OscilloscopePanel(BasePage):
                 form = self._ctrl._main_window.child_window(auto_id=form_id)
                 if not form.exists():
                     continue
-                btn = form.child_window(title="Apply", control_type="Button")
+                btn = form.child_window(title="Apply")
                 if btn.exists():
                     btn.click_input()
                     return
@@ -537,6 +556,8 @@ class OscilloscopePanel(BasePage):
             time.sleep(0.3)
         except Exception:
             pass
+        finally:
+            self._dso_form_open = False
 
     def close_dds_setting(self) -> None:
         """Close DDS Setting form via WM_CLOSE."""
@@ -546,22 +567,16 @@ class OscilloscopePanel(BasePage):
             time.sleep(0.3)
         except Exception:
             pass
+        finally:
+            self._dds_form_open = False
 
     def is_dso_setting_open(self) -> bool:
-        """Return True if the DSO Setting form is currently visible."""
-        try:
-            form = self._ctrl._main_window.child_window(auto_id=self._DSO_FORM)
-            return form.exists() and form.is_visible()
-        except Exception:
-            return False
+        """Return True if the DSO Setting form is currently open (flag-based, no UIA call)."""
+        return self._dso_form_open
 
     def is_dds_setting_open(self) -> bool:
-        """Return True if the DDS Setting form is currently visible."""
-        try:
-            form = self._ctrl._main_window.child_window(auto_id=self._DDS_FORM)
-            return form.exists() and form.is_visible()
-        except Exception:
-            return False
+        """Return True if the DDS Setting form is currently open (flag-based, no UIA call)."""
+        return self._dds_form_open
 
     def _is_oscilloscope_nav_expanded(self) -> bool:
         """

@@ -657,8 +657,9 @@ class AppController:
         if not PYWINAUTO_AVAILABLE:
             return False
         from pywinauto import Desktop
+        main_hwnd = getattr(self._main_window, 'handle', None) if self._main_window else None
         for _ in range(retries):
-            for win in Desktop(backend="uia").windows():
+            for win in self._iter_popup_windows(main_hwnd):
                 try:
                     for ctrl in win.descendants():
                         try:
@@ -685,9 +686,9 @@ class AppController:
         """
         if not PYWINAUTO_AVAILABLE:
             return False
-        from pywinauto import Desktop
+        main_hwnd = getattr(self._main_window, 'handle', None) if self._main_window else None
         for _ in range(retries):
-            for win in Desktop(backend="uia").windows():
+            for win in self._iter_popup_windows(main_hwnd):
                 try:
                     for ctrl in win.descendants():
                         try:
@@ -703,6 +704,28 @@ class AppController:
             time.sleep(0.5)
         logger.warning(f"click_in_any_window({value!r}) — not found after {retries} retries")
         return False
+
+    def _iter_popup_windows(self, exclude_hwnd=None):
+        """
+        Yield desktop windows that are likely small popup / dropdown windows.
+        Skips the main app window and large windows (Explorer, browser, etc.)
+        to avoid slow descendants() scans on hundreds of irrelevant elements.
+        """
+        from pywinauto import Desktop
+        for win in Desktop(backend="uia").windows():
+            try:
+                if exclude_hwnd and win.handle == exclude_hwnd:
+                    continue
+                rect = win.rectangle()
+                width  = rect.right  - rect.left
+                height = rect.bottom - rect.top
+                # Dropdown / context-menu popups are small; skip anything wider
+                # than 900 px (main app, browser, explorer, taskbar, etc.)
+                if width > 900 or height > 900:
+                    continue
+                yield win
+            except Exception:
+                continue
 
     def scroll_to_text(self, keyword: str, max_scroll: int = 20) -> bool:
         """
