@@ -60,14 +60,27 @@ class OscilloscopePanel(BasePage):
 
     def open_dso_setting(self) -> None:
         """
-        @brief  Click mục "DSO Setting" trong Oscilloscope panel
+        @brief  Click mục "DSO Setting" trong Oscilloscope panel.
+                Bỏ qua nếu form đã mở để tránh toggle đóng panel.
         @retval None
         """
+        if self.is_dso_setting_open():
+            logger.info("OscilloscopePanel: DSO Setting đã mở, bỏ qua")
+            return
         logger.info("OscilloscopePanel: mở DSO Setting")
         self.ensure_oscilloscope_panel_open()
-        if not self._ctrl.click_by_text("DSO Setting", retries=5):
-            raise RuntimeError("OscilloscopePanel: Không click được 'DSO Setting'")
-        self._ctrl.wait_for_text("Time/Div", timeout=5)
+        try:
+            self._ctrl._main_window.child_window(title="DSO Setting").click_input()
+        except Exception:
+            if not self._ctrl.click_by_text("DSO Setting", retries=5):
+                raise RuntimeError("OscilloscopePanel: Không click được 'DSO Setting'")
+        # Đợi form xuất hiện bằng auto_id thay vì quét descendants
+        deadline = time.time() + 5
+        while time.time() < deadline:
+            if self.is_dso_setting_open():
+                return
+            time.sleep(0.15)
+        raise RuntimeError("OscilloscopePanel: DSO Setting không mở trong 5 giây")
 
     def set_dso_params(
         self,
@@ -121,8 +134,7 @@ class OscilloscopePanel(BasePage):
             self._select_dropdown("Trigger Sweep", trigger_sweep)
 
         self._click_apply()
-        time.sleep(0.2)
-        errs = self.check_validation_errors()
+        errs = self._check_form_validation_errors(self._DSO_FORM)
         if errs:
             logger.warning(f"OscilloscopePanel DSO: validation errors — {errs}")
         else:
@@ -155,7 +167,6 @@ class OscilloscopePanel(BasePage):
         logger.info(f"OscilloscopePanel: set Time/Div = {value}")
         self._select_dropdown("Time/Div", value)
         self._click_apply()
-        time.sleep(0.2)
 
     def set_voltage_div(self, value: str) -> None:
         """
@@ -166,7 +177,6 @@ class OscilloscopePanel(BasePage):
         logger.info(f"OscilloscopePanel: set Voltage/Div = {value}")
         self._select_dropdown("Voltage/Div", value)
         self._click_apply()
-        time.sleep(0.2)
 
     def set_coupling(self, value: str) -> None:
         """
@@ -177,7 +187,6 @@ class OscilloscopePanel(BasePage):
         logger.info(f"OscilloscopePanel: set Coupling = {value}")
         self._select_dropdown("Coupling", value)
         self._click_apply()
-        time.sleep(0.2)
 
     def set_trigger_mode(self, mode: str) -> None:
         """
@@ -188,7 +197,6 @@ class OscilloscopePanel(BasePage):
         logger.info(f"OscilloscopePanel: set Trigger Mode = {mode}")
         self._select_dropdown("Trigger Mode", mode)
         self._click_apply()
-        time.sleep(0.2)
 
     def set_trigger_sweep(self, sweep: str) -> None:
         """
@@ -199,7 +207,6 @@ class OscilloscopePanel(BasePage):
         logger.info(f"OscilloscopePanel: set Trigger Sweep = {sweep}")
         self._select_dropdown("Trigger Sweep", sweep)
         self._click_apply()
-        time.sleep(0.2)
 
     def set_dso_params_no_apply(
         self,
@@ -256,14 +263,26 @@ class OscilloscopePanel(BasePage):
 
     def open_dds_setting(self) -> None:
         """
-        @brief  Click mục "DDS Setting" trong Oscilloscope panel
+        @brief  Click mục "DDS Setting" trong Oscilloscope panel.
+                Bỏ qua nếu form đã mở để tránh toggle đóng panel.
         @retval None
         """
+        if self.is_dds_setting_open():
+            logger.info("OscilloscopePanel: DDS Setting đã mở, bỏ qua")
+            return
         logger.info("OscilloscopePanel: mở DDS Setting")
         self.ensure_oscilloscope_panel_open()
-        if not self._ctrl.click_by_text("DDS Setting", retries=5):
-            raise RuntimeError("OscilloscopePanel: Không click được 'DDS Setting'")
-        self._ctrl.wait_for_text("Signal Type", timeout=5)
+        try:
+            self._ctrl._main_window.child_window(title="DDS Setting").click_input()
+        except Exception:
+            if not self._ctrl.click_by_text("DDS Setting", retries=5):
+                raise RuntimeError("OscilloscopePanel: Không click được 'DDS Setting'")
+        deadline = time.time() + 5
+        while time.time() < deadline:
+            if self.is_dds_setting_open():
+                return
+            time.sleep(0.15)
+        raise RuntimeError("OscilloscopePanel: DDS Setting không mở trong 5 giây")
 
     def set_dds_params(
         self,
@@ -297,8 +316,7 @@ class OscilloscopePanel(BasePage):
             self._dds_set_field("txtOffset", offset_v)
 
         self._click_apply()
-        time.sleep(0.2)
-        errs = self.check_validation_errors()
+        errs = self._check_form_validation_errors(self._DDS_FORM)
         if errs:
             logger.warning(f"OscilloscopePanel DDS: validation errors — {errs}")
         else:
@@ -329,11 +347,40 @@ class OscilloscopePanel(BasePage):
 
     def _click_apply(self) -> None:
         """
-        @brief  Click nút Apply trong Oscilloscope panel
+        @brief  Click nút Apply trong form DSO hoặc DDS (scoped, nhanh hơn click_by_text).
         @retval None
         """
+        for form_id in (self._DSO_FORM, self._DDS_FORM):
+            try:
+                form = self._ctrl._main_window.child_window(auto_id=form_id)
+                if not form.exists():
+                    continue
+                btn = form.child_window(title="Apply", control_type="Button")
+                if btn.exists():
+                    btn.click_input()
+                    return
+            except Exception:
+                pass
+        # fallback
         if not self._ctrl.click_by_text("Apply"):
             raise RuntimeError("OscilloscopePanel: Không click được 'Apply'")
+
+    def _check_form_validation_errors(self, form_auto_id: str) -> list:
+        """Quét chỉ trong form con (nhanh) thay vì toàn bộ main_window.descendants()."""
+        _KEYWORDS = ("cannot", "invalid", "out of range")
+        errors = []
+        try:
+            form = self._ctrl._main_window.child_window(auto_id=form_auto_id)
+            for ctrl in form.descendants():
+                try:
+                    t = ctrl.window_text().strip()
+                    if t and any(kw in t.lower() for kw in _KEYWORDS):
+                        errors.append(t)
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        return errors
 
     # ── Private helpers ───────────────────────────────────────────────────────
 
@@ -379,15 +426,14 @@ class OscilloscopePanel(BasePage):
     def _set_channel_on_off(self, enabled: bool) -> None:
         """
         @brief  Click checkbox ON/OFF bên cạnh Channel dropdown để bật/tắt kênh.
-                Đọc get_toggle_state() trước khi click để tránh toggle ngược.
+                Scope vào DSO form thay vì quét toàn bộ main_window.
         @param  enabled: True = bật kênh (ON), False = tắt kênh (OFF)
         @retval None
         """
         state = "ON" if enabled else "OFF"
         logger.info(f"OscilloscopePanel: set channel ON/OFF → {state}")
-        if self._ctrl._main_window is None:
-            raise RuntimeError("OscilloscopePanel: main window không khả dụng")
-        for ctrl in self._ctrl._main_window.descendants():
+        form = self._ctrl._main_window.child_window(auto_id=self._DSO_FORM)
+        for ctrl in form.descendants():
             try:
                 if ctrl.window_text().strip() != "ON/OFF":
                     continue
@@ -440,13 +486,17 @@ class OscilloscopePanel(BasePage):
             return ""
 
     def get_channel_on_off_state(self) -> bool:
-        """Read current ON/OFF checkbox state of the selected channel (True = ON)."""
-        for ctrl in self._ctrl._main_window.descendants():
-            try:
-                if ctrl.window_text().strip() == "ON/OFF":
-                    return ctrl.get_toggle_state() == 1
-            except Exception:
-                pass
+        """Read current ON/OFF checkbox state — scope to DSO form (nhanh hơn)."""
+        try:
+            form = self._ctrl._main_window.child_window(auto_id=self._DSO_FORM)
+            for ctrl in form.descendants():
+                try:
+                    if ctrl.window_text().strip() == "ON/OFF":
+                        return ctrl.get_toggle_state() == 1
+                except Exception:
+                    pass
+        except Exception:
+            pass
         return False
 
     def is_signal_on_checked(self) -> bool:
@@ -515,15 +565,13 @@ class OscilloscopePanel(BasePage):
 
     def _is_oscilloscope_nav_expanded(self) -> bool:
         """
-        @brief  Kiểm tra Oscilloscope nav item đang expanded (sub-items hiển thị trong cây)
+        @brief  Kiểm tra Oscilloscope nav item đang expanded.
+                Dùng child_window(title=) thay vì quét toàn bộ descendants() — nhanh hơn.
         @retval bool — True nếu panel đang mở, False nếu đang đóng
         """
         if self._ctrl._main_window is None:
             return False
-        for ctrl in self._ctrl._main_window.descendants():
-            try:
-                if ctrl.window_text().strip() in ("DSO Setting", "DDS Setting"):
-                    return True
-            except Exception:
-                pass
-        return False
+        try:
+            return self._ctrl._main_window.child_window(title="DSO Setting").exists()
+        except Exception:
+            return False

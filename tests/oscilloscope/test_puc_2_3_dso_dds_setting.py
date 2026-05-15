@@ -464,13 +464,11 @@ class TestOscilloscopePuc23DdsSetting:
 
         main_page.toggle_dds_signal_on()
         main_page.oscilloscope_apply()
-        time.sleep(0.2)
         assert main_page.is_dds_signal_on_checked(), \
             "Signal On phải ON sau khi tick"
 
         main_page.toggle_dds_signal_on()
         main_page.oscilloscope_apply()
-        time.sleep(0.2)
         assert not main_page.is_dds_signal_on_checked(), \
             "Signal On phải OFF sau khi bỏ tick"
 
@@ -511,7 +509,6 @@ class TestOscilloscopePuc23DdsSetting:
 
         main_page.click_dds_sync()
         main_page.oscilloscope_apply()
-        time.sleep(0.2)
 
         if main_page.is_dds_sync_checked():
             main_page.click_dds_sync()
@@ -523,12 +520,10 @@ class TestOscilloscopePuc23DdsSetting:
 
         main_page.click_dds_sync()
         main_page.oscilloscope_apply()
-        time.sleep(0.2)
         assert main_page.is_dds_sync_checked(), "Sync phải ON sau khi tick (Signal On đang bật)"
 
         main_page.click_dds_sync()
         main_page.oscilloscope_apply()
-        time.sleep(0.2)
         assert not main_page.is_dds_sync_checked(), "Sync phải OFF sau khi bỏ tick"
 
         main_page.toggle_dds_signal_on()
