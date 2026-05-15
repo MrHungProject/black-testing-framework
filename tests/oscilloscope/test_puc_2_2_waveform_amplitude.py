@@ -56,7 +56,7 @@ class TestPuc22WaveformAmplitude:
                        - Biên độ sóng Peak-to-Peak là 20V
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         @note: Máy phát tối đa được biên độ là 10V
@@ -77,7 +77,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 20V
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -97,7 +97,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 20V
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -117,7 +117,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 20V
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -144,7 +144,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 10V
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -164,7 +164,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 10V
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -184,7 +184,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 10V
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -204,7 +204,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 10V
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -231,7 +231,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 20mV
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -254,7 +254,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 20mV
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -277,7 +277,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 20mV
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -300,7 +300,7 @@ class TestPuc22WaveformAmplitude:
             [!code]
         @pass_criteria:- Dạng sóng SIN 5MHz, Peak-to-Peak 20mV
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

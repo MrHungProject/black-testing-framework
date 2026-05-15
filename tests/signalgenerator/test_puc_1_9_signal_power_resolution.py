@@ -50,7 +50,7 @@ class TestSignalPuc19PowerResolution:
                        - Sai số công suất theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -79,7 +79,7 @@ class TestSignalPuc19PowerResolution:
                        - Sai số công suất theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -108,7 +108,7 @@ class TestSignalPuc19PowerResolution:
                        - Sai số công suất theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -137,7 +137,7 @@ class TestSignalPuc19PowerResolution:
                        - Sai số công suất theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -166,7 +166,7 @@ class TestSignalPuc19PowerResolution:
                        - Sai số công suất theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -195,7 +195,7 @@ class TestSignalPuc19PowerResolution:
         @pass_criteria:- PC17 trả về lỗi không hỗ trợ độ phân giải của giá trị công suất này
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

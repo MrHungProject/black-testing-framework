@@ -44,7 +44,7 @@ class TestSignalPuc110Temperature:
                        - Giá trị nhiệt độ không rỗng và là số thực hợp lệ
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -75,7 +75,7 @@ class TestSignalPuc110Temperature:
         @pass_criteria:- PC17 hiển thị popup warning khi nhiệt độ vượt ngưỡng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -106,7 +106,7 @@ class TestSignalPuc110Temperature:
         @pass_criteria:- PC17 hiển thị popup error khi sensor nhiệt độ bị hỏng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

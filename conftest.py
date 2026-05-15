@@ -247,46 +247,42 @@ def pytest_runtest_logreport(report):  # noqa: F811  (intentional re-def for ite
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """Generate Excel report at end of session.
-    - TEST_SUITE=vna        → reports/excel/vna_report.xlsx
-    - TEST_SUITE=attenuator → reports/excel/attenuator_report.xlsx
-    - TEST_SUITE=all        → reports/excel/vna_report.xlsx + attenuator_report.xlsx + all_report.xlsx
-    - (local run, no env)   → group tự động theo module folder
-    """
-    if not _session_results:
-        return
-
+    """Generate Excel report at end of session — luôn chạy, kể cả khi có test failed."""
     import os
-    excel_dir = Path(get_settings().report.excel_dir)
-    excel_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        excel_dir = Path(get_settings().report.excel_dir)
+        excel_dir.mkdir(parents=True, exist_ok=True)
 
-    test_suite = os.getenv("TEST_SUITE", "").strip().lower()
+        results = _session_results or []
+        test_suite = os.getenv("TEST_SUITE", "").strip().lower()
 
-    if test_suite and test_suite != "all":
-        # Chạy 1 suite cụ thể → 1 file tên theo suite
-        filename = f"{test_suite}_report.xlsx"
-        ExcelReporter(output_path=str(excel_dir / filename)).generate(_session_results)
-        logger.info(f"Report: {filename} ({len(_session_results)} tests)")
+        if test_suite and test_suite != "all":
+            filename = f"{test_suite}_report.xlsx"
+            ExcelReporter(output_path=str(excel_dir / filename)).generate(results)
+            logger.info(f"Report: {filename} ({len(results)} tests)")
 
-    else:
-        # all hoặc không set → group theo module folder, xuất 1 file all_report với nhiều sheets
-        modules: dict = {}
-        for result in _session_results:
-            parts = Path(result.nodeid.split("::")[0]).parts
-            module = parts[1] if len(parts) >= 2 else "other"
-            modules.setdefault(module, []).append(result)
-
-        if len(modules) > 1 or test_suite == "all":
-            # 1 file all_report.xlsx: sheet Summary + sheet All + sheet per module
-            sheet_data = {"All": _session_results}
-            sheet_data.update(modules)
-            ExcelReporter(output_path=str(excel_dir / "all_report.xlsx")).generate_multi_sheet(sheet_data)
-            logger.info(f"Combined report: all_report.xlsx ({len(_session_results)} tests, {len(modules)} modules)")
         else:
-            # chỉ 1 module → file đơn
-            module = list(modules.keys())[0]
-            filename = f"{module}_report.xlsx"
-            ExcelReporter(output_path=str(excel_dir / filename)).generate(_session_results)
-            logger.info(f"Module report: {filename} ({len(_session_results)} tests)")
+            modules: dict = {}
+            for result in results:
+                parts = Path(result.nodeid.split("::")[0]).parts
+                module = parts[1] if len(parts) >= 2 else "other"
+                modules.setdefault(module, []).append(result)
 
-    logger.info(f"Session finished — {len(_session_results)} test(s) collected")
+            if not modules:
+                # Không có kết quả nào → vẫn xuất file rỗng để report viewer không thấy trống
+                ExcelReporter(output_path=str(excel_dir / "session_report.xlsx")).generate(results)
+            elif len(modules) > 1 or test_suite == "all":
+                sheet_data = {"All": results}
+                sheet_data.update(modules)
+                ExcelReporter(output_path=str(excel_dir / "all_report.xlsx")).generate_multi_sheet(sheet_data)
+                logger.info(f"Combined report: all_report.xlsx ({len(results)} tests, {len(modules)} modules)")
+            else:
+                module = list(modules.keys())[0]
+                filename = f"{module}_report.xlsx"
+                ExcelReporter(output_path=str(excel_dir / filename)).generate(results)
+                logger.info(f"Module report: {filename} ({len(results)} tests)")
+
+        logger.info(f"Session finished — {len(results)} test(s) collected")
+
+    except Exception as exc:
+        logger.error(f"pytest_sessionfinish: lỗi khi tạo Excel report — {exc}", exc_info=True)

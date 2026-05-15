@@ -52,7 +52,7 @@ class TestSignalPuc15DwellSweep:
                        - Sai số công suất, tần số và thời gian theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -83,7 +83,7 @@ class TestSignalPuc15DwellSweep:
                        - Sai số công suất, tần số và thời gian theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -114,7 +114,7 @@ class TestSignalPuc15DwellSweep:
                        - Sai số công suất, tần số và thời gian theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -145,7 +145,7 @@ class TestSignalPuc15DwellSweep:
                        - Sai số công suất, tần số và thời gian theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -176,7 +176,7 @@ class TestSignalPuc15DwellSweep:
                        - Sai số công suất, tần số và thời gian theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -202,7 +202,7 @@ class TestSignalPuc15DwellSweep:
         @pass_criteria:- PC17 báo lỗi C phải > 0
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -224,7 +224,7 @@ class TestSignalPuc15DwellSweep:
         @pass_criteria:- PC17 báo lỗi C phải > 0
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -246,7 +246,7 @@ class TestSignalPuc15DwellSweep:
         @pass_criteria:- PC17 báo lỗi C out of range
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -268,7 +268,7 @@ class TestSignalPuc15DwellSweep:
         @pass_criteria:- PC17 báo lỗi D phải > 0
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -290,7 +290,7 @@ class TestSignalPuc15DwellSweep:
         @pass_criteria:- PC17 báo lỗi D phải > 0
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -312,7 +312,7 @@ class TestSignalPuc15DwellSweep:
         @pass_criteria:- PC17 báo lỗi D out of range
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

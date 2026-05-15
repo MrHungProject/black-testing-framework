@@ -42,7 +42,7 @@ class TestSignalPuc17SwTrigger:
         @pass_criteria:- Software trigger hoạt động đúng — tham chiếu pass criteria từ TC33–TC45
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -72,7 +72,7 @@ class TestSignalPuc17SwTrigger:
         @pass_criteria:- TBD — cần xác định theo spec của hãng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

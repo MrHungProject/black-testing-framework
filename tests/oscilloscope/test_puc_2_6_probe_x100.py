@@ -40,7 +40,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Biên độ trên PC x100 lần (Peak-to-Peak 20V), 200mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -58,7 +58,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 20V (x100), 500mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -76,7 +76,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 100V (x100), 1V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -94,7 +94,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 100V (x100), 2V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -112,7 +112,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 400V (x100), 5V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -130,7 +130,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 400V (x100), 10V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -148,7 +148,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 1000V (x100), 20V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -166,7 +166,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 2000V (x100), 50V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -184,7 +184,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 2000V (x100), 100V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -203,7 +203,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Dạng sóng hiển thị, 200V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -221,7 +221,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Dạng sóng hiển thị, 500V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -239,7 +239,7 @@ class TestPuc26ProbeX100:
             [!code]
         @pass_criteria:- Dạng sóng hiển thị, 1000V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

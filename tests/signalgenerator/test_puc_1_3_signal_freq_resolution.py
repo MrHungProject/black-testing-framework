@@ -51,7 +51,7 @@ class TestSignalPuc13FreqResolution:
                        - Sai số công suất và tần số theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -83,7 +83,7 @@ class TestSignalPuc13FreqResolution:
                        - Sai số công suất và tần số theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -115,7 +115,7 @@ class TestSignalPuc13FreqResolution:
                        - Sai số công suất và tần số theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -147,7 +147,7 @@ class TestSignalPuc13FreqResolution:
                        - Sai số công suất và tần số theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -179,7 +179,7 @@ class TestSignalPuc13FreqResolution:
                        - Sai số công suất và tần số theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -209,7 +209,7 @@ class TestSignalPuc13FreqResolution:
         @pass_criteria:- PC17 trả về lỗi không hỗ trợ độ phân giải sub-Hz
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

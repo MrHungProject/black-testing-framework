@@ -119,6 +119,22 @@ class AppController:
         self._main_window = None
         logger.info("App controller disconnected")
 
+    def force_restart(self, timeout: int = 5) -> "AppController":
+        """
+        @brief  Kill process PC17.exe (nếu đang treo) rồi relaunch.
+                Dùng khi UI bị hang sau thao tác disconnect device.
+        @param  timeout: Giây chờ trước khi kill (dùng taskkill /F)
+        @retval AppController — self
+        """
+        import os
+        import subprocess as sp
+        exe_name = os.path.basename(self.exe_path) if self.exe_path else "PC17.exe"
+        logger.warning(f"force_restart: killing {exe_name} ...")
+        sp.run(["taskkill", "/F", "/IM", exe_name], capture_output=True)
+        time.sleep(timeout)
+        logger.info("force_restart: relaunching app ...")
+        return self.launch()
+
     # ── Element helpers ───────────────────────────────────────────────────────
 
     def _get_element(self, identifier: Union[str, dict]):

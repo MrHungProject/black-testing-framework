@@ -47,7 +47,7 @@ class TestPuc61AttenuatorOnOff:
                        - UI PC17 hiển thị trạng thái Attenuator đã khởi động xong và đang bật
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -84,7 +84,7 @@ class TestPuc61AttenuatorOnOff:
                        - Hoàn thành đủ 5 chu kỳ không có exception
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

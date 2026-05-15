@@ -19,6 +19,24 @@ class PowerPanel(BasePage):
               → Control Measurement
     """
 
+    _POWER_FORM = "FormDetailPowerConfig"
+
+    # auto_id của từng Pane input trong Sensor Setting
+    _FIELD_IDS: dict[str, str] = {
+        "averages":          "txtPowerAverages",
+        "correction_db":     "txtPowerCorrection",
+        "duty_cycle_pct":    "txtPowerDutyCycle",
+        "frequency_hz":      "txtPowerFrequency",
+        "interval_ms":       "txtPowerInterval",
+        "pulse_top_power":   "txtPowerPulseTop",
+        "pulse_width":       "txtPowerPulseWidth",
+        "signal_peak_noise": "txtPowerSignalPeak",
+        "signal_power":      "txtPowerSignalPower",
+        "trace_delay":       "txtPowerTraceDelay",
+        "trace_size":        "txtPowerTraceSize",
+        "trace_time":        "txtPowerTraceTime",
+    }
+
     # ── Panel open ────────────────────────────────────────────────────────────
 
     def ensure_power_panel_open(self) -> None:
@@ -93,41 +111,30 @@ class PowerPanel(BasePage):
             f"PowerPanel SensorSetting: averages={averages}, correction={correction_db}, "
             f"freq={frequency_hz}{frequency_unit}, units={units}"
         )
-        self._ctrl.build_cache()
-        try:
-            if averages:
-                self._ctrl.set_field_by_label("Averages", averages)
-            if correction_db:
-                self._ctrl.set_field_by_label("Correction (dB)", correction_db)
-            if duty_cycle_pct:
-                self._ctrl.set_field_by_label("Duty Cycle %", duty_cycle_pct)
-            if frequency_hz:
-                self._ctrl.set_field_by_label("Frequency (Hz)", frequency_hz)
-            if interval_ms:
-                self._ctrl.set_field_by_label("Interval (ms)", interval_ms)
-            if pulse_top_power:
-                self._ctrl.set_field_by_label("Pulse top power (dBm)", pulse_top_power)
-            if pulse_width:
-                self._ctrl.set_field_by_label("Pulse width (sec)", pulse_width)
-            if signal_peak_noise:
-                self._ctrl.set_field_by_label("Signal peak-to-peak noise (dB)", signal_peak_noise)
-            if signal_power:
-                self._ctrl.set_field_by_label("Signal Power (dBm)", signal_power)
-            if trace_delay:
-                self._ctrl.set_field_by_label("Trace delay (seconds)", trace_delay)
-            if trace_size:
-                self._ctrl.set_field_by_label("Trace size (points)", trace_size)
-            if trace_time:
-                self._ctrl.set_field_by_label("Trace time (seconds)", trace_time)
-        finally:
-            self._ctrl.invalidate_cache()
+        fields = {
+            "averages":          averages,
+            "correction_db":     correction_db,
+            "duty_cycle_pct":    duty_cycle_pct,
+            "frequency_hz":      frequency_hz,
+            "interval_ms":       interval_ms,
+            "pulse_top_power":   pulse_top_power,
+            "pulse_width":       pulse_width,
+            "signal_peak_noise": signal_peak_noise,
+            "signal_power":      signal_power,
+            "trace_delay":       trace_delay,
+            "trace_size":        trace_size,
+            "trace_time":        trace_time,
+        }
+        for key, value in fields.items():
+            if value:
+                self._set_field(self._FIELD_IDS[key], value)
 
         if disp_res:
             self._select_dropdown("Disp Res", disp_res)
         if frequency_unit:
             self._select_dropdown("Frequency (Hz)", frequency_unit)
         if units:
-            self._select_dropdown("Units", units)
+            self._select_dropdown("Unit (W or dBm)", units)
 
         self._click_apply()
         time.sleep(0.2)
@@ -140,21 +147,21 @@ class PowerPanel(BasePage):
 
     def toggle_correction(self) -> None:
         """
-        @brief  Click toggle On/Off của Correction (dB)
+        @brief  Click toggle On/Off của Correction (dB) — auto_id: rdoCorrection
         @retval None
         """
         logger.info("PowerPanel: toggle Correction On/Off")
-        if not self._ctrl.click_by_text("Correction (dB)", retries=5):
-            raise RuntimeError("PowerPanel: Không tìm thấy toggle Correction")
+        form = self._ctrl._main_window.child_window(auto_id=self._POWER_FORM)
+        form.child_window(auto_id="rdoCorrection").click_input()
 
     def toggle_duty_cycle(self) -> None:
         """
-        @brief  Click toggle On/Off của Duty Cycle
+        @brief  Click toggle On/Off của Duty Cycle — auto_id: radioCustom1
         @retval None
         """
         logger.info("PowerPanel: toggle Duty Cycle On/Off")
-        if not self._ctrl.click_by_text("Duty Cycle On/Off", retries=5):
-            logger.warning("PowerPanel: toggle Duty Cycle On/Off — không tìm thấy text")
+        form = self._ctrl._main_window.child_window(auto_id=self._POWER_FORM)
+        form.child_window(auto_id="radioCustom1").click_input()
 
     def set_frequency(self, value: str, unit: str = "") -> None:
         """
@@ -164,7 +171,7 @@ class PowerPanel(BasePage):
         @retval None
         """
         logger.info(f"PowerPanel: set Frequency = {value} {unit}")
-        self._ctrl.set_field_by_label("Frequency (Hz)", value)
+        self._set_field("txtPowerFrequency", value)
         if unit:
             self._select_dropdown("Frequency (Hz)", unit)
 
@@ -175,7 +182,7 @@ class PowerPanel(BasePage):
         @retval None
         """
         logger.info(f"PowerPanel: set Averages = {value}")
-        self._ctrl.set_field_by_label("Averages", value)
+        self._set_field("txtPowerAverages", value)
         self._click_apply()
         time.sleep(0.2)
 
@@ -305,6 +312,30 @@ class PowerPanel(BasePage):
         time.sleep(0.3)
         if not self._ctrl.click_in_any_window(value):
             raise RuntimeError(f"PowerPanel: Không chọn được '{value}' trong dropdown '{label}'")
+
+    def _set_field(self, auto_id: str, value: str) -> None:
+        """
+        @brief  Nhập giá trị vào Pane input field qua auto_id.
+                Tự scroll element vào vùng nhìn thấy trước khi click.
+        @param  auto_id: auto_id của Pane (ví dụ: "txtPowerAverages")
+        @param  value:   Giá trị cần nhập
+        @retval None
+        """
+        form = self._ctrl._main_window.child_window(auto_id=self._POWER_FORM)
+        pane = form.child_window(auto_id=auto_id)
+        try:
+            pane.scroll_into_view()
+        except Exception:
+            pass
+        try:
+            tb = pane.child_window(auto_id="textBox1")
+        except Exception:
+            tb = pane
+        tb.click_input()
+        tb.type_keys("^a", with_spaces=True)
+        tb.set_edit_text(value)
+        tb.type_keys("{ENTER}", with_spaces=True)
+        logger.debug(f"PowerPanel._set_field: {auto_id} = {value!r}")
 
     def _is_power_nav_expanded(self) -> bool:
         """

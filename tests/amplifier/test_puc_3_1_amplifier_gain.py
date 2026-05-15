@@ -57,7 +57,7 @@ class TestPuc31AmplifierGain:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -99,7 +99,7 @@ class TestPuc31AmplifierGain:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -141,7 +141,7 @@ class TestPuc31AmplifierGain:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

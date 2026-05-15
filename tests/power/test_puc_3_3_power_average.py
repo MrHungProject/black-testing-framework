@@ -51,7 +51,7 @@ class TestPuc33PowerAverage:
                        - Độ biến thiên ở Average=100 nhỏ hơn rõ rệt so với Average=1
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -79,7 +79,7 @@ class TestPuc33PowerAverage:
                        - Không crash hoặc treo ứng dụng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -107,7 +107,7 @@ class TestPuc33PowerAverage:
                        - Không crash hoặc treo ứng dụng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -135,7 +135,7 @@ class TestPuc33PowerAverage:
                        - Không crash hoặc treo ứng dụng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

@@ -57,7 +57,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -92,7 +92,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -127,7 +127,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -162,7 +162,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -197,7 +197,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -232,7 +232,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -267,7 +267,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -302,7 +302,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Sai số: TBD
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -337,7 +337,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Không crash hoặc treo ứng dụng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -372,7 +372,7 @@ class TestPuc62AttenuatorAttenuation:
                        - Không crash hoặc treo ứng dụng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

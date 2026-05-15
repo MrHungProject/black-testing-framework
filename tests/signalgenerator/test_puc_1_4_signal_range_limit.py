@@ -44,7 +44,7 @@ class TestSignalPuc14RangeLimit:
         @pass_criteria:- PC17 trả về lỗi không support công suất này tại range 18GHz
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -73,7 +73,7 @@ class TestSignalPuc14RangeLimit:
         @pass_criteria:- PC17 trả về lỗi tần số out of range
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -102,7 +102,7 @@ class TestSignalPuc14RangeLimit:
         @pass_criteria:- PC17 trả về lỗi tần số out of range
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -131,7 +131,7 @@ class TestSignalPuc14RangeLimit:
         @pass_criteria:- PC17 trả về lỗi công suất out of range
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -160,7 +160,7 @@ class TestSignalPuc14RangeLimit:
         @pass_criteria:- PC17 trả về lỗi công suất out of range
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

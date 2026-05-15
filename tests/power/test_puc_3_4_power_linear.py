@@ -49,7 +49,7 @@ class TestPuc34PowerLinear:
                        - Sai số < 1.71%
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -70,7 +70,7 @@ class TestPuc34PowerLinear:
             [!code]
         @pass_criteria:- PC17 hiển thị ~5.01mW, sai số < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -91,7 +91,7 @@ class TestPuc34PowerLinear:
             [!code]
         @pass_criteria:- PC17 hiển thị ~1mW, sai số < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -112,7 +112,7 @@ class TestPuc34PowerLinear:
             [!code]
         @pass_criteria:- PC17 hiển thị ~0.0501mW, sai số < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -135,7 +135,7 @@ class TestPuc34PowerLinear:
             [!code]
         @pass_criteria:- PC17 hiển thị ~3.16nW, sai số < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

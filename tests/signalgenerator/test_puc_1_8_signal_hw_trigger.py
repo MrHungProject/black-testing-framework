@@ -48,7 +48,7 @@ class TestSignalPuc18HwTrigger:
                        - Phát tín hiệu được trigger bởi xung sườn xuống từ GPIO21
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -79,7 +79,7 @@ class TestSignalPuc18HwTrigger:
         @pass_criteria:- TBD — cần xác định theo spec của hãng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

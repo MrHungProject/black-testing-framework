@@ -37,7 +37,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 0.1Hz +-5V, chuyển sang FFT mode, capture [!code]
         @pass_criteria:- 1 cột phổ tại 0.1Hz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -51,7 +51,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 150Hz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 150Hz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -65,7 +65,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 888729.5 Hz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 888.7295kHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -79,7 +79,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 2.3563257MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 2.3563257MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -93,7 +93,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 8.5241541MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 8.5241541MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -107,7 +107,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 15.6261665MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 15.6261665MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -121,7 +121,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 58.312974MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 58.312974MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -135,7 +135,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 74.0161857MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 74.0161857MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -149,7 +149,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 82.9721514MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 82.9721514MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -163,7 +163,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 97.3167227MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 97.3167227MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -177,7 +177,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 110.851616MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 110.851616MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -191,7 +191,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 117.9682676MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 117.9682676MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -205,7 +205,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 129.1130505MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 129.1130505MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -219,7 +219,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 149.79719MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 149.79719MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -233,7 +233,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 155.1636448MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 155.1636448MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -247,7 +247,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 173.9418309MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 173.9418309MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -261,7 +261,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 183.7667644MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 183.7667644MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -275,7 +275,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 194.3681404MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 194.3681404MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -289,7 +289,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 203.0684222MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 203.0684222MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -303,7 +303,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 213.4362707MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 213.4362707MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -317,7 +317,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 230.7963409MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 230.7963409MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -331,7 +331,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 240.1587833MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 240.1587833MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -345,7 +345,7 @@ class TestPuc29FftFrequency:
         @test_procedure:[code] Phát SIN 250MHz, FFT mode [!code]
         @pass_criteria:- 1 cột phổ tại 250MHz, độ chính xác 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

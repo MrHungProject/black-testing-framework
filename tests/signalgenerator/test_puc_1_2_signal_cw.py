@@ -56,7 +56,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 0dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -86,7 +86,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 0dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -116,7 +116,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: -20dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -146,7 +146,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 7dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -174,7 +174,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: -18dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -198,7 +198,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: -18dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -222,7 +222,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: -18dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -246,7 +246,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: -18dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -270,7 +270,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: -18dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -294,7 +294,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 0dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -318,7 +318,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 0dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -342,7 +342,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 0dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -366,7 +366,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 0dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -390,7 +390,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 0dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -414,7 +414,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 6dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -438,7 +438,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 6dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -462,7 +462,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 6dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -486,7 +486,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 6dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -510,7 +510,7 @@ class TestSignalPuc12CW:
         @pass_criteria:- Công suất đo được: 6dBm ± 1.25 dB
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

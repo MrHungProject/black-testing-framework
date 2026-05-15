@@ -49,7 +49,7 @@ class TestPuc21OscilloscopeOnOff:
                        - UI PC17 hiển thị Oscilloscope đã khởi động xong và đang bật
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -86,7 +86,7 @@ class TestPuc21OscilloscopeOnOff:
                        - Hoàn thành đủ 5 chu kỳ không có exception
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

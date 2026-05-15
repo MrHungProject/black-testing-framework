@@ -47,7 +47,7 @@ class TestSignalPuc16StepPoint:
                        - Sai số công suất, tần số và thời gian theo thông số của hãng (TBD)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -77,7 +77,7 @@ class TestSignalPuc16StepPoint:
         @pass_criteria:- PC17 trả về lỗi step out of range
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

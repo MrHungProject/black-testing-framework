@@ -40,7 +40,7 @@ class TestPuc211DdsPulse:
         @pass_criteria:- Tần số scope ngoài = 1000Hz
                        - Độ rộng xung đúng theo duty cycle
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -55,7 +55,7 @@ class TestPuc211DdsPulse:
         @test_procedure:[code] PC17 phát Square 729463Hz +-3.5V, scope ngoài đo [!code]
         @pass_criteria:- Tần số = 729463Hz, độ rộng xung đúng
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -70,7 +70,7 @@ class TestPuc211DdsPulse:
         @test_procedure:[code] PC17 phát Square 5.498649MHz +-3.5V [!code]
         @pass_criteria:- Tần số = 5.498649MHz, độ rộng xung đúng
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -85,7 +85,7 @@ class TestPuc211DdsPulse:
         @test_procedure:[code] PC17 phát Square 15.205131MHz +-3.5V [!code]
         @pass_criteria:- Tần số = 15.205131MHz, độ rộng xung đúng
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -100,7 +100,7 @@ class TestPuc211DdsPulse:
         @test_procedure:[code] PC17 phát Square 25MHz +-3.5V [!code]
         @pass_criteria:- Tần số = 25MHz, độ rộng xung đúng
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

@@ -38,7 +38,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 0.1Hz +-3.5V, scope ngoài capture [!code]
         @pass_criteria:- Tần số scope ngoài = 0.1Hz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -52,7 +52,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 371Hz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 371Hz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -66,7 +66,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 542228.8Hz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 542228.8Hz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -80,7 +80,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 5.0178347MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 5.0178347MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -94,7 +94,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 16.1004954MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 16.1004954MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -108,7 +108,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 38.4531756MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 38.4531756MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -122,7 +122,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 60.2253399MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 60.2253399MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -136,7 +136,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 71.6509112MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 71.6509112MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -150,7 +150,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 83.4659073MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 83.4659073MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -164,7 +164,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 97.7003059MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 97.7003059MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -178,7 +178,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 104.918617MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 104.918617MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -192,7 +192,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 121.6426195MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 121.6426195MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -206,7 +206,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 136.4830098MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 136.4830098MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -220,7 +220,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 148.8289957MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 148.8289957MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -234,7 +234,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 155.3167801MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 155.3167801MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -248,7 +248,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 167.5433713MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 167.5433713MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -262,7 +262,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 181.9751258MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 181.9751258MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -276,7 +276,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 198.6142522MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 198.6142522MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -290,7 +290,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 205.131496MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 205.131496MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -304,7 +304,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 217.5018643MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 217.5018643MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -318,7 +318,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 226.4426532MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 226.4426532MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -332,7 +332,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 248.2059101MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 248.2059101MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -346,7 +346,7 @@ class TestPuc210DdsCw:
         @test_procedure:[code] PC17 phát SIN 250MHz +-3.5V [!code]
         @pass_criteria:- Tần số scope ngoài = 250MHz, sai số 0.1%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

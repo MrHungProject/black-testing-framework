@@ -40,7 +40,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Biên độ hiển thị x1000 (Peak-to-Peak 200V), 2V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -58,7 +58,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 200V (x1000), 5V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -76,7 +76,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 1000V (x1000), 10V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -94,7 +94,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 1000V (x1000), 20V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -112,7 +112,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 4000V (x1000), 50V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -130,7 +130,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 4000V (x1000), 100V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -148,7 +148,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 10000V (x1000), 200V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -166,7 +166,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 20000V (x1000), 500V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -184,7 +184,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Peak-to-Peak hiển thị 20000V (x1000), 1000V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -203,7 +203,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Dạng sóng hiển thị, 2000V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -221,7 +221,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Dạng sóng hiển thị, 5000V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -239,7 +239,7 @@ class TestPuc27ProbeX1000:
             [!code]
         @pass_criteria:- Dạng sóng hiển thị, 10000V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

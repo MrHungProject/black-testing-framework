@@ -45,7 +45,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 2ns/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 2ns/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -59,7 +59,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 4ns/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 4ns/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -73,7 +73,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 10ns/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 10ns/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -87,7 +87,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 20ns/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 20ns/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -101,7 +101,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 40ns/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 40ns/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -115,7 +115,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 100ns/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 100ns/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -129,7 +129,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 200ns/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 200ns/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -143,7 +143,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 400ns/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 400ns/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -157,7 +157,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 1us/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 1us/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -171,7 +171,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 2us/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 2us/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -185,7 +185,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 4us/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 4us/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -199,7 +199,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 10us/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 10us/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -213,7 +213,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 20us/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 20us/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -227,7 +227,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 40us/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 40us/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -241,7 +241,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 100us/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 100us/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -255,7 +255,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 200us/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 200us/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -269,7 +269,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 400us/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 400us/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         @note: Có thể không hiển thị lên biểu đồ ở mức Time/Div lớn
@@ -284,7 +284,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 1ms/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 1ms/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -298,7 +298,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 2ms/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 2ms/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -312,7 +312,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 4ms/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 4ms/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -326,7 +326,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 10ms/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 10ms/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -340,7 +340,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 20ms/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 20ms/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -354,7 +354,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 40ms/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 40ms/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -368,7 +368,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 100ms/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 100ms/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -382,7 +382,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 200ms/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 200ms/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -396,7 +396,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 400ms/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 400ms/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -410,7 +410,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 1s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 1s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -424,7 +424,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 2s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 2s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -438,7 +438,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 4s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 4s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -452,7 +452,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 10s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 10s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -466,7 +466,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 20s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 20s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -480,7 +480,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 40s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 40s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -494,7 +494,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 100s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 100s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -508,7 +508,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 200s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 200s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -522,7 +522,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 400s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 400s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -536,7 +536,7 @@ class TestPuc28TimeDiv:
         @test_procedure:[code] SIN 1MHz +-5V, probe x1, 5V/div, 1000s/div [!code]
         @pass_criteria:- SIN 1MHz, P2P 10V, 5V/div, 1000s/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

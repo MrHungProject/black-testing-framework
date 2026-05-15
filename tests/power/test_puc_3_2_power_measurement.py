@@ -46,7 +46,7 @@ class TestPuc32PowerMeasurement:
                        - Sai số công suất < 1.71%
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -73,7 +73,7 @@ class TestPuc32PowerMeasurement:
                        - Sai số công suất < 1.71%
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -100,7 +100,7 @@ class TestPuc32PowerMeasurement:
                        - Sai số công suất < 1.71%
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -127,7 +127,7 @@ class TestPuc32PowerMeasurement:
                        - Sai số công suất < 1.71%
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -150,7 +150,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -169,7 +169,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -188,7 +188,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -207,7 +207,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -226,7 +226,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -245,7 +245,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -264,7 +264,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -283,7 +283,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -302,7 +302,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -321,7 +321,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -340,7 +340,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -359,7 +359,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -378,7 +378,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -397,7 +397,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -416,7 +416,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -435,7 +435,7 @@ class TestPuc32PowerMeasurement:
             [!code]
         @pass_criteria:- Sai số công suất < 1.71%
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -466,7 +466,7 @@ class TestPuc32PowerMeasurement:
                        - Không crash hoặc treo ứng dụng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -493,7 +493,7 @@ class TestPuc32PowerMeasurement:
                        - Không crash hoặc treo ứng dụng
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

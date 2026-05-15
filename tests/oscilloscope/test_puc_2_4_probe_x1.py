@@ -46,7 +46,7 @@ class TestPuc24ProbeX1:
                        - 2mV/div (1 ô có giá trị 2mV)
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -64,7 +64,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 20mV, 5mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -82,7 +82,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 100mV, 10mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -100,7 +100,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 100mV, 20mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -118,7 +118,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 400mV, 50mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -136,7 +136,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 400mV, 100mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -154,7 +154,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 1V, 200mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -172,7 +172,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 4V, 500mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -190,7 +190,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 6V, 1V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -208,7 +208,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 10V, 2V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -226,7 +226,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 20V, 5V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -244,7 +244,7 @@ class TestPuc24ProbeX1:
             [!code]
         @pass_criteria:- SIN 1MHz, Peak-to-Peak 40V, 10V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

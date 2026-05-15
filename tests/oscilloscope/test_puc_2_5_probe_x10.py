@@ -39,7 +39,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- SIN 1MHz, biên độ hiển thị x10 lần (1V Peak-to-Peak), 20mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -57,7 +57,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- SIN 1MHz, hiển thị Peak-to-Peak 200mV (x10), 50mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -75,7 +75,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- SIN 1MHz, hiển thị Peak-to-Peak 1V (x10), 100mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -93,7 +93,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- SIN 1MHz, hiển thị Peak-to-Peak 1V (x10), 200mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -111,7 +111,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- SIN 1MHz, hiển thị Peak-to-Peak 4V (x10), 500mV/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -129,7 +129,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- SIN 1MHz, hiển thị Peak-to-Peak 4V (x10), 1V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -147,7 +147,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- SIN 1MHz, hiển thị Peak-to-Peak 10V (x10), 2V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -165,7 +165,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- SIN 1MHz, hiển thị Peak-to-Peak 20V (x10), 5V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -183,7 +183,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- SIN 1MHz, hiển thị Peak-to-Peak 20V (x10), 10V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -202,7 +202,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- Dạng sóng hiển thị, 20V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -220,7 +220,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- Dạng sóng hiển thị, 50V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -238,7 +238,7 @@ class TestPuc25ProbeX10:
             [!code]
         @pass_criteria:- Dạng sóng hiển thị, 100V/div
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """

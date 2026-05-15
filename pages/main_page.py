@@ -185,6 +185,10 @@ class MainPage(BasePage):
     def disconnect_device(self, device_label: str) -> bool:
         return self.system.disconnect_device(device_label)
 
+    def force_restart_app(self, kill_wait: int = 5) -> None:
+        """Kill PC17.exe và relaunch — dùng khi UI bị treo sau disconnect."""
+        self._ctrl.force_restart(timeout=kill_wait)
+
     def is_device_connected(self, device_label: str) -> bool:
         return self.system.is_device_connected(device_label)
 
@@ -415,6 +419,34 @@ class MainPage(BasePage):
     def oscilloscope_cancel(self) -> None:
         self.oscilloscope.click_cancel()
 
+    def set_dso_params_no_apply(
+        self,
+        channel: str = "",
+        coupling: str = "",
+        probe: str = "",
+        time_div: str = "",
+        voltage_div: str = "",
+        trigger_mode: str = "",
+        trigger_sweep: str = "",
+    ) -> None:
+        self.oscilloscope.set_dso_params_no_apply(
+            channel=channel, coupling=coupling, probe=probe,
+            time_div=time_div, voltage_div=voltage_div,
+            trigger_mode=trigger_mode, trigger_sweep=trigger_sweep,
+        )
+
+    def set_dds_params_no_apply(
+        self,
+        signal_type: str = "",
+        frequency_hz: str = "",
+        amplitude_v: str = "",
+        offset_v: str = "",
+    ) -> None:
+        self.oscilloscope.set_dds_params_no_apply(
+            signal_type=signal_type, frequency_hz=frequency_hz,
+            amplitude_v=amplitude_v, offset_v=offset_v,
+        )
+
     def open_dds_setting(self) -> None:
         self.oscilloscope.open_dds_setting()
 
@@ -437,3 +469,33 @@ class MainPage(BasePage):
 
     def click_dds_sync(self) -> None:
         self.oscilloscope.click_sync()
+
+    def oscilloscope_apply(self) -> None:
+        self.oscilloscope.click_apply()
+
+    def get_dso_dropdown_value(self, label: str) -> str:
+        return self.oscilloscope.get_dso_dropdown_value(label)
+
+    def get_oscilloscope_channel_enabled(self) -> bool:
+        return self.oscilloscope.get_channel_on_off_state()
+
+    def is_dds_signal_on_checked(self) -> bool:
+        return self.oscilloscope.is_signal_on_checked()
+
+    def is_dds_sync_checked(self) -> bool:
+        return self.oscilloscope.is_sync_checked()
+
+    def get_dds_field_value(self, field_id: str) -> str:
+        return self.oscilloscope.get_dds_field_value(field_id)
+
+    def close_dso_setting(self) -> None:
+        self.oscilloscope.close_dso_setting()
+
+    def close_dds_setting(self) -> None:
+        self.oscilloscope.close_dds_setting()
+
+    def is_dso_setting_open(self) -> bool:
+        return self.oscilloscope.is_dso_setting_open()
+
+    def is_dds_setting_open(self) -> bool:
+        return self.oscilloscope.is_dds_setting_open()

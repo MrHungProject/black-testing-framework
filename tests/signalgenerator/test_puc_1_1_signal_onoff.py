@@ -47,7 +47,7 @@ class TestSignalPuc11OnOff:
                        - UI PC17 hiển thị trạng thái Signal Generator đã khởi động xong và đang bật
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
@@ -84,7 +84,7 @@ class TestSignalPuc11OnOff:
                        - Hoàn thành đủ 5 chu kỳ không có exception
 
         @test_level: software
-        @test_type: functional
+        @test_type: fat
         @execution_type: manual
         @hw_depend: yes
         """
